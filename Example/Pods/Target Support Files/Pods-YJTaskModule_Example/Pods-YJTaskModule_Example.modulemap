@@ -1,0 +1,6 @@
+framework module Pods_YJTaskModule_Example {
+  umbrella header "Pods-YJTaskModule_Example-umbrella.h"
+
+  export *
+  module * { export * }
+}

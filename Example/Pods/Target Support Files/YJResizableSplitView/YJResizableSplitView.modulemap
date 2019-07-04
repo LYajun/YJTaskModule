@@ -1,0 +1,6 @@
+framework module YJResizableSplitView {
+  umbrella header "YJResizableSplitView-umbrella.h"
+
+  export *
+  module * { export * }
+}

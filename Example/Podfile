@@ -5,9 +5,4 @@ platform :ios, '8.0'
 target 'YJTaskModule_Example' do
   pod 'YJTaskModule', :path => '../'
 
-  target 'YJTaskModule_Tests' do
-    inherit! :search_paths
-
-    
-  end
 end

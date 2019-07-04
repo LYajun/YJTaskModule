@@ -1,0 +1,6 @@
+framework module YJSearchController {
+  umbrella header "YJSearchController-umbrella.h"
+
+  export *
+  module * { export * }
+}

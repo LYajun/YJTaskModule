@@ -1,5 +1,5 @@
 //
-//  YJAnaImgBrowserScrollView.h
+//  YJWrittingImageBrowserScrollView.h
 //  LGEducationCloud
 //
 //  Created by 刘亚军 on 2019/4/30.
@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YJAnaImgBrowserScrollView : UIScrollView
+@interface YJWrittingImageBrowserScrollView : UIScrollView
 @property (nonatomic,copy) NSString *imageUrl;
 @property (nonatomic,strong) UIImage *scrollImg;
 @property (nonatomic,copy) void (^ClickBlock) (void);
