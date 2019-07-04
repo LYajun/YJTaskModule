@@ -7,12 +7,26 @@
 //
 
 #import "YJAppDelegate.h"
+#import <YJTaskMark/YJSpeechMark.h>
+#import <YJNetManager/YJNetMonitoring.h>
+#import <YJTaskModule/YJConst.h>
 
 @implementation YJAppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Override point for customization after application launch.
+    /** 网络监听 必须加 */
+    [[YJSpeechManager defaultManager] initEngine];
+    /** 语音评测 需要用到时才加 */
+    [[YJNetMonitoring shareMonitoring] startNetMonitoring];
+    
+    /** 以下几个参数必须赋值，字符串可赋值为空 */
+    [NSUserDefaults yj_setObject:@"用户ID" forKey:YJTasModule_UserID_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"用户类型" forKey:YJTasModule_UserType_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"作文题是否支持图片作答" forKey:YJTasModule_ImgAnswerEnable_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"图片上传接口的Ip:Port" forKey:YJTasModule_ApiUrl_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"填空题是否支持语音识别" forKey:YJTasModule_SpeechMarkEnable_UserDefault_Key];
+    
     return YES;
 }
 
