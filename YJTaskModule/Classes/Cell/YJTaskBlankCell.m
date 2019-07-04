@@ -43,7 +43,7 @@
         make.right.equalTo(self.contentView.mas_right).with.offset(-10);
         make.left.equalTo(self.indexLab.mas_right).with.offset(5);
     }];
-    BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTasModule_SpeechMarkEnable_UserDefault_Key];
+    BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
     
     [bgView addSubview:self.recordBtn];
     [self.recordBtn mas_makeConstraints:^(MASConstraintMaker *make) {

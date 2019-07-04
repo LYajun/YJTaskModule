@@ -34,11 +34,11 @@
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
 
 /** 配置 */
-static NSString *YJTasModule_ApiUrl_UserDefault_Key = @"YJTasModule_ApiUrl_UserDefault_Key";
-static NSString *YJTasModule_UserID_UserDefault_Key = @"YJTasModule_UserID_UserDefault_Key";
-static NSString *YJTasModule_UserType_UserDefault_Key = @"YJTasModule_UserType_UserDefault_Key";
-static NSString *YJTasModule_ImgAnswerEnable_UserDefault_Key = @"YJTasModule_ImgAnswerEnable_UserDefault_Key";
-static NSString *YJTasModule_SpeechMarkEnable_UserDefault_Key = @"YJTasModule_SpeechMarkEnable_UserDefault_Key";
+static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
+static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
+static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
+static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
+static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
 static NSString *YJTaskBundle_Cell = @"Cell";
 static NSString *YJTaskBundle_Empty = @"EmptyPage";

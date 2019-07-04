@@ -21,11 +21,11 @@
     [[YJNetMonitoring shareMonitoring] startNetMonitoring];
     
     /** 以下几个参数必须赋值，字符串可赋值为空 */
-    [NSUserDefaults yj_setObject:@"用户ID" forKey:YJTasModule_UserID_UserDefault_Key];
-    [NSUserDefaults yj_setObject:@"用户类型" forKey:YJTasModule_UserType_UserDefault_Key];
-    [NSUserDefaults yj_setObject:@"作文题是否支持图片作答" forKey:YJTasModule_ImgAnswerEnable_UserDefault_Key];
-    [NSUserDefaults yj_setObject:@"图片上传接口的Ip:Port" forKey:YJTasModule_ApiUrl_UserDefault_Key];
-    [NSUserDefaults yj_setObject:@"填空题是否支持语音识别" forKey:YJTasModule_SpeechMarkEnable_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"用户ID" forKey:YJTaskModule_UserID_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"用户类型" forKey:YJTaskModule_UserType_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"作文题是否支持图片作答" forKey:YJTaskModule_ImgAnswerEnable_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"图片上传接口的Ip:Port" forKey:YJTaskModule_ApiUrl_UserDefault_Key];
+    [NSUserDefaults yj_setObject:@"填空题是否支持语音识别" forKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
     
     return YES;
 }

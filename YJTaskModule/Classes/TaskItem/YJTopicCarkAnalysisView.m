@@ -59,7 +59,7 @@
     
 }
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
-    NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTasModule_UserType_UserDefault_Key];
+    NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
     YJBasePaperSmallModel *firstSmallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList.firstObject;
     
     switch (firstSmallModel.yj_smallTopicType) {

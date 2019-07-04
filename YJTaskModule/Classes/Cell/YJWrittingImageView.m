@@ -79,7 +79,7 @@ static NSInteger maxUploadCount = 3;
     uploadModel.fileNames = fileNames;
     uploadModel.fileType = @"image/png";
     
-    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTasModule_ApiUrl_UserDefault_Key];
+    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ApiUrl_UserDefault_Key];
     NSString *url = [exerciseApiUrl stringByAppendingString:@"/api/Common/UploadImg"];
     [LGAlert showIndeterminateWithStatus:@"上传图片..."];
     [[YJNetManager defaultManager].setRequest(url).setRequestType(YJRequestTypeUpload).setUploadModel(uploadModel) startRequestWithProgress:^(NSProgress *progress) {
@@ -114,7 +114,7 @@ static NSInteger maxUploadCount = 3;
     if (IsStrEmpty(imgUrl)) {
         return;
     }
-    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTasModule_ApiUrl_UserDefault_Key];
+    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ApiUrl_UserDefault_Key];
     NSString *urlStr = [exerciseApiUrl stringByAppendingString:@"api/Com/DeleteImg"];
     
     NSData *data = [NSJSONSerialization dataWithJSONObject:@[imgUrl] options:NSJSONWritingPrettyPrinted error:nil];

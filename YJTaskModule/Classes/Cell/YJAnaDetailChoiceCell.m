@@ -63,7 +63,7 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
             break;
         case 1:
         {
-            NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTasModule_UserType_UserDefault_Key];
+            NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
             if (UserType == 1) {
                 cell.titleStr = @"学生答案";
             }else{

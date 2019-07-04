@@ -60,7 +60,7 @@
             make.left.equalTo(self.indexLab.mas_right).offset(5);
         }];
         
-        BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTasModule_SpeechMarkEnable_UserDefault_Key];
+        BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
         
         [self.contentBgV addSubview:self.recordBtn];
         [self.recordBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -146,7 +146,7 @@
     if (self.editable) {
         BOOL isOffline = [NSUserDefaults yj_boolForKey:UserDefaults_YJAnswerOfflineStatus];
         
-        BOOL isImgAnswerEnable = [NSUserDefaults yj_boolForKey:YJTasModule_ImgAnswerEnable_UserDefault_Key];
+        BOOL isImgAnswerEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_ImgAnswerEnable_UserDefault_Key];
         if (!isImgAnswerEnable) {
             isOffline = YES;
         }

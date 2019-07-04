@@ -75,7 +75,7 @@
 }
 - (NSString *)documentRelativePath{
     NSString *documentPath = [NSFileManager yj_documentsPath];
-    NSString *userID = [NSUserDefaults yj_stringForKey:YJTasModule_UserID_UserDefault_Key];
+    NSString *userID = [NSUserDefaults yj_stringForKey:YJTaskModule_UserID_UserDefault_Key];
     return [documentPath stringByAppendingPathComponent:[NSString stringWithFormat:@"downloadRecord/%@",userID]];
 }
 @end
