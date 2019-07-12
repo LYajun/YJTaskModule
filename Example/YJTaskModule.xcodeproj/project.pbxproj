@@ -23,6 +23,9 @@
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 71719F9D1E33DC2100824A3D /* LaunchScreen.storyboard */; };
 		873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 873B8AEA1B1F5CCA007FD442 /* Main.storyboard */; };
+		BA9D788F22D8261700D6E561 /* IEPaperDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D788A22D8261700D6E561 /* IEPaperDisplayViewController.m */; };
+		BA9D789022D8261700D6E561 /* IEPaperDisplayDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */; };
+		BA9D789222D8284400D6E561 /* task.json in Resources */ = {isa = PBXBuildFile; fileRef = BA9D789122D8284400D6E561 /* task.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -63,6 +66,12 @@
 		A8DA7D1FC3016F9C8256A166 /* Pods_YJTaskModule_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_YJTaskModule_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6B40C1E7C184CC6D41DB8CF /* YJTaskModule.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = YJTaskModule.podspec; path = ../YJTaskModule.podspec; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		B9F284ECEF13BE3669D07D0A /* Pods-YJTaskModule_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-YJTaskModule_Example.release.xcconfig"; path = "Target Support Files/Pods-YJTaskModule_Example/Pods-YJTaskModule_Example.release.xcconfig"; sourceTree = "<group>"; };
+		BA9D788922D8261700D6E561 /* IEPaperDisplayViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEPaperDisplayViewController.h; sourceTree = "<group>"; };
+		BA9D788A22D8261700D6E561 /* IEPaperDisplayViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IEPaperDisplayViewController.m; sourceTree = "<group>"; };
+		BA9D788C22D8261700D6E561 /* IEPaperDisplayDataModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEPaperDisplayDataModel.h; sourceTree = "<group>"; };
+		BA9D788D22D8261700D6E561 /* IEPaperDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEPaperDisplayProtocol.h; sourceTree = "<group>"; };
+		BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IEPaperDisplayDataModel.m; sourceTree = "<group>"; };
+		BA9D789122D8284400D6E561 /* task.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = task.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +135,8 @@
 		6003F593195388D20070C39A /* Example for YJTaskModule */ = {
 			isa = PBXGroup;
 			children = (
+				BA9D789122D8284400D6E561 /* task.json */,
+				BA9D788722D8261700D6E561 /* PaperDisplay */,
 				6003F59C195388D20070C39A /* YJAppDelegate.h */,
 				6003F59D195388D20070C39A /* YJAppDelegate.m */,
 				873B8AEA1B1F5CCA007FD442 /* Main.storyboard */,
@@ -186,6 +197,34 @@
 				B9F284ECEF13BE3669D07D0A /* Pods-YJTaskModule_Example.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		BA9D788722D8261700D6E561 /* PaperDisplay */ = {
+			isa = PBXGroup;
+			children = (
+				BA9D788822D8261700D6E561 /* Controller */,
+				BA9D788B22D8261700D6E561 /* DataModel */,
+			);
+			path = PaperDisplay;
+			sourceTree = "<group>";
+		};
+		BA9D788822D8261700D6E561 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				BA9D788922D8261700D6E561 /* IEPaperDisplayViewController.h */,
+				BA9D788A22D8261700D6E561 /* IEPaperDisplayViewController.m */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		BA9D788B22D8261700D6E561 /* DataModel */ = {
+			isa = PBXGroup;
+			children = (
+				BA9D788C22D8261700D6E561 /* IEPaperDisplayDataModel.h */,
+				BA9D788D22D8261700D6E561 /* IEPaperDisplayProtocol.h */,
+				BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */,
+			);
+			path = DataModel;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -251,6 +290,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -272,6 +312,7 @@
 			files = (
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
+				BA9D789222D8284400D6E561 /* task.json in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);
@@ -369,6 +410,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BA9D788F22D8261700D6E561 /* IEPaperDisplayViewController.m in Sources */,
+				BA9D789022D8261700D6E561 /* IEPaperDisplayDataModel.m in Sources */,
 				6003F59E195388D20070C39A /* YJAppDelegate.m in Sources */,
 				6003F5A7195388D20070C39A /* YJViewController.m in Sources */,
 				6003F59A195388D20070C39A /* main.m in Sources */,
