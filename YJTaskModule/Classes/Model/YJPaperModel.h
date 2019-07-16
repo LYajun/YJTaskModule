@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger AnswerType;
 
 @property (nonatomic,copy) NSString *Comment;
+@property (nonatomic,copy) NSString *IntelligenceScore;
 /** 互评得分 */
 @property (nonatomic,assign) float HpScore;
 /** 小题索引 */

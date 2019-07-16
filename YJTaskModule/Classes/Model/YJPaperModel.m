@@ -161,6 +161,13 @@ static NSString *kHpStuName = @"";
 - (NSString *)yj_smallScore{
     return [NSString stringWithFormat:@"%.1f",self.QuesScore];
 }
+- (NSString *)yj_smallIntelligenceScore{
+    NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
+    if (UserType == 1 && self.AnswerType == 4 && ![self.TopicTypeID isEqualToString:@"f"]) {
+        return self.IntelligenceScore;
+    }
+    return @"";
+}
 - (YJSmallTopicType)yj_smallTopicType{
     YJSmallTopicType smallType = 0;
     switch (self.AnswerType) {
