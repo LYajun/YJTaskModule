@@ -204,7 +204,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL isSubmit;
 /** 大题List */
 @property (nonatomic,strong) NSArray<YJPaperBigModel *> *Topics;
-
+/** 上次保存的大题索引 */
+@property (nonatomic,assign) NSInteger LastAnsTopic;
+/** 上次保存的小题索引 */
+@property (nonatomic,assign) NSInteger LastAnsQues;
 /** 新增 教案ID 随堂测试上传数据用*/
 @property (nonatomic,copy) NSString *LessonPlanID;
 @end
