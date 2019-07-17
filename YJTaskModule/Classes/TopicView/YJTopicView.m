@@ -14,12 +14,11 @@
 #import "YJWebViewController.h"
 #import "YJCorrentView.h"
 #import "YJConst.h"
-#import "UIView+YJEmpty.h"
 
-@interface YJTopicView ()<UITextViewDelegate,YJMatchViewDelegate,UIWebViewDelegate>
+
+@interface YJTopicView ()<UITextViewDelegate,YJMatchViewDelegate>
 @property (strong,nonatomic) YJListenView *listenView;
 @property (strong,nonatomic) YJTopicTextView *textView;
-@property (strong,nonatomic) UIWebView *textWebView;
 @property (nonatomic,strong) YJWebViewController *readVC;
 @property(nonatomic,strong) YJBasePaperBigModel *bigModel;
 @property (strong,nonatomic) UILabel *titleL;
@@ -48,21 +47,12 @@
         self.correntView.bigModel = (YJPaperBigModel *)self.bigModel;
     }else{
         self.textView.scrollEnabled = YES;
-        if ([self.bigModel.yj_topicContent.lowercaseString containsString:@"<table"]) {
-            [self.textWebView yj_setViewLoadingShow:YES];
-            __weak typeof(self) weakSelf = self;
-            self.textWebView.updateDataBlock = ^{
-                [weakSelf.textWebView loadHTMLString:[weakSelf adaptWebViewForHtml:weakSelf.bigModel.yj_topicContent] baseURL:nil];
-            };
-            [self.textWebView loadHTMLString:[self adaptWebViewForHtml:self.bigModel.yj_topicContent] baseURL:nil];
+        if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank ||
+            self.bigModel.yj_bigTopicType == YJBigTopicTypeBigTextAndBlank || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"S"] || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"U"]) {// 添加听力填空
+            [self.textView setBlankAttributedString:self.bigModel.yj_bigTopicAttrText];
+            self.textView.answerResults = self.bigModel.yj_bigChioceBlankAnswerList;
         }else{
-            if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank ||
-                self.bigModel.yj_bigTopicType == YJBigTopicTypeBigTextAndBlank || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"S"] || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"U"]) {// 添加听力填空
-                [self.textView setBlankAttributedString:self.bigModel.yj_bigTopicAttrText];
-                self.textView.answerResults = self.bigModel.yj_bigChioceBlankAnswerList;
-            }else{
-                [self.textView setTopicContentAttr: self.bigModel.yj_bigTopicAttrText];
-            }
+            [self.textView setTopicContentAttr: self.bigModel.yj_bigTopicAttrText];
         }
     }
     self.listenView.urlNameArr = self.bigModel.yj_bigMediaNames;
@@ -145,22 +135,12 @@
             }];
             [self.correntView yj_clipLayerWithRadius:0 width:1 color:LG_ColorThemeBlue];
         }else{
-            if ([self.bigModel.yj_topicContent.lowercaseString containsString:@"<table"]) {
-                [self addSubview:self.textWebView];
-                [self.textWebView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.centerX.bottom.equalTo(self);
-                    make.left.equalTo(self.mas_left).offset(5);
-                    make.top.equalTo(self.titleL.mas_bottom);
-                }];
-                
-            }else{
-                [self addSubview:self.textView];
-                [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-                    make.centerX.bottom.equalTo(self);
-                    make.left.equalTo(self.mas_left).offset(5);
-                    make.top.equalTo(self.titleL.mas_bottom);
-                }];
-            }
+            [self addSubview:self.textView];
+            [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.centerX.bottom.equalTo(self);
+                make.left.equalTo(self.mas_left).offset(5);
+                make.top.equalTo(self.titleL.mas_bottom);
+            }];
         }
     }
 }
@@ -180,22 +160,12 @@
             make.top.equalTo(self.listenView.mas_bottom).offset(5);
         }];
     }else{
-        if ([self.bigModel.yj_topicContent.lowercaseString containsString:@"<table"]) {
-            [self addSubview:self.textWebView];
-            [self.textWebView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.bottom.equalTo(self);
-                make.left.equalTo(self.mas_left).offset(5);
-                make.top.equalTo(self.listenView.mas_bottom).offset(14);
-            }];
-            
-        }else{
-            [self addSubview:self.textView];
-            [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-                make.centerX.bottom.equalTo(self);
-                make.left.equalTo(self.mas_left).offset(5);
-                make.top.equalTo(self.listenView.mas_bottom).offset(14);
-            }];
-        }
+        [self addSubview:self.textView];
+        [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerX.bottom.equalTo(self);
+            make.left.equalTo(self.mas_left).offset(5);
+            make.top.equalTo(self.listenView.mas_bottom).offset(14);
+        }];
     }
     
 }
@@ -256,41 +226,7 @@
         [matchView show];
     }
 }
-#pragma mark - UIWebViewDelegate
-- (NSString *)adaptWebViewForHtml:(NSString *) htmlStr{
-    NSMutableString *headHtml = [[NSMutableString alloc] initWithCapacity:0];
-    [headHtml appendString : @"<html>" ];
-    [headHtml appendString : @"<head>" ];
-    [headHtml appendString : @"<meta charset=\"utf-8\">" ];
-    [headHtml appendString : @"<meta id=\"viewport\" name=\"viewport\" content=\"width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=false\" />" ];
-    [headHtml appendString : @"<meta name=\"apple-mobile-web-app-capable\" content=\"yes\" />" ];
-    [headHtml appendString : @"<meta name=\"apple-mobile-web-app-status-bar-style\" content=\"black\" />" ];
-    [headHtml appendString : @"<meta name=\"black\" name=\"apple-mobile-web-app-status-bar-style\" />" ];
-    [headHtml appendString : @"<script type='text/javascript'>"
-     "window.onload = function(){\n"
-     "var maxwidth=document.body.clientWidth;\n" //屏幕宽度
-     "for(i=0;i <document.images.length;i++){\n"
-     "var myimg = document.images[i];\n"
-     "if(myimg.width > maxwidth){\n"
-     "myimg.style.width = '90%';\n"
-     "myimg.style.height = 'auto'\n;"
-     "}\n"
-     "}\n"
-     "}\n"
-     "</script>\n"];
-    [headHtml appendString : @"<style>table{width:90%;}</style>" ];
-    [headHtml appendString : @"<title>webview</title>" ];
-    NSString *bodyHtml;
-    bodyHtml = [NSString stringWithString:headHtml];
-    bodyHtml = [bodyHtml stringByAppendingString:htmlStr];
-    return bodyHtml;
-}
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
-    [self.textWebView yj_setViewLoadErrorShow:YES];
-}
--(void)webViewDidFinishLoad:(UIWebView*)webView{
-    [self.textWebView yj_setViewLoadingShow:NO];
-}
+
 #pragma mark YJMatchView delegate
 - (void)yj_matchView:(YJMatchView *)matchView didSelectedItemAtIndex:(NSInteger)index{
     NSMutableArray *arr = [NSMutableArray arrayWithArray:self.textView.answerResults];
@@ -369,17 +305,7 @@
     }
     return _titleL;
 }
-- (UIWebView *)textWebView{
-    if (!_textWebView) {
-        _textWebView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        _textWebView.scalesPageToFit = NO;
-        _textWebView.scrollView.bounces = NO;
-        _textWebView.opaque = NO;
-        _textWebView.delegate = self;
-        _textWebView.backgroundColor = [UIColor whiteColor];
-    }
-    return _textWebView;
-}
+
 - (YJWebViewController *)readVC{
     if (!_readVC) {
         _readVC = [[YJWebViewController alloc] init];

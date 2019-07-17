@@ -73,6 +73,10 @@
 - (void)setIndexable:(BOOL)indexable{
     _indexable = indexable;
     self.topicIndexL.hidden = !indexable;
+    [self.topicIndexL mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.width.mas_equalTo(indexable ? 60:0);
+        make.right.equalTo(self.topicCardBgView.mas_left).offset(indexable ? -8 : -2);
+    }];
 }
 - (void)setCarkable:(BOOL)carkable{
     _carkable = carkable;

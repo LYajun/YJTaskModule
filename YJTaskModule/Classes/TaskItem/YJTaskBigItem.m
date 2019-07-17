@@ -214,6 +214,14 @@
     }
 }
 #pragma mark Setter
+- (void)setBottomDistance:(CGFloat)bottomDistance{
+    _bottomDistance = bottomDistance;
+    self.splitView.bottomDistance = bottomDistance;
+}
+- (void)setTopDistance:(CGFloat)topDistance{
+    _topDistance = topDistance;
+    self.splitView.topDistance = topDistance;
+}
 - (void)setTaskStageType:(YJTaskStageType)taskStageType{
     _taskStageType = taskStageType;
     for (UIView *view in self.smallScrollContentView.subviews) {

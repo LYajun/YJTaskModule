@@ -192,8 +192,8 @@ static CGFloat kYJTextFontSize = 16;
 }
 // 填空题富文本
 - (NSMutableAttributedString *)blankAttr{
-    YJBlankTextField *btn = [[YJBlankTextField alloc] initWithFrame:CGRectMake(0, 0, 100, 28)];
-    btn.font = [UIFont systemFontOfSize:kYJTextFontSize];
+    YJBlankTextField *btn = [[YJBlankTextField alloc] initWithFrame:CGRectMake(0, 0, 70, 22)];
+    btn.font = [UIFont systemFontOfSize:kYJTextFontSize-2];
     btn.tag = self.blankTextFieldArray.count;
     [self.blankTextFieldArray addObject:btn];
     NSString *placeholder = [NSString stringWithFormat:@"(%li)",self.blankTextFieldArray.count];

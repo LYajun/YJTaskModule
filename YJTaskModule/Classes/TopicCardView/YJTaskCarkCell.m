@@ -56,7 +56,7 @@ static CGFloat kTaskCarkCellWidthRate = 0.9;
 }
 - (void)setCardModel:(YJTaskCarkModel *)cardModel{
     _cardModel = cardModel;
-    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li题",cardModel.topicIndex+1],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
+    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li大题",cardModel.topicIndex+1],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
     self.titleL.attributedText = attr;
     [self.collectionView reloadData];
 }

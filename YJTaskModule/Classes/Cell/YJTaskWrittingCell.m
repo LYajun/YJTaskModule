@@ -18,7 +18,7 @@
 #import <Masonry/Masonry.h>
 
 @interface YJTaskWrittingCell ()
-@property (nonatomic,strong) LGBaseTextView *indexLab;
+@property (nonatomic,strong) UILabel *indexLab;
 @property (strong,nonatomic) LGBaseTextView *textView;
 @property (strong,nonatomic) UIButton *recordBtn;
 @property (strong, nonatomic) UIView *contentBgV;
@@ -189,17 +189,11 @@
     }
     return _contentBgV;
 }
-- (LGBaseTextView *)indexLab{
+- (UILabel *)indexLab{
     if (!_indexLab) {
-        _indexLab = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
+        _indexLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _indexLab.textColor = [UIColor darkGrayColor];
-        _indexLab.contentInset = UIEdgeInsetsMake(-3, -2, 0, -2);
-        _indexLab.placeholder = @"-";
         _indexLab.font = [UIFont systemFontOfSize:16];
-        _indexLab.editable = NO;
-        _indexLab.scrollEnabled = NO;
-        _indexLab.selectable = NO;
-        _indexLab.userInteractionEnabled = NO;
     }
     return _indexLab;
 }
