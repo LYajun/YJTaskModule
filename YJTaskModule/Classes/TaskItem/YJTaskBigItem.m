@@ -239,6 +239,9 @@
     self.bigTopicView.highlightSmallIndex = currentSmallIndex;
     [self.smallScrollView layoutIfNeeded];
     self.smallScrollView.contentOffset = CGPointMake(LG_ScreenWidth*self.currentSmallIndex, 0);
+    if (self.bigModel.yj_topicCarkMode) {
+        self.taskModel.yj_currentBigIndex = currentSmallIndex;
+    }
 }
 #pragma mark Getter
 - (CGFloat)bigTopicViewHeight{

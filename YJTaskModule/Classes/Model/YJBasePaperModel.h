@@ -60,6 +60,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger yj_answerTimeAdd;
 /** 作业阶段类型 */
 @property (nonatomic,assign) YJTaskStageType yj_taskStageType;
+/** 当前大题索引 */
+@property (nonatomic,assign) NSInteger yj_currentBigIndex;
 
 /** 已作答小题数 */
 - (NSInteger)quesAnswerItemSum;

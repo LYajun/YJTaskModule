@@ -39,6 +39,12 @@
              @"ModelAnswerAreaList":[YJCorrectAnswerAreaModel class]
              };
 }
+- (void)setQuesLeaderContent:(NSString *)QuesLeaderContent{
+    _QuesLeaderContent = QuesLeaderContent;
+    if (!IsStrEmpty(QuesLeaderContent)) {
+        _QuesLeaderContent = QuesLeaderContent.yj_toHtmlMutableAttributedString.string;
+    }
+}
 
 - (NSDictionary *)QuesAnswerInfo{
     if (!_QuesAnswerInfo) {

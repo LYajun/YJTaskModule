@@ -159,44 +159,44 @@ PODS:
     - YJExtensions
     - YJNetManager
     - YJTaskMark/kuyou
-  - YJTaskModule (1.0.2):
-    - YJTaskModule/ActivityIndicatorView (= 1.0.2)
-    - YJTaskModule/AnswerEditView (= 1.0.2)
-    - YJTaskModule/Base (= 1.0.2)
-    - YJTaskModule/BaseItem (= 1.0.2)
-    - YJTaskModule/Cell (= 1.0.2)
-    - YJTaskModule/Const (= 1.0.2)
-    - YJTaskModule/ImageLabel (= 1.0.2)
-    - YJTaskModule/ListenPlayer (= 1.0.2)
-    - YJTaskModule/MatchView (= 1.0.2)
-    - YJTaskModule/Model (= 1.0.2)
-    - YJTaskModule/TaskItem (= 1.0.2)
-    - YJTaskModule/TitleView (= 1.0.2)
-    - YJTaskModule/TopicCardView (= 1.0.2)
-    - YJTaskModule/TopicView (= 1.0.2)
-    - YJTaskModule/YJCorrect (= 1.0.2)
-    - YJTaskModule/YJFileManager (= 1.0.2)
-    - YJTaskModule/YJProgressView (= 1.0.2)
-    - YJTaskModule/YJSpeechMarkView (= 1.0.2)
-  - YJTaskModule/ActivityIndicatorView (1.0.2)
-  - YJTaskModule/AnswerEditView (1.0.2):
+  - YJTaskModule (1.0.5):
+    - YJTaskModule/ActivityIndicatorView (= 1.0.5)
+    - YJTaskModule/AnswerEditView (= 1.0.5)
+    - YJTaskModule/Base (= 1.0.5)
+    - YJTaskModule/BaseItem (= 1.0.5)
+    - YJTaskModule/Cell (= 1.0.5)
+    - YJTaskModule/Const (= 1.0.5)
+    - YJTaskModule/ImageLabel (= 1.0.5)
+    - YJTaskModule/ListenPlayer (= 1.0.5)
+    - YJTaskModule/MatchView (= 1.0.5)
+    - YJTaskModule/Model (= 1.0.5)
+    - YJTaskModule/TaskItem (= 1.0.5)
+    - YJTaskModule/TitleView (= 1.0.5)
+    - YJTaskModule/TopicCardView (= 1.0.5)
+    - YJTaskModule/TopicView (= 1.0.5)
+    - YJTaskModule/YJCorrect (= 1.0.5)
+    - YJTaskModule/YJFileManager (= 1.0.5)
+    - YJTaskModule/YJProgressView (= 1.0.5)
+    - YJTaskModule/YJSpeechMarkView (= 1.0.5)
+  - YJTaskModule/ActivityIndicatorView (1.0.5)
+  - YJTaskModule/AnswerEditView (1.0.5):
     - LGAlertHUD
     - Masonry
     - TFHpple
     - YJResizableSplitView
     - YJTaskModule/Base
     - YJTaskModule/Const
-  - YJTaskModule/Base (1.0.2):
+  - YJTaskModule/Base (1.0.5):
     - BlocksKit
     - LGAlertHUD
     - MJExtension
     - YJTaskModule/Const
-  - YJTaskModule/BaseItem (1.0.2):
+  - YJTaskModule/BaseItem (1.0.5):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/Model
     - YJTaskModule/TitleView
-  - YJTaskModule/Cell (1.0.2):
+  - YJTaskModule/Cell (1.0.5):
     - LGAlertHUD
     - LGTalk
     - Masonry
@@ -209,24 +209,24 @@ PODS:
     - YJTaskModule/ImageLabel
     - YJTaskModule/Model
     - YJTaskModule/YJSpeechMarkView
-  - YJTaskModule/Const (1.0.2):
+  - YJTaskModule/Const (1.0.5):
     - YJExtensions
-  - YJTaskModule/ImageLabel (1.0.2):
+  - YJTaskModule/ImageLabel (1.0.5):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/ListenPlayer (1.0.2):
+  - YJTaskModule/ListenPlayer (1.0.5):
     - LGAlertHUD
     - Masonry
     - YJSearchController
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/YJProgressView
-  - YJTaskModule/MatchView (1.0.2):
+  - YJTaskModule/MatchView (1.0.5):
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/Model (1.0.2):
+  - YJTaskModule/Model (1.0.5):
     - MJExtension
     - TFHpple
     - YJNetManager
@@ -234,7 +234,7 @@ PODS:
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/YJFileManager
-  - YJTaskModule/TaskItem (1.0.2):
+  - YJTaskModule/TaskItem (1.0.5):
     - Masonry
     - SwipeView
     - YJResizableSplitView
@@ -245,14 +245,14 @@ PODS:
     - YJTaskModule/Model
     - YJTaskModule/TitleView
     - YJTaskModule/TopicView
-  - YJTaskModule/TitleView (1.0.2):
+  - YJTaskModule/TitleView (1.0.5):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/TopicCardView (1.0.2):
+  - YJTaskModule/TopicCardView (1.0.5):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/TopicView (1.0.2):
+  - YJTaskModule/TopicView (1.0.5):
     - Masonry
     - TFHpple
     - YJSearchController
@@ -262,15 +262,15 @@ PODS:
     - YJTaskModule/MatchView
     - YJTaskModule/Model
     - YJTaskModule/YJCorrect
-  - YJTaskModule/YJCorrect (1.0.2):
+  - YJTaskModule/YJCorrect (1.0.5):
     - LGAlertHUD
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/Model
-  - YJTaskModule/YJFileManager (1.0.2)
-  - YJTaskModule/YJProgressView (1.0.2)
-  - YJTaskModule/YJSpeechMarkView (1.0.2):
+  - YJTaskModule/YJFileManager (1.0.5)
+  - YJTaskModule/YJProgressView (1.0.5)
+  - YJTaskModule/YJSpeechMarkView (1.0.5):
     - Masonry
     - YJTaskModule/Const
 
@@ -319,7 +319,7 @@ SPEC CHECKSUMS:
   YJResizableSplitView: 5ce0f3e8a608552a6f9a8c4d987e589a9c21b17e
   YJSearchController: bac6b989a9ce807d5415cbcd600f69c03e13bb28
   YJTaskMark: e04da9c74606d72e9db854b78b22449ce5a4e88c
-  YJTaskModule: a0a4ad6867cf5c9d923299d0b9b663b05b1381fa
+  YJTaskModule: 2716f80de9bfa23f12ae8df0239770bde14c710e
 
 PODFILE CHECKSUM: f500a7ccba47323bb95db68447fe69ebb1bf31aa
 

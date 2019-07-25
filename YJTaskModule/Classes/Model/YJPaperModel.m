@@ -641,6 +641,11 @@ static NSString *kHpStuName = @"";
         }
     }
 }
+- (void)setYj_currentBigIndex:(NSInteger)yj_currentBigIndex{
+    [super setYj_currentBigIndex:yj_currentBigIndex];
+    _LastAnsTopic = yj_currentBigIndex;
+}
+
 - (void)setTopics:(NSArray<YJPaperBigModel *> *)Topics{
     _Topics = Topics;
     for (YJPaperBigModel *bigModel in Topics) {

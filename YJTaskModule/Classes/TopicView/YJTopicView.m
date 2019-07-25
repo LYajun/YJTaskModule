@@ -118,6 +118,9 @@
             if (!IsStrEmpty(self.bigModel.yj_correntTopicPintro)) {
                 CGSize stringSize = [self.bigModel.yj_correntTopicPintro boundingRectWithSize:CGSizeMake(LG_ScreenWidth-10, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:16]} context:nil].size;
                 height = stringSize.height + 20;
+                if (height > 150) {
+                    height = 150;
+                }
             }
             [self addSubview:self.textView];
             [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -291,8 +294,10 @@
 }
 - (YJTopicTextView *)textView{
     if (!_textView) {
-        self.textView = [[YJTopicTextView alloc] initWithFrame:CGRectZero];
-        self.textView.delegate = self;
+        _textView = [[YJTopicTextView alloc] initWithFrame:CGRectZero];
+        _textView.font = [UIFont systemFontOfSize:16];
+        _textView.delegate = self;
+
     }
     return _textView;
 }
