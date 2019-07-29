@@ -621,6 +621,10 @@ static NSString *kHpStuName = @"";
     [super setYj_bigAnswerTimeCount:yj_bigAnswerTimeCount];
     self.AnswerTimeAdd = yj_bigAnswerTimeCount;
 }
+- (void)setYj_bigAnswerTimeSum:(NSInteger)yj_bigAnswerTimeSum{
+    [super setYj_bigAnswerTimeSum:yj_bigAnswerTimeSum];
+    self.AnswerTime = yj_bigAnswerTimeSum;
+}
 @end
 @implementation YJPaperModel
 + (NSDictionary *)mj_objectClassInArray{

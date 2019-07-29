@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YJBasePaperBigModel : LGBaseModel<YJPaperBigProtocol>
 /** 大题作答计时，大数据用 */
 @property (nonatomic,assign) NSInteger yj_bigAnswerTimeCount;
+@property (nonatomic,assign) NSInteger yj_bigAnswerTimeSum;
 - (NSDictionary<NSString *,NSString *> *)choiceTopicInfo;
 - (NSDictionary<NSString *,NSString *> *)blankTopicInfo;
 - (NSDictionary<NSString *,NSString *> *)matchTopicInfo;
