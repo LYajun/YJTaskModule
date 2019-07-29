@@ -104,8 +104,8 @@ static CGFloat indexLabHeight = 36;
     [self.contentView addSubview:self.indexLab];
     [self.indexLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
-        make.left.equalTo(self.contentView).offset(15);
-        make.width.mas_equalTo(40);
+        make.left.equalTo(self.contentView).offset(10);
+        make.width.mas_equalTo(35);
     }];
     [self.contentView addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -182,7 +182,7 @@ static CGFloat indexLabHeight = 36;
     if (!_indexLab) {
         _indexLab = [UILabel new];
 //        _indexLab.textAlignment = NSTextAlignmentCenter;
-        _indexLab.font = LG_SysFont(17);
+        _indexLab.font = LG_SysFont(16);
         _indexLab.textColor = [UIColor darkGrayColor];
     }
     return _indexLab;

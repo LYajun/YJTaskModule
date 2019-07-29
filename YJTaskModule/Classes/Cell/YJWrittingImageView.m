@@ -89,6 +89,7 @@ static NSInteger maxUploadCount = 3;
         if ([[response objectForKey:@"Code"] isEqualToString:@"00"]) {
             NSArray *imagesUrls = [response objectForKey:@"Data"];
             if (!IsArrEmpty(imagesUrls)) {
+                [NSUserDefaults yj_setObject:@(YES) forKey:UserDefaults_YJAnswerStatusChanged];
                 [LGAlert showSuccessWithStatus:@"上传成功"];
             }else{
                 [LGAlert showErrorWithStatus:@"上传失败"];

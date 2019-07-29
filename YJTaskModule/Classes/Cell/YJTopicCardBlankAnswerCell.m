@@ -16,7 +16,7 @@
 #import "YJConst.h"
 
 @interface YJTopicCardBlankAnswerCell ()
-@property (nonatomic,strong) LGBaseTextView *indexLab;
+@property (nonatomic,strong) UILabel *indexLab;
 @property (strong,nonatomic) LGBaseTextView *textView;
 @property (strong,nonatomic) UIButton *recordBtn;
 @end
@@ -30,10 +30,9 @@
 - (void)layoutUI{
     [self.contentView addSubview:self.indexLab];
     [self.indexLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.contentView);
         make.top.equalTo(self.contentView).offset(5);
-        make.left.equalTo(self.contentView).offset(5);
-        make.width.mas_equalTo(45);
+        make.left.equalTo(self.contentView).offset(10);
+        make.width.mas_equalTo(35);
     }];
     
     UIView *bgView = [UIView new];
@@ -42,7 +41,7 @@
         make.centerY.equalTo(self.contentView.mas_centerY);
         make.top.equalTo(self.contentView.mas_top).with.offset(5);
         make.right.equalTo(self.contentView.mas_right).with.offset(-10);
-        make.left.equalTo(self.indexLab.mas_right).with.offset(5);
+        make.left.equalTo(self.indexLab.mas_right).with.offset(0);
     }];
      BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
     [bgView addSubview:self.recordBtn];
@@ -105,12 +104,7 @@
     if (!_indexLab) {
         _indexLab = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
         _indexLab.textColor = [UIColor darkGrayColor];
-        _indexLab.placeholder = @"-";
         _indexLab.font = [UIFont systemFontOfSize:16];
-        _indexLab.editable = NO;
-        _indexLab.scrollEnabled = NO;
-        _indexLab.selectable = NO;
-        _indexLab.userInteractionEnabled = NO;
     }
     return _indexLab;
 }

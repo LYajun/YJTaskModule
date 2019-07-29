@@ -111,7 +111,7 @@
     if (!_indexLab) {
         _indexLab = [UILabel new];
         _indexLab.textAlignment = NSTextAlignmentCenter;
-        _indexLab.font = [UIFont systemFontOfSize:17];
+        _indexLab.font = [UIFont systemFontOfSize:16];
         _indexLab.textColor = [UIColor darkGrayColor];
     }
     return _indexLab;

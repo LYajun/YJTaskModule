@@ -32,17 +32,16 @@
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
         [self.contentView addSubview:self.indexLab];
         [self.indexLab mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.centerY.equalTo(self.contentView);
             make.top.equalTo(self.contentView).offset(5);
-            make.left.equalTo(self.contentView).offset(5);
-            make.width.mas_equalTo(40);
+            make.left.equalTo(self.contentView).offset(10);
+            make.width.mas_equalTo(35);
         }];
         
         [self.contentView addSubview:self.imageBgV];
         [self.imageBgV mas_makeConstraints:^(MASConstraintMaker *make) {
             make.bottom.equalTo(self.contentView).offset(-5);
             make.right.equalTo(self.contentView.mas_right).offset(-10);
-            make.left.equalTo(self.indexLab.mas_right).offset(5);
+            make.left.equalTo(self.indexLab.mas_right).offset(0);
             make.height.mas_equalTo([self.addImageView collectionViewItemWidth]);
         }];
         
@@ -57,7 +56,7 @@
             make.bottom.equalTo(self.imageBgV.mas_top).offset(-5);
             make.top.equalTo(self.contentView.mas_top).offset(5);
             make.right.equalTo(self.contentView.mas_right).offset(-10);
-            make.left.equalTo(self.indexLab.mas_right).offset(5);
+            make.left.equalTo(self.indexLab.mas_right).offset(0);
         }];
         
         BOOL isSpeechMarkEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
@@ -104,7 +103,7 @@
     }
     _topicIndex = topicIndex;
     [self.indexLab mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.width.mas_equalTo(topicIndex < 0 ? 0:40);
+        make.width.mas_equalTo(topicIndex < 0 ? 0:35);
     }];
     self.indexLab.text = [NSString stringWithFormat:@"(%li)",topicIndex];
 }
