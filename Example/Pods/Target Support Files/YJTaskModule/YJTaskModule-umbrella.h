@@ -14,6 +14,7 @@
 #import "LGActivityIndicatorAnimationProtocol.h"
 #import "LGActivityIndicatorBallPulseAnimation.h"
 #import "LGActivityIndicatorView.h"
+#import "YJScoreAlert.h"
 #import "YJTaskAnswerEditView.h"
 #import "YJTaskAnswerView.h"
 #import "YJTaskWrittingView.h"

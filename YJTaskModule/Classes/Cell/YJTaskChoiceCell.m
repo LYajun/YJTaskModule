@@ -25,7 +25,7 @@
 - (void)layoutUI{
     [self.contentView addSubview:self.choiceLab];
     [self.choiceLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self.contentView);
+        make.top.equalTo(self.contentView).offset(3);
         make.width.height.mas_equalTo(LabHeight);
         make.left.equalTo(self.contentView).offset(10);
     }];
@@ -36,6 +36,9 @@
         make.right.equalTo(self.contentView).offset(-10);
         make.height.greaterThanOrEqualTo(@44);
     }];
+    
+    BOOL isHideIndexBgImg = [NSUserDefaults yj_boolForKey:YJTaskModule_ImageLabelBgHidden_UserDefault_Key];
+    self.choiceLab.isHideIndexBgImg = isHideIndexBgImg;
 }
 - (void)setIsChoiced:(BOOL)isChoiced{
     _isChoiced = isChoiced;

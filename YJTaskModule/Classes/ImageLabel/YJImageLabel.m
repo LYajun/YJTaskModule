@@ -44,6 +44,10 @@
     _textStr = textStr;
     self.titleLab.text = textStr;
 }
+- (void)setIsHideIndexBgImg:(BOOL)isHideIndexBgImg{
+    _isHideIndexBgImg = isHideIndexBgImg;
+    self.bgImageView.hidden = isHideIndexBgImg;
+}
 - (UIImageView *)bgImageView{
     if (!_bgImageView) {
         _bgImageView = [[UIImageView alloc] initWithFrame:CGRectZero];

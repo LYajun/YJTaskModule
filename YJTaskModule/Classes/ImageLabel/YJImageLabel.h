@@ -17,4 +17,5 @@
 @property (nonatomic,strong) UIColor *textColor;
 /** 文本内容 */
 @property (nonatomic,copy) NSString *textStr;
+@property (nonatomic,assign) BOOL isHideIndexBgImg;
 @end

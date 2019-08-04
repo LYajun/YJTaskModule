@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.0.8'
+  s.version          = '1.0.9'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -19,10 +19,17 @@ TODO: Add long description of the pod here.
   s.resources = 'YJTaskModule/Classes/YJTaskModule.bundle'
 
   s.subspec 'Const' do |const|
-        const.source_files = 'YJTaskModule/Classes/Const/**/*'
-        const.dependency 'YJExtensions'
+      const.source_files = 'YJTaskModule/Classes/Const/**/*'
+      const.dependency 'YJExtensions'
+  end
+  
+  s.subspec 'AlertView' do |alertView|
+        alertView.source_files = 'YJTaskModule/Classes/AlertView/**/*'
+        alertView.dependency 'YJTaskModule/Const'
     end
 
+  
+  
     s.subspec 'Base' do |base|
         base.source_files = 'YJTaskModule/Classes/Base/**/*'
         base.dependency 'MJExtension'
