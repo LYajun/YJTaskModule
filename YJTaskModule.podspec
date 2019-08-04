@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.0.9'
+  s.version          = '1.1.0'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -26,6 +26,7 @@ TODO: Add long description of the pod here.
   s.subspec 'AlertView' do |alertView|
         alertView.source_files = 'YJTaskModule/Classes/AlertView/**/*'
         alertView.dependency 'YJTaskModule/Const'
+        alertView.dependency 'Masonry'
     end
 
   
