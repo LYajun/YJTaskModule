@@ -152,6 +152,7 @@
     
      NSTextAttachment *scoreTitleAttachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil] ;
     if (isPass) {
+        self.titleLab.text = @"恭喜你完成本次测试";
         [self addAnimation];
         scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
@@ -168,6 +169,7 @@
         }
         self.scoreLab.attributedText = attr;
     }else{
+        self.titleLab.text = @"再接再厉，继续努力";
         scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"wrong"] atBundle:YJTaskBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
