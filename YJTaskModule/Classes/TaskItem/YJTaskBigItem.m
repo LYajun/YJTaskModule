@@ -17,9 +17,6 @@
 #import "YJConst.h"
 
 @interface YJTaskBigItem ()<YJResizableSplitViewDelegate,YJTopicViewViewDelegate,UIScrollViewDelegate,YJTaskBaseSmallItemDelegate>
-{
-    CGFloat _dragOffsetX;
-}
 @property(nonatomic,strong) YJBasePaperBigModel *bigModel;
 @property(nonatomic,strong) YJBasePaperModel *taskModel;
 @property (nonatomic,strong) UIScrollView *smallScrollView;
@@ -190,12 +187,18 @@
     self.currentSmallIndex = index;
 }
 #pragma mark UIScrollViewDelegate
-- (void)scrollViewWillBeginDragging:(UIScrollView *)scrollView{
-    _dragOffsetX = scrollView.contentOffset.x;
+/** 滚动完毕就会调用（如果是人为拖拽scrollView导致滚动完毕，才会调用这个方法） */
+- (void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
+    NSInteger index = round(scrollView.contentOffset.x / LG_ScreenWidth);
+    if (index != self.currentSmallIndex) {
+        self.currentSmallIndex = index;
+    }
 }
--(void)scrollViewDidEndDecelerating:(UIScrollView *)scrollView{
-    if (fabs(_dragOffsetX - scrollView.contentOffset.x) > LG_ScreenWidth / 2) {
-        self.currentSmallIndex = scrollView.contentOffset.x / LG_ScreenWidth;
+/** 滚动完毕就会调用（如果不是人为拖拽scrollView导致滚动完毕，才会调用这个方法） */
+- (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView{
+    NSInteger index = round(scrollView.contentOffset.x / LG_ScreenWidth);
+    if (index != self.currentSmallIndex) {
+        self.currentSmallIndex = index;
     }
 }
 #pragma mark YJTaskBaseSmallItemDelegate

@@ -93,6 +93,17 @@
     }
     return html;
 }
+- (void)loadFileWithUrl:(NSString *)url{
+    if (![self.ResFileExtension.lowercaseString containsString:@"html"] && ![self.ResFileExtension.lowercaseString containsString:@"pdf"]) {
+        [self setTextNoData:@"当前不支持查看此格式的资料哦!"];
+        [self setViewNoDataShow:YES];
+    }else{
+        self.fileUrl = url;
+        [self downloadOnlineFile];
+    }
+    
+}
+
 -(void)downloadOnlineFile{
     NSString* urlString = self.fileUrl;
     if ([YJChineseInclude isIncludeChineseInString:urlString]) {

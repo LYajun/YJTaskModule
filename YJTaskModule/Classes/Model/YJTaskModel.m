@@ -10,6 +10,10 @@
 #import <TFHpple/TFHpple.h>
 #import "YJConst.h"
 
+@implementation YJTaskCourResModel
+
+@end
+
 @interface YJTaskModel ()
 @property (nonatomic,strong) NSMutableDictionary *htmlDic;
 @property (nonatomic,strong) NSString *answerStrCopy;
@@ -18,6 +22,12 @@
 + (NSArray *)mj_ignoredPropertyNames{
     return @[@"hash",@"superclass",@"description",@"debugDescription",@"AnswerStr_Attr"];
 }
++ (NSDictionary *)mj_objectClassInArray{
+    return @{
+             @"CourResList":[YJTaskCourResModel class]
+             };
+}
+
 - (NSMutableDictionary *)htmlDic{
     if (!_htmlDic) {
         _htmlDic = [NSMutableDictionary dictionary];

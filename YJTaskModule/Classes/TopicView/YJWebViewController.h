@@ -20,6 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *AssignmentID;
 
 
+- (void)loadFileWithUrl:(NSString *)url;
 
 
 /** 加载中 */

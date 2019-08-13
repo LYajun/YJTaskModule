@@ -13,7 +13,7 @@
 @interface YJTaskTitleView ()
 @property(nonatomic,strong) UILabel *taskNameL;
 @property(nonatomic,strong) UILabel *topicIndexL;
-@property(nonatomic,strong) UIButton *topicCarkBtn;
+
 @property(nonatomic,strong) UIView *topicCardBgView;
 @property(nonatomic,strong) UIView *botLine;
 @end

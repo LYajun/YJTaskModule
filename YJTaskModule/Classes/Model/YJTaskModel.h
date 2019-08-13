@@ -11,6 +11,15 @@
 #import "YJSpeechConfig.h"
 NS_ASSUME_NONNULL_BEGIN
 
+@interface YJTaskCourResModel : LGBaseModel
+@property (nonatomic,copy) NSString *FileExtension;
+@property (nonatomic,copy) NSString *FtpPath;
+@property (nonatomic,copy) NSString *HttpPath;
+@property (nonatomic,copy) NSString *MainResID;
+@property (nonatomic,copy) NSString *fileName;
+@end
+
+
 @interface YJTaskModel : LGBaseModel
 /** 作答ID */
 @property (nonatomic,copy) NSString *AnswerID;
@@ -71,6 +80,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float TotalScore;
 /** Paper */
 @property (nonatomic,strong) YJPaperModel *Paper;
+
+/** 非标准多资料模型 */
+@property (nonatomic,strong) NSArray<YJTaskCourResModel *> *CourResList;
 
 /** 新增 */
 @property (nonatomic,strong) YJSpeechConfig *bkSpeechConfig;

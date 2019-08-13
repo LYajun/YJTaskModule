@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 @interface YJTaskTitleView : UIView
+@property(nonatomic,strong) UIButton *topicCarkBtn;
 @property(nonatomic,copy) NSString *taskName;
 @property(nonatomic,strong) NSAttributedString *topicIndexAttr;
 @property (nonatomic,assign) BOOL carkable;
