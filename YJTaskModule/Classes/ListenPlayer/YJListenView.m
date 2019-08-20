@@ -47,6 +47,8 @@
 @property (copy, nonatomic) NSString *urlString;
 // 播放本地资源
 @property (copy, nonatomic) NSString *path;
+@property (nonatomic,assign) BOOL pauseByResign;
+
 @end
 @implementation YJListenView
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -145,14 +147,19 @@
     
     [self indicatorViewStop];
     self.playProgress.userInteractionEnabled = NO;
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ApplicationDidEnterBackground:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(ApplicationWillResign:) name:UIApplicationWillResignActiveNotification object:nil];
+
 }
 - (void)dealloc{
      [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
-- (void)ApplicationDidEnterBackground:(NSNotification *) noti{
-    [self stopPlayer];
+- (void)ApplicationWillResign:(NSNotification *) noti{
+    if (self.listenPlayer.isPlaying) {
+        self.pauseByResign = YES;
+        [self pausePlayer];
+    }
+
 }
 - (void)stopPlayer{
     [self yj_listenPlayerDidPlayFinish];
@@ -282,7 +289,10 @@
     _totalDuration = totalDuration;
     self.allTime = totalDuration;
     self.totalPlayTimeL.text = [self timeWithInterVal:totalDuration];
-     self.BtnTapBlock();
+    if (!self.pauseByResign) {
+        self.BtnTapBlock();
+        self.pauseByResign = NO;
+    }
 }
 - (void)yj_listenPlayer:(YJListenPlayer *)player totalBuffer:(CGFloat)totalBuffer{
     if (_totalDuration > 0) {
