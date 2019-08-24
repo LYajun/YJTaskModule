@@ -115,22 +115,25 @@
         __weak typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(0, 0), ^{
 
-            NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingGB_18030_2000);
-            __block NSString *html = [[NSString alloc]initWithContentsOfURL:url encoding:enc error:nil];
-            if (!html) {
-                NSStringEncoding enc1 = CFStringConvertEncodingToNSStringEncoding (kCFStringEncodingGBK_95);
-                html = [[NSString alloc]initWithContentsOfURL:url encoding:enc1 error:nil];
+            NSStringEncoding * usedEncoding = nil;
+            //带编码头的如 utf-8等 这里会识别
+            NSString *body = [NSString stringWithContentsOfURL:url usedEncoding:usedEncoding error:nil];
+            if (!body){
+                //如果之前不能解码，现在使用GBK解码
+                body = [NSString stringWithContentsOfURL:url encoding:0x80000632 error:nil];
             }
-            if (!html) {
-                html = [[NSString alloc]initWithContentsOfURL:url encoding:NSUTF8StringEncoding error:nil];
+            if (!body) {
+                //再使用GB18030解码
+                body = [NSString stringWithContentsOfURL:url encoding:0x80000631 error:nil];
             }
+            
             dispatch_async(dispatch_get_main_queue(), ^{
-                if (!html) {
-                   
-                    NSURLRequest* request = [NSURLRequest requestWithURL:url];
+                if (body) {
+                    [weakSelf.webView loadHTMLString:[NSString yj_adaptWebViewForHtml:body] baseURL:url];
+                }else {
+                    NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:url];
+                    request.timeoutInterval = 15;
                     [weakSelf.webView loadRequest:request];
-                }else{
-                    [self.webView loadHTMLString:html baseURL:url];
                 }
             });
         });

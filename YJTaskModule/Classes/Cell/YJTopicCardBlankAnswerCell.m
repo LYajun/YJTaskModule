@@ -100,9 +100,9 @@
         [[YJSpeechManager defaultManager] stopEngineWithTip:@"语音识别中..."];
     }
 }
-- (LGBaseTextView *)indexLab{
+- (UILabel *)indexLab{
     if (!_indexLab) {
-        _indexLab = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
+        _indexLab = [[UILabel alloc] initWithFrame:CGRectZero];
         _indexLab.textColor = [UIColor darkGrayColor];
         _indexLab.font = [UIFont systemFontOfSize:16];
     }
@@ -112,6 +112,7 @@
     if (!_textView) {
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
         _textView.placeholder = @"请输入...";
+        _textView.maxLength = 100;
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
         _textView.font = [UIFont systemFontOfSize:18];
         _textView.editable = NO;
