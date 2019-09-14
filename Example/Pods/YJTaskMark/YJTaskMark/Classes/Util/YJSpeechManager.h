@@ -25,16 +25,10 @@ typedef NS_ENUM(NSInteger,YJSpeechMarkType) {
 
 
 
-@interface YJSpeechConfigModel : NSObject
-
-@end
-
-
 @interface YJSpeechManager : NSObject
 
-/** 语音配置 */
-@property (nonatomic,strong,readonly) YJSpeechConfigModel *config;
-
+/** 评测超时时间 默认15s*/
+@property (nonatomic,assign) NSTimeInterval markTimeout;
 
 + (YJSpeechManager *)defaultManager;
 

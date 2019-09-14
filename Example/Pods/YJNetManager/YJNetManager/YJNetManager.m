@@ -10,7 +10,7 @@
 #import <AFNetworking/AFNetworking.h>
 
 #import <YJExtensions/YJExtensions.h>
-#import "YJNetMonitoring.h"
+#import <LGLog/LGLog.h>
 
 @interface YJNetManager ()
 @property (nonatomic,copy) NSString *wUrl;
@@ -34,7 +34,13 @@
     });
     return macro;
 }
-
++ (YJNetManager *)createManager{
+    YJNetManager *manager = [[YJNetManager alloc] init];
+    manager.userID = [YJNetManager defaultManager].userID;
+    manager.serverTimeInteverval = [YJNetManager defaultManager].serverTimeInteverval;
+    [manager replace];
+    return manager;
+}
 #pragma mark - Private
 - (void)replace {
     _wUrl = nil;
@@ -60,6 +66,8 @@
     return currentServiceStr;
 }
 - (void)getRequestWithSuccess:(void(^)(id response))success failure:(void (^)(NSError * error))failure{
+    NSString *originUrl = self.wUrl;
+    NSDictionary *originParams = self.wParameters;
     NSString *urlStr = [self.wUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     if (self.wParameters) {
         urlStr = [NSString stringWithFormat:@"%@?%@",urlStr,[self.wParameters yj_URLQueryString]];
@@ -69,13 +77,13 @@
     request.timeoutInterval = self.wTimeout;
     NSURLSession *session = [NSURLSession sharedSession];
     YJResponseType responseType = self.wResponseType;
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 failure(error);
+                [YJNetManager LogErrorRegMethod:@"GET" urlStr:originUrl errorMsg:error.localizedDescription params:originParams];
             }else{
-                success([weakSelf responseResultWithData:data responseType:responseType]);
+                success([YJNetManager responseResultWithData:data responseType:responseType]);
             }
         });
     }];
@@ -83,6 +91,8 @@
     self.currentDataTask = dataTask;
 }
 - (void)postRequestWithSuccess:(void(^)(id response))success failure:(void (^)(NSError * error))failure{
+    NSString *originUrl = self.wUrl;
+    NSDictionary *originParams = self.wParameters;
     NSString *urlStr = [self.wUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl];
@@ -92,13 +102,13 @@
     request.HTTPBody = [NSJSONSerialization dataWithJSONObject:self.wParameters options:NSJSONWritingPrettyPrinted error:NULL];
     NSURLSession *session = [NSURLSession sharedSession];
     YJResponseType responseType = self.wResponseType;
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 failure(error);
+                 [YJNetManager LogErrorRegMethod:@"POST" urlStr:originUrl errorMsg:error.localizedDescription params:originParams];
             }else{
-                success([weakSelf responseResultWithData:data responseType:responseType]);
+                success([YJNetManager responseResultWithData:data responseType:responseType]);
             }
         });
     }];
@@ -129,6 +139,7 @@
     });
 }
 - (void)uploadGetRequestWithProgress:(nullable void(^)(NSProgress * progress))progress success:(void(^)(id response))success failure:(void (^)(NSError * error))failure{
+    NSString *originUrl = self.wUrl;
      NSString *urlStr = [self.wUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
      AFHTTPSessionManager *manager = [AFHTTPSessionManager manager];
     __weak typeof(self) weakSelf = self;
@@ -150,21 +161,25 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             failure(error);
         });
+        [YJNetManager LogErrorRegMethod:@"UPLOAD" urlStr:originUrl errorMsg:error.localizedDescription params:@{}];
     }];
 }
 - (void)md5GetRequestWithSuccess:(void(^)(id response))success failure:(void (^)(NSError * error))failure{
+    NSString *originUrl = self.wUrl;
+    NSDictionary *originParams = self.wParameters;
+    
     YJResponseType responseType = self.wResponseType;
   
     NSMutableURLRequest *request = [self exerciseMd5GetReqWithUrl:self.wUrl];
      request.timeoutInterval = self.wTimeout;
     NSURLSession *session = [NSURLSession sharedSession];
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 failure(error);
+                 [YJNetManager LogErrorRegMethod:@"MD5GET" urlStr:originUrl errorMsg:error.localizedDescription params:originParams];
             }else{
-                success([weakSelf responseResultWithData:data responseType:responseType]);
+                success([YJNetManager responseResultWithData:data responseType:responseType]);
             }
         });
     }];
@@ -172,6 +187,9 @@
     self.currentDataTask = dataTask;
 }
 - (void)md5PostRequestWithSuccess:(void(^)(id response))success failure:(void (^)(NSError * error))failure{
+    NSString *originUrl = self.wUrl;
+    NSDictionary *originParams = self.wParameters;
+    
     YJResponseType responseType = self.wResponseType;
    
     NSMutableURLRequest *request = [self exerciseMd5PostReqWithUrl:self.wUrl];
@@ -180,20 +198,20 @@
     [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
     
     NSURLSession *session = [NSURLSession sharedSession];
-    __weak typeof(self) weakSelf = self;
     NSURLSessionDataTask *dataTask = [session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
         dispatch_async(dispatch_get_main_queue(), ^{
             if (error) {
                 failure(error);
+                 [YJNetManager LogErrorRegMethod:@"MD5POST" urlStr:originUrl errorMsg:error.localizedDescription params:originParams];
             }else{
-                success([weakSelf responseResultWithData:data responseType:responseType]);
+                success([YJNetManager responseResultWithData:data responseType:responseType]);
             }
         });
     }];
     [dataTask resume];
     self.currentDataTask = dataTask;
 }
-- (id)responseResultWithData:(NSData *)data responseType:(YJResponseType)type{
++ (id)responseResultWithData:(NSData *)data responseType:(YJResponseType)type{
     switch (type) {
         case YJResponseTypeJSON:
         {
@@ -203,26 +221,35 @@
             break;
         case YJResponseTypeString:
         {
-            NSData *xmldata = [data subdataWithRange:NSMakeRange(0,40)];
-            NSString *xmlstr = [[NSString alloc] initWithData:xmldata encoding:NSUTF8StringEncoding];
-            NSData *newData = data;
-            if (xmlstr && xmlstr.length > 0 && [xmlstr rangeOfString:@"\"GB2312\"" options:NSCaseInsensitiveSearch].location != NSNotFound){
-                NSStringEncoding enc = CFStringConvertEncodingToNSStringEncoding(kCFStringEncodingGB_18030_2000);
-                NSString *utf8str = [[NSString alloc] initWithData:newData encoding:enc];
-                utf8str = [utf8str stringByReplacingOccurrencesOfString:@"\"GB2312\"" withString:@"\"utf-8\"" options:NSCaseInsensitiveSearch range:NSMakeRange(0,40)];
-                newData = [utf8str dataUsingEncoding:NSUTF8StringEncoding];
+            NSString *xmlStr = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+            if (!xmlStr){
+                //如果之前不能解码，现在使用GBK解码
+                xmlStr = [[NSString alloc] initWithData:data encoding:0x80000632];
             }
-            NSString *str = [[NSString alloc] initWithData:newData encoding:NSUTF8StringEncoding];
-            if (!str || str.length == 0) {
-                str = [[NSString alloc] initWithData:newData encoding:NSUnicodeStringEncoding];
+            if (!xmlStr) {
+                //再使用GB18030解码
+                xmlStr = [[NSString alloc] initWithData:data encoding:0x80000631];
             }
-            return str;
+            if (!xmlStr) {
+                xmlStr = [[NSString alloc] initWithData:data encoding:NSUnicodeStringEncoding];
+            }
+            if (!xmlStr) {
+                xmlStr = [NSString stringWithUTF8String:[data bytes]];
+            }
+            return xmlStr;
         }
             break;
         case YJResponseTypeData:
             return data;
             break;
     }
+}
++ (void)LogErrorRegMethod:(NSString *)method urlStr:(NSString *)urlStr errorMsg:(NSString *)msg params:(NSDictionary *)params{
+    if (!params) {
+        params = @{};
+    }
+    NSString *content = [NSString stringWithFormat:@"\n请求方法:%@\nURL:%@\n请求参数:%@\n错误信息:%@",method,urlStr,params,msg];
+    LGLogError(content);
 }
 #pragma mark - Public
 - (void)startRequestWithSuccess:(void (^)(id _Nonnull))success failure:(void (^)(NSError * _Nonnull))failure{
@@ -234,9 +261,11 @@
             [self _startRequestWithProgress:progress success:success failure:failure];
         }else{
             failure([NSError yj_errorWithCode:YJErrorUrlEmpty description:@"url empty"]);
+            [self replace];
         }
     }else{
         failure([NSError yj_errorWithCode:YJErrorNoNetwork description:@"无网络连接"]);
+        [self replace];
     }
 }
 - (void)_startRequestWithProgress:(void(^)(NSProgress * progress))progress success:(void(^)(id response))success failure:(void (^)(NSError * error))failure{

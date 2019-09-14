@@ -164,8 +164,9 @@
     if([text isEqualToString:@"\n"]){
         if (self.lgtDelegate && [self.lgtDelegate respondsToSelector:@selector(lgt_textViewShouldReturn:)]) {
             [self.lgtDelegate lgt_textViewShouldReturn:self];
+            return NO;
         }
-        return NO;
+        return YES;
     }
     if (self.lgtDelegate && [self.lgtDelegate respondsToSelector:@selector(lgt_textView:shouldChangeTextInRange:replacementText:)]) {
         return [self.lgtDelegate lgt_textView:self shouldChangeTextInRange:range replacementText:text];

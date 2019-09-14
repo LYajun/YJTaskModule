@@ -15,9 +15,10 @@
 #import <YJSearchController/YJChineseInclude.h>
 #import "YJConst.h"
 #import "LGActivityIndicatorView.h"
+#import <WebKit/WebKit.h>
 
-@interface YJWebViewController ()<UIWebViewDelegate>
-@property (strong, nonatomic) UIWebView *webView;
+@interface YJWebViewController ()<WKNavigationDelegate>
+@property (strong, nonatomic) WKWebView *webView;
 /** 加载中 */
 @property (strong, nonatomic) UIView *viewLoading;
 /** 没有数据 */
@@ -143,20 +144,19 @@
         [self.webView loadRequest:request];
     }
 }
-#pragma mark - UIWebViewDelegate
-//当请求页面出现错误的时候，我们给予提示：
-- (void)webView:(UIWebView *)webView didFailLoadWithError:(NSError *)error{
+#pragma mark - WKNavigationDelegate
 
+- (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error{
     [self setTextLoadError:@"文件加载失败"];
     [self setViewLoadErrorShow:YES];
 }
-- (BOOL)webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request navigationType:(UIWebViewNavigationType)navigationType{
-    return YES;
+- (void)webView:(WKWebView *)webView decidePolicyForNavigationAction:(WKNavigationAction *)navigationAction decisionHandler:(void (^)(WKNavigationActionPolicy))decisionHandler{
+    decisionHandler(WKNavigationActionPolicyAllow);
 }
-//当网页视图结束加载一个请求之后，得到通知
--(void)webViewDidFinishLoad:(UIWebView*)webView{
-    [self setViewLoadingShow:NO];
+- (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
+     [self setViewLoadingShow:NO];
 }
+
 #pragma mark - Empty
 - (void)setViewLoadingShow:(BOOL)show{
     [self.viewLoadError removeFromSuperview];
@@ -260,14 +260,21 @@
     return _viewLoadError;
 }
 
-- (UIWebView *)webView{
+- (WKWebView *)webView{
     if (!_webView) {
-        _webView = [[UIWebView alloc] initWithFrame:CGRectZero];
-        _webView.scalesPageToFit = [self.ResFileExtension.lowercaseString containsString:@"pdf"];
+        WKUserScript *wkUScript = [[WKUserScript alloc] initWithSource:@"var meta = document.createElement('meta'); meta.setAttribute('name', 'viewport'); meta.setAttribute('content', 'width=device-width'); document.getElementsByTagName('head')[0].appendChild(meta);" injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+        WKUserScript *wkImgScript = [[WKUserScript alloc] initWithSource:@"var imgs=document.getElementsByTagName('img');var maxwidth=document.body.clientWidth;var length=imgs.length;for(var i=0;i<length;i++){var img=imgs[i];if(img.width > maxwidth){img.style.width = '90%';img.style.height = 'auto';}}" injectionTime:WKUserScriptInjectionTimeAtDocumentEnd forMainFrameOnly:YES];
+        WKUserContentController *wkUController = [[WKUserContentController alloc] init];
+        [wkUController addUserScript:wkUScript];
+        [wkUController addUserScript:wkImgScript];
+        WKWebViewConfiguration *config = [[WKWebViewConfiguration alloc] init];
+        config.userContentController = wkUController;
+        WKPreferences *preference = [[WKPreferences alloc]init];
+        config.preferences = preference;
+        _webView = [[WKWebView alloc] initWithFrame:CGRectZero configuration:config];
+        _webView.navigationDelegate = self;
         _webView.scrollView.bounces = NO;
-        _webView.opaque = NO;
         _webView.backgroundColor = [UIColor whiteColor];
-        _webView.delegate = self;
     }
     return _webView;
 }

@@ -88,12 +88,15 @@
     self.layer.shadowRadius = radius;
     self.layer.shadowOffset = offset;
 }
-- (void)yj_shadowWithCornerRadius:(CGFloat)cRadius shadowRadius:(CGFloat)shadowRadius shadowColor:(UIColor *)shadowColor opacity:(CGFloat)opacity offset:(CGSize)offset{
+- (void)yj_shadowWithCornerRadius:(CGFloat)cRadius borderWidth:(CGFloat)borderWidth borderColor:(UIColor *)borderColor shadowColor:(UIColor *)shadowColor shadowOpacity:(CGFloat)shadowOpacity shadowOffset:(CGSize)shadowOffset roundedRect:(CGRect)roundedRect cornerRadii:(CGSize)cornerRadii rectCorner:(UIRectCorner)rectCorner{
     self.layer.cornerRadius = cRadius;
+    self.layer.borderWidth = borderWidth;
+    self.layer.borderColor = borderColor.CGColor;
+    self.layer.shadowOpacity = shadowOpacity;
     self.layer.shadowColor = shadowColor.CGColor;
-    self.layer.shadowOpacity = opacity;
-    self.layer.shadowRadius = shadowRadius;
-    self.layer.shadowOffset = offset;
+    self.layer.shadowOffset =  shadowOffset;
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:roundedRect byRoundingCorners:rectCorner cornerRadii:cornerRadii];
+    self.layer.shadowPath = bezierPath.CGPath;
 }
 #pragma mark - Shake
 - (void)yj_shake {
@@ -272,13 +275,25 @@
     return self.frame.origin.x + self.frame.size.width;
 }
 
-- (BOOL)yj_isIPhoneX{
-    if ((MIN([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) >= 375 &&
-         MAX([UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height) >= 812)) {
-        return YES;
-    }
-    return NO;
+- (BOOL)yj_isIPAD{
+    BOOL isIpad = (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad);
+    return isIpad;
 }
+
+- (BOOL)yj_isIPhoneX{
+    BOOL iPhoneX = NO;
+    if (UIDevice.currentDevice.userInterfaceIdiom != UIUserInterfaceIdiomPhone) {
+        return iPhoneX;
+    }
+    if (@available(iOS 11.0, *)) {
+        UIWindow *mainWindow = [[[UIApplication sharedApplication] delegate] window];
+        if (mainWindow.safeAreaInsets.bottom > 0.0) {
+            iPhoneX = YES;
+        }
+    }
+    return iPhoneX;
+}
+
 - (CGFloat)yj_stateBarSpace{
      return ([self yj_isIPhoneX] ? 24 : 0);
 }

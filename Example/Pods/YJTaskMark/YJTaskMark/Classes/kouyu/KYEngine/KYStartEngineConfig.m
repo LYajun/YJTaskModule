@@ -15,7 +15,7 @@
     self = [super init];
     if (self) {
         self.enable = YES;
-        NSBundle *frameworkBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[KYStartEngineConfig class]] pathForResource:@"LGKnowledgeFramework" ofType:@"bundle"]];
+        NSBundle *frameworkBundle = [NSBundle bundleWithPath:[[NSBundle bundleForClass:[KYStartEngineConfig class]] pathForResource:@"YJTaskMark" ofType:@"bundle"]];
         NSString *frameworkPath = [frameworkBundle resourcePath];
         self.native = [frameworkPath stringByAppendingPathComponent:[[NSString alloc] initWithUTF8String:"native.res"]];
         self.provison = [frameworkPath stringByAppendingPathComponent:[[NSString alloc] initWithUTF8String:"skegn.provision"]];

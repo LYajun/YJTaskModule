@@ -18,6 +18,8 @@
 #import "LGTBarProgressView.h"
 #import "LGTImageDeleteView.h"
 #import "LGTUploadCell.h"
+#import "LGTWrittingImageBrowserScrollView.h"
+#import "LGTWrittingImageViewer.h"
 #import "LGTMainViewController.h"
 #import "LGTTalkModel.h"
 #import "LGTTalkReplyModel.h"

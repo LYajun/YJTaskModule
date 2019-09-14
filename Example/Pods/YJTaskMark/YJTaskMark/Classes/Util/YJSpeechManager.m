@@ -25,20 +25,19 @@ static NSString *cMicAuthorization = @"micAuthorization";
 static NSString *cSpeechAppkey = @"148757611600000f";
 static NSString *cSpeechSecretkey = @"2d5356fe1d5f3f13eba43ca48c176647";
 
-static CGFloat kSoundOffset = 20;
-@implementation YJSpeechConfigModel
+static CGFloat kSoundOffset = 10;
 
-@end
 
 
 @interface YJSpeechManager ()
-/** 语音配置 */
-@property (nonatomic,strong,readwrite) YJSpeechConfigModel *config;
+
 @property (nonatomic,assign) BOOL isInit;
 @property (nonatomic,assign) YJSpeechMarkType markType;
 @property (nonatomic,copy) NSString *refText;
 @property(nonatomic,strong) YJSpeechTimer *timer;
 @property (nonatomic,assign) CGFloat timeCount;
+@property(nonatomic,strong) YJSpeechTimer *timeoutTimer;
+@property (nonatomic,assign) CGFloat timeoutCount;
 @property (nonatomic,assign) CGFloat sound;
 @property (nonatomic,copy) void (^initBlock) (BOOL success);
 @property (nonatomic,copy) void (^speechResultBlock) (YJSpeechResultModel *resultModel);
@@ -58,7 +57,6 @@ static CGFloat kSoundOffset = 20;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         macro = [[YJSpeechManager alloc]init];
-        macro.config = [[YJSpeechConfigModel alloc] init];
     });
     return macro;
 }
@@ -111,7 +109,7 @@ static CGFloat kSoundOffset = 20;
     KYStartEngineConfig *startEngineConfig = [[KYStartEngineConfig alloc] init];
     startEngineConfig.appKey = cSpeechAppkey;
     startEngineConfig.secretKey = cSpeechSecretkey;
-    
+    startEngineConfig.vadEnable = YES;
     __weak typeof(self) weakSelf = self;
     //初始化引擎
     [[KYTestEngine sharedInstance] initEngine:KY_CloudEngine startEngineConfig:startEngineConfig finishBlock:^(BOOL isSuccess) {
@@ -125,7 +123,12 @@ static CGFloat kSoundOffset = 20;
 - (BOOL)isInitEngine{
     return self.isInit;
 }
-
+- (NSTimeInterval)markTimeout{
+    if (_markTimeout == 0) {
+        return 15.0;
+    }
+    return _markTimeout;
+}
 - (void)startEngineAtRefText:(NSString *)refText markType:(YJSpeechMarkType)markType{
    
     self.markType = markType;
@@ -145,6 +148,10 @@ static CGFloat kSoundOffset = 20;
     }
     if ([YJNetMonitoring shareMonitoring].netStatus == 0) {
         [self showResult:@"网络未连接"];
+        return;
+    }
+    if ([YJNetMonitoring shareMonitoring].networkCanUseState != 1) {
+        [self showResult:@"网络异常"];
         return;
     }
      [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -179,6 +186,7 @@ static CGFloat kSoundOffset = 20;
     return self.isMarking;
 }
 - (void)showResult:(NSString *) result{
+   
      __weak typeof(self) weakSelf = self;
     if ([result containsString:@"sound_intensity"]) {
         NSData *rdata = [result dataUsingEncoding:NSUTF8StringEncoding];
@@ -188,6 +196,7 @@ static CGFloat kSoundOffset = 20;
             self.timeCount = 0;
         }
     }else{
+        [self removeTimeoutTimer];
         if (!self.isEndMark) {
             NSLog(@"评测异常结束");
 //            [self startEngineAtRefText:self.refText markType:self.markType];
@@ -259,11 +268,11 @@ static CGFloat kSoundOffset = 20;
                 model.errorMsg = result;
                 model.totalScore = 0;
             }
+            weakSelf.isMarking = NO;
+            weakSelf.isEndMark = NO;
             if (weakSelf.speechResultBlock) {
                 weakSelf.speechResultBlock(model);
             }
-            weakSelf.isMarking = NO;
-            weakSelf.isEndMark = NO;
         });
     }
 }
@@ -276,6 +285,7 @@ static CGFloat kSoundOffset = 20;
     if (self.isMarking) {
         self.isEndMark = YES;
         [[KYTestEngine sharedInstance] stopEngine];
+        [self startTimeoutTimer];
         if (!YJS_IsStrEmpty(tip)) {
             if (![tip isEqualToString:[NSString yj_Char1]]) {
                 [LGAlert showIndeterminateWithStatus:tip];
@@ -321,6 +331,7 @@ static CGFloat kSoundOffset = 20;
     __weak typeof(self) weakSelf = self;
     if (self.soundIntensityBlock) {
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             if (weakSelf.timeCount >= 0 && weakSelf.sound <= kSoundOffset) {
                 weakSelf.timeCount += 0.2;
             }
@@ -328,13 +339,38 @@ static CGFloat kSoundOffset = 20;
                 weakSelf.timeCount = 0;
             }
             weakSelf.soundIntensityBlock(weakSelf.sound, weakSelf.timeCount);
+           
         });
     }
+}
+- (void)startTimeoutTimer{
+    [self.timeoutTimer fire];
+    self.timeoutCount = 0;
+}
+- (void)removeTimeoutTimer{
+    [self.timeoutTimer invalidate];
+    self.timeoutTimer = nil;
+}
+- (void)timeoutTimerAction{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        weakSelf.timeoutCount += 1;
+        if (weakSelf.timeoutCount >= weakSelf.markTimeout) {
+            [weakSelf cancelEngine];
+            [weakSelf showResult:@"评测超时"];
+        }
+    });
 }
 - (YJSpeechTimer *)timer{
     if (!_timer) {
         _timer = [YJSpeechTimer scheduledTimerWithTimeInterval:0.2 target:self selector:@selector(timerAction) userInfo:nil repeats:YES dispatchQueue:dispatch_queue_create("YJSpeechTimerQueue", DISPATCH_QUEUE_CONCURRENT)];
     }
     return _timer;
+}
+- (YJSpeechTimer *)timeoutTimer{
+    if (!_timeoutTimer) {
+         _timeoutTimer = [YJSpeechTimer scheduledTimerWithTimeInterval:1 target:self selector:@selector(timeoutTimerAction) userInfo:nil repeats:YES dispatchQueue:dispatch_queue_create("YJSpeechTimeroutQueue", DISPATCH_QUEUE_CONCURRENT)];
+    }
+    return _timeoutTimer;
 }
 @end

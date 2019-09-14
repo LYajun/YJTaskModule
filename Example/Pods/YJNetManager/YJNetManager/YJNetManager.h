@@ -9,6 +9,7 @@
 #import <Foundation/Foundation.h>
 #import "YJUploadModel.h"
 #import "NSError+YJNetManager.h"
+#import "YJNetMonitoring.h"
 
 NS_ASSUME_NONNULL_BEGIN
 typedef NS_ENUM(NSInteger,YJRequestType){
@@ -36,7 +37,7 @@ typedef NS_ENUM(NSInteger,YJResponseType){
 
 
 + (YJNetManager *)defaultManager;
-
++ (YJNetManager *)createManager;
 - (void)cancelRequest;
 /** 填充网址 */
 - (YJNetManager* (^)(NSString *url))setRequest;
