@@ -271,6 +271,11 @@
     if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank) {
         if (self.taskStageType == YJTaskStageTypeAnswer) {
             [self showMatchViewByIndex:index];
+        }else{
+            if (self.delegate &&
+                [self.delegate respondsToSelector:@selector(yj_topicView:didClickBlankTextAtIndex:)]) {
+                [self.delegate yj_topicView:self didClickBlankTextAtIndex:index];
+            }
         }
     }else{
         if (self.delegate &&
