@@ -123,14 +123,18 @@
                 }else if (indexP.row == 1){
                     cell.titleStr = @"参考答案";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
-                    cell.text = self.smallModel.yj_smallStandardAnswer;
+                    NSString *standardAnswer = self.smallModel.yj_smallStandardAnswer;
+                    if (!IsStrEmpty(standardAnswer)) {
+                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    }
+                    cell.text = standardAnswer;
                 }else if (indexP.row == 2){
                     cell.titleStr = @"本题得分";
                     cell.titleColor = LG_ColorWithHex(0xFC0000);
                     if (!IsStrEmpty(self.smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [self.smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{
-                        cell.text = @"--";
+                        cell.text = @"暂无评阅结果";
                     }
                 }else{
                     cell.titleStr = @"本题解析";
@@ -168,7 +172,11 @@
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"参考答案";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
-                    cell.text = self.smallModel.yj_smallStandardAnswer;
+                    NSString *standardAnswer = self.smallModel.yj_smallStandardAnswer;
+                    if (!IsStrEmpty(standardAnswer)) {
+                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    }
+                    cell.text = standardAnswer;
                 }else if (indexP.row == 2){
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"本题得分";
@@ -176,7 +184,7 @@
                     if (!IsStrEmpty(self.smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [self.smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{
-                        cell.text = @"--";
+                        cell.text = @"暂无评阅结果";
                     }
                 }else{
                     cell.imgUrlArr = nil;
