@@ -537,6 +537,9 @@ static NSString *kHpStuName = @"";
     return self.TopicTypeID;
 }
 - (NSString *)yj_bigTopicTypeName{
+    if (!IsStrEmpty(self.TopicTypeOtherName)) {
+        return self.TopicTypeOtherName;
+    }
     return self.TopicTypeName;
 }
 - (NSString *)yj_bigTopicID{

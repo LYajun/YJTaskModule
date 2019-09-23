@@ -133,6 +133,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *TopicTypeID;
 /** 大题类型名 */
 @property (nonatomic,copy) NSString *TopicTypeName;
+@property (nonatomic,copy) NSString *TopicTypeOtherName;
+@property (nonatomic,copy) NSString *TopicGenreName;
 /** 改错题信息 */
 @property (nonatomic,strong) YJCorrectModel *GCQues;
 /** 小题List */
