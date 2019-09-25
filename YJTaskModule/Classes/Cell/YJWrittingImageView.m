@@ -64,6 +64,9 @@ static NSInteger maxUploadCount = 3;
     [self.collectionView reloadData];
 }
 - (CGFloat)collectionViewItemWidth{
+    if (IsIPad) {
+        return 120;
+    }
     return (LG_ScreenWidth - 80)/3;
 }
 - (void)uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{

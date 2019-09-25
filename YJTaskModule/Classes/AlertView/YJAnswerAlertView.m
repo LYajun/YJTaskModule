@@ -103,7 +103,7 @@ static CGFloat kCellRowSpace = 10;
     return [self alertWithTitle:title normalMsg:normalMsg highLightMsg:highLightMsg cancelTitle:cancelTitle destructiveTitle:destructiveTitle choiceTitle:nil cancelBlock:cancelBlock destructiveBlock:destructiveBlock choiceBlock:nil];
 }
 + (YJAnswerAlertView *)alertWithTitle:(NSString *)title normalMsg:(NSString *)normalMsg highLightMsg:(NSString *)highLightMsg cancelTitle:(NSString *)cancelTitle destructiveTitle:(NSString *)destructiveTitle choiceTitle:(NSString *)choiceTitle cancelBlock:(void (^)(void))cancelBlock destructiveBlock:(void (^)(void))destructiveBlock choiceBlock:(void (^)(BOOL))choiceBlock{
-    CGFloat w = LG_ScreenWidth*0.72;
+    CGFloat w = IsIPad ? 350 : LG_ScreenWidth*0.72;
     CGFloat h = w;
     if (LG_ScreenWidth <= 320) {
         h = w * 1.38;
@@ -217,6 +217,9 @@ static CGFloat kCellRowSpace = 10;
     self.timeL.text = [NSString stringWithFormat:@"%li",timeCount];
 }
 - (CGFloat)alertWidth{
+    if (IsIPad) {
+        return 350;
+    }
     return LG_ScreenWidth*0.72;
 }
 - (CGFloat)alertHeight{

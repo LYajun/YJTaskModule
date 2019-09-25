@@ -57,33 +57,23 @@
     }
     return self;
 }
-
+- (CGFloat)listenBgViewWidth{
+    CGFloat listenBgViewWidth = LG_ScreenWidth-40;
+    if (IsIPad) {
+        listenBgViewWidth = 420;
+    }
+    return listenBgViewWidth;
+}
 - (void)layoutUI{
   
-    UIView *listenContentView = [UIView new];
-    [self addSubview:listenContentView];
-    [listenContentView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.center.equalTo(self);
-        make.left.equalTo(self).offset(20);
-        make.height.mas_equalTo(44);
-    }];
-    
-    
     [self addSubview:self.listenBgView];
     [self.listenBgView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.center.equalTo(self);
-        make.left.equalTo(self).offset(20);
-        make.height.mas_equalTo(44);
+        make.width.mas_equalTo(self.listenBgViewWidth);
+        make.height.mas_equalTo(42);
     }];
     
-    listenContentView.layer.cornerRadius = 22;
-    listenContentView.layer.shadowOpacity = 0.5;
-    listenContentView.layer.shadowColor = LG_ColorWithHex(0x00C3F2).CGColor;
-    listenContentView.layer.shadowOffset =  CGSizeMake(0, 2.0);
-    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRoundedRect:CGRectMake(3, 2, LG_ScreenWidth-40-6, 44) byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(22, 22)];
-    listenContentView.layer.shadowPath = bezierPath.CGPath;
-    
-    [self.listenBgView yj_clipLayerWithRadius:22 width:0 color:nil];
+     [self.listenBgView yj_shadowWithCornerRadius:21 borderWidth:0 borderColor:nil shadowColor:LG_ColorWithHex(0x00C3F2) shadowOpacity:0.5 shadowOffset:CGSizeMake(0, 2.0) roundedRect:CGRectMake(3, 1, self.listenBgViewWidth-6, 42) cornerRadii:CGSizeMake(21, 21) rectCorner:UIRectCornerAllCorners];
     
     [self.listenBgView addSubview:self.playBtn];
     [self.playBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -203,7 +193,8 @@
 - (void)listenListClickAction:(UIButton *) btn{
     CGPoint relativePoint = [self convertRect: self.bounds toView: [UIApplication sharedApplication].keyWindow].origin;
     CGSize relativeSize = [self convertRect: self.bounds toView: [UIApplication sharedApplication].keyWindow].size;
-    YJListenListView *listView = [YJListenListView showOnView:[UIApplication sharedApplication].keyWindow frame:CGRectMake(42, relativePoint.y+relativeSize.height, LG_ScreenWidth-84, (self.urlNameArr.count > 5 ? 5:self.urlNameArr.count)*44)];
+    CGFloat listViewX = (LG_ScreenWidth - self.listenBgViewWidth)/2 + 22;
+    YJListenListView *listView = [YJListenListView showOnView:[UIApplication sharedApplication].keyWindow frame:CGRectMake(listViewX, relativePoint.y+relativeSize.height, LG_ScreenWidth-listViewX*2, (self.urlNameArr.count > 5 ? 5:self.urlNameArr.count)*44)];
     listView.delegate = self;
     listView.currentIndex = self.currentIndex;
     listView.listenTitles = self.urlNameArr;

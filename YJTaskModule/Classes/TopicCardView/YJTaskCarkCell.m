@@ -12,7 +12,7 @@
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
 
-static CGFloat kTaskCarkCellWidthRate = 0.9;
+#define kTaskCarkCellWidth  (IsIPad ? 420 : LG_ScreenWidth*0.9)
 @interface YJTaskCarkCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (nonatomic,strong) UICollectionView *collectionView;
@@ -107,7 +107,7 @@ static CGFloat kTaskCarkCellWidthRate = 0.9;
         layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
         layout.minimumInteritemSpacing = 3;
         layout.minimumLineSpacing = 3;
-        CGFloat w = (LG_ScreenWidth*kTaskCarkCellWidthRate-20*2-3*5)/5;
+        CGFloat w = (kTaskCarkCellWidth-20*2-3*5)/5;
         layout.itemSize = CGSizeMake(w, w);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.scrollEnabled = NO;

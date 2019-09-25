@@ -26,6 +26,7 @@
 		BA9D788F22D8261700D6E561 /* IEPaperDisplayViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D788A22D8261700D6E561 /* IEPaperDisplayViewController.m */; };
 		BA9D789022D8261700D6E561 /* IEPaperDisplayDataModel.m in Sources */ = {isa = PBXBuildFile; fileRef = BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */; };
 		BA9D789222D8284400D6E561 /* task.json in Resources */ = {isa = PBXBuildFile; fileRef = BA9D789122D8284400D6E561 /* task.json */; };
+		BADE095F233B813D009D88D6 /* task_writting.json in Resources */ = {isa = PBXBuildFile; fileRef = BADE095E233B813D009D88D6 /* task_writting.json */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -72,6 +73,7 @@
 		BA9D788D22D8261700D6E561 /* IEPaperDisplayProtocol.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IEPaperDisplayProtocol.h; sourceTree = "<group>"; };
 		BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IEPaperDisplayDataModel.m; sourceTree = "<group>"; };
 		BA9D789122D8284400D6E561 /* task.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = task.json; sourceTree = "<group>"; };
+		BADE095E233B813D009D88D6 /* task_writting.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = task_writting.json; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -135,6 +137,7 @@
 		6003F593195388D20070C39A /* Example for YJTaskModule */ = {
 			isa = PBXGroup;
 			children = (
+				BADE095E233B813D009D88D6 /* task_writting.json */,
 				BA9D789122D8284400D6E561 /* task.json */,
 				BA9D788722D8261700D6E561 /* PaperDisplay */,
 				6003F59C195388D20070C39A /* YJAppDelegate.h */,
@@ -221,8 +224,8 @@
 			isa = PBXGroup;
 			children = (
 				BA9D788C22D8261700D6E561 /* IEPaperDisplayDataModel.h */,
-				BA9D788D22D8261700D6E561 /* IEPaperDisplayProtocol.h */,
 				BA9D788E22D8261700D6E561 /* IEPaperDisplayDataModel.m */,
+				BA9D788D22D8261700D6E561 /* IEPaperDisplayProtocol.h */,
 			);
 			path = DataModel;
 			sourceTree = "<group>";
@@ -310,6 +313,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BADE095F233B813D009D88D6 /* task_writting.json in Resources */,
 				873B8AEB1B1F5CCA007FD442 /* Main.storyboard in Resources */,
 				71719F9F1E33DC2100824A3D /* LaunchScreen.storyboard in Resources */,
 				BA9D789222D8284400D6E561 /* task.json in Resources */,
