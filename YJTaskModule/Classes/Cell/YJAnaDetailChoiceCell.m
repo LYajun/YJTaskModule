@@ -118,7 +118,7 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
         layout.minimumInteritemSpacing = 1;
-        CGFloat itemW = (LG_ScreenWidth - 2)/3;
+        CGFloat itemW = (LG_ScreenWidth - 3)/3;
         layout.itemSize = CGSizeMake(itemW, YJAnaDetailChoiceCollectionCellHeight-2);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.contentInset = UIEdgeInsetsMake(1, 0, 1, 0);

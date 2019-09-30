@@ -12,7 +12,7 @@
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
 
-#define kTaskCarkCellWidth  (IsIPad ? 420 : LG_ScreenWidth*0.9)
+#define kTaskCarkCellWidth  (IsIPad ? 480 : LG_ScreenWidth*0.9)
 @interface YJTaskCarkCell ()<UICollectionViewDelegate,UICollectionViewDataSource>
 
 @property (nonatomic,strong) UICollectionView *collectionView;
@@ -56,7 +56,7 @@
 }
 - (void)setCardModel:(YJTaskCarkModel *)cardModel{
     _cardModel = cardModel;
-    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li大题",cardModel.topicIndex+1],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
+    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li%@题",cardModel.topicIndex+1,(self.bigTopicTypeNameHideBig ? @"":@"大")],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
     self.titleL.attributedText = attr;
     [self.collectionView reloadData];
 }
@@ -107,7 +107,10 @@
         layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
         layout.minimumInteritemSpacing = 3;
         layout.minimumLineSpacing = 3;
-        CGFloat w = (kTaskCarkCellWidth-20*2-3*5)/5;
+        CGFloat w = (kTaskCarkCellWidth-20*2-3*4)/5;
+        if (IsIPad) {
+            w = (kTaskCarkCellWidth-20*2-3*7)/8;
+        }
         layout.itemSize = CGSizeMake(w, w);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
         _collectionView.scrollEnabled = NO;

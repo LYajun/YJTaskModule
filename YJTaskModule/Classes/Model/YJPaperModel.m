@@ -103,6 +103,9 @@ static NSString *kHpStuName = @"";
     if (IsStrEmpty(self.QuesAnswer)) {
         return @"-";
     }
+    if ([self.QuesAnswer containsString:@"&nbsp;"]) {
+       self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    }
     return [NSString yj_filterHTML:self.QuesAnswer];
 }
 - (void)setQuesAnswer:(NSString *)QuesAnswer{
@@ -127,6 +130,9 @@ static NSString *kHpStuName = @"";
     return self.PaperIndex;
 }
 - (NSString *)yj_smallAnswerAnalysis{
+    if (!IsStrEmpty(self.QuesAnalysis) && [self.QuesAnalysis containsString:@"&nbsp;"]) {
+        self.QuesAnalysis = [self.QuesAnalysis stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    }
     return [NSString yj_filterHTML:self.QuesAnalysis];
 }
 - (NSString *)yj_smallTopicArticle{
@@ -339,6 +345,9 @@ static NSString *kHpStuName = @"";
     _TopicPintro = TopicPintro;
     _TopicPintro_copy = TopicPintro;
     if (!IsStrEmpty(TopicPintro)) {
+        if ([TopicPintro containsString:@"&nbsp;"]) {
+            TopicPintro = [TopicPintro stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+        }
         _TopicPintro = [NSString yj_filterHTML:TopicPintro];
     }
 }

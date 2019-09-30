@@ -7,7 +7,7 @@
 //
 
 #import <UIKit/UIKit.h>
-static CGFloat kCellHeight = 38;
+#define kCellHeight 46
 @interface YJAnswerAlertCell : UICollectionViewCell
 /** 标题 */
 @property (nonatomic,copy) NSString *titleStr;

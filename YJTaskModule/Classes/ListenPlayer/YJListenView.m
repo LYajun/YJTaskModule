@@ -313,6 +313,7 @@
 }
 - (void)yj_listenPlayerDidPlayFail{
     [self indicatorViewStop];
+    [self.listenPlayer stop];
     self.playBtn.selected = NO;
     self.playProgress.userInteractionEnabled = NO;
     [LGAlert showStatus:@"音频资源加载失败"];

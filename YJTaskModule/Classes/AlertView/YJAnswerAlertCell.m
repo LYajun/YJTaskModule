@@ -12,7 +12,10 @@
 
 #import <YJExtensions/YJExtensions.h>
 
-static CGFloat kSpace = 3;
+#define kSpace  3
+
+#define kLeftSpace  (IsIPad ? 40 : 10)
+#define kCellSpace  (IsIPad ? 24 : 6)
 @interface YJAnswerAlertCell ()
 @property (nonatomic,strong) UIImageView *bgImageView;
 @property (nonatomic,strong) UILabel *titleLab;
@@ -24,6 +27,13 @@ static CGFloat kSpace = 3;
     }
     return self;
 }
+- (CGFloat)alertWidth{
+    if (IsIPad) {
+        return 400;
+    }
+    return LG_ScreenWidth*0.72;
+}
+
 - (void)layoutUI{
     [self.contentView addSubview:self.bgImageView];
     [self.bgImageView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -31,7 +41,7 @@ static CGFloat kSpace = 3;
         make.top.equalTo(self.contentView).offset(kSpace);
         make.width.mas_equalTo(self.contentView.width-10);
     }];
-    [self.bgImageView yj_clipLayerWithRadius:(kCellHeight-kSpace*2)/2 width:0 color:nil];
+   
     [self.contentView addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.centerX.equalTo(self.contentView);
@@ -41,9 +51,15 @@ static CGFloat kSpace = 3;
 - (void)setIsSingle:(BOOL)isSingle{
     _isSingle = isSingle;
     if (isSingle) {
-        [self.bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(120);
-        }];
+        if (IsIPad) {
+            [self.bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.mas_equalTo(240);
+            }];
+        }else{
+            [self.bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
+                make.width.mas_equalTo(120);
+            }];
+        }
     }else{
         [self.bgImageView mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(self.contentView.width-10);
@@ -56,14 +72,26 @@ static CGFloat kSpace = 3;
 }
 - (void)setClickHighlighted:(BOOL)clickHighlighted{
     _clickHighlighted = clickHighlighted;
+    CGFloat bgImageWidth = 0;
+    CGFloat bgImageHeight = kCellHeight-kSpace*2;
+    if (self.isSingle) {
+         if (IsIPad) {
+             bgImageWidth = 240;
+         }else{
+             bgImageWidth = 120;
+         }
+    }else{
+        bgImageWidth = (self.alertWidth-kLeftSpace*2-kCellSpace)/2-10;
+    }
+    
     if (clickHighlighted) {
         self.titleLab.textColor = [UIColor whiteColor];
         self.bgImageView.backgroundColor = LG_ColorWithHex(0x22B0F8);
-        [self.bgImageView yj_clipLayerWithRadius:(kCellHeight-kSpace*2)/2 width:0 color:nil];
+        [self.bgImageView yj_shadowWithCornerRadius:bgImageHeight/2 borderWidth:0 borderColor:nil shadowColor:LG_ColorWithHex(0x00C3F2) shadowOpacity:0.5 shadowOffset:CGSizeMake(0, 2.5) roundedRect:CGRectMake(3, 2, bgImageWidth-6, bgImageHeight) cornerRadii:CGSizeMake(bgImageHeight/2, bgImageHeight/2) rectCorner:UIRectCornerAllCorners];
     }else{
         self.titleLab.textColor = LG_ColorWithHex(0x22B0F8);
         self.bgImageView.backgroundColor = [UIColor whiteColor];
-         [self.bgImageView yj_clipLayerWithRadius:(kCellHeight-kSpace*2)/2 width:1.5 color:LG_ColorWithHex(0x22B0F8)];
+        [self.bgImageView yj_shadowWithCornerRadius:bgImageHeight/2 borderWidth:1.5 borderColor:LG_ColorWithHex(0x22B0F8) shadowColor:LG_ColorWithHex(0x00C3F2) shadowOpacity:0.5 shadowOffset:CGSizeMake(0, 2.5) roundedRect:CGRectMake(3, 2, bgImageWidth-6, bgImageHeight) cornerRadii:CGSizeMake(bgImageHeight/2, bgImageHeight/2) rectCorner:UIRectCornerAllCorners];
     }
 }
 - (UIImageView *)bgImageView{

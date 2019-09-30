@@ -11,6 +11,7 @@
 @class YJTaskCarkModel;
 @interface YJTaskCarkCell : UITableViewCell
 @property (strong, nonatomic) UIImageView *curentImage;
+@property (nonatomic,assign) BOOL bigTopicTypeNameHideBig;
 @property (nonatomic,strong) YJTaskCarkModel *cardModel;
 @property (nonatomic,copy) NSString *currentSmallIndexStr;
 @property (nonatomic,assign) BOOL isTopicCardMode;

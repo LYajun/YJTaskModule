@@ -24,7 +24,11 @@
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
-        [self layoutUI];
+        if (IsIPad) {
+            [self layoutUI_ipad];
+        }else{
+            [self layoutUI];
+        }
     }
     return self;
 }
@@ -54,6 +58,33 @@
     }];
     [self.textView yj_clipLayerWithRadius:4 width:0 color:nil];
 }
+- (void)layoutUI_ipad{
+    [self.contentView addSubview:self.titleLab];
+    [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.contentView).offset(10);
+        make.top.equalTo(self.contentView).offset(8);
+        make.width.mas_equalTo(80);
+        make.height.mas_equalTo(30);
+    }];
+    
+    [self.contentView addSubview:self.imageBgV];
+    [self.imageBgV mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.titleLab.mas_right).offset(5);
+        make.right.equalTo(self.contentView).offset(-10);
+        make.bottom.equalTo(self.contentView).offset(-5);
+        make.height.mas_equalTo(120);
+    }];
+    
+    [self.contentView addSubview:self.textView];
+    [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self.titleLab.mas_right).offset(5);
+        make.right.equalTo(self.contentView).offset(-10);
+        make.top.equalTo(self.contentView).offset(5);
+        make.bottom.equalTo(self.imageBgV.mas_top).offset(-5);
+    }];
+    [self.textView yj_clipLayerWithRadius:4 width:0 color:nil];
+    
+}
 - (void)setTitleStr:(NSString *)titleStr{
     self.titleLab.text = titleStr;
 }
@@ -62,9 +93,15 @@
 }
 - (void)setText:(NSString *)text{
     self.textView.text = text;
-    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.titleLab.mas_bottom).offset(IsStrEmpty(text) ? -30 :5);
-    }];
+    if (IsIPad) {
+        [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.contentView).offset(IsStrEmpty(text) ? -30 :5);
+        }];
+    }else{
+        [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.top.equalTo(self.titleLab.mas_bottom).offset(IsStrEmpty(text) ? -30 :5);
+        }];
+    }
     if (!IsStrEmpty(text) && [text isEqualToString:@"未作答"]) {
         self.textView.textColor = LG_ColorWithHex(0x999999);
     }else{
@@ -96,6 +133,9 @@
     }
 }
 - (CGFloat)photoBrowserWidth{
+    if (IsIPad) {
+        return 120*3;
+    }
     return  LG_ScreenWidth - 10 - 10;;
 }
 - (UILabel *)titleLab{

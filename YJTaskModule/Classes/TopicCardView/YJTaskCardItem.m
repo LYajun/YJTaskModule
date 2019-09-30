@@ -27,8 +27,13 @@
         [self.contentView addSubview:self.indexL];
         [self.indexL mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.contentView);
-            make.left.equalTo(self.contentView.mas_left).offset(10);
-            make.top.equalTo(self.contentView.mas_top).offset(10);
+            if (IsIPad) {
+                make.left.equalTo(self.contentView.mas_left).offset(7);
+                make.top.equalTo(self.contentView.mas_top).offset(7);
+            }else{
+                make.left.equalTo(self.contentView.mas_left).offset(10);
+                make.top.equalTo(self.contentView.mas_top).offset(10);
+            }
         }];
         [self.indexL layoutIfNeeded];
         [self.indexL yj_clipLayerWithRadius:self.indexL.bounds.size.width/2 width:0 color:nil];
@@ -37,7 +42,12 @@
         [self.contentView addSubview:self.curentImage];
         [self.curentImage mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.bottom.equalTo(self.contentView);
-            make.width.height.mas_equalTo(8);
+            if (IsIPad) {
+                make.width.mas_equalTo(9);
+                make.height.mas_equalTo(5);
+            }else{
+                make.width.height.mas_equalTo(8);
+            }
         }];
         self.curentImage.hidden = YES;
     }

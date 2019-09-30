@@ -14,9 +14,9 @@
 #import <Masonry/Masonry.h>
 
 
-static CGFloat kLeftSpace = 10;
-static CGFloat kCellSpace = 6;
-static CGFloat kCellRowSpace = 10;
+#define kLeftSpace  (IsIPad ? 40 : 10)
+#define kCellSpace  (IsIPad ? 24 : 6)
+#define kCellRowSpace 10
 @interface YJAnswerAlertView ()<UICollectionViewDelegateFlowLayout,UICollectionViewDataSource>
 /** 头像 */
 @property (nonatomic,strong) UIImageView *headImageV;
@@ -92,8 +92,8 @@ static CGFloat kCellRowSpace = 10;
     [self.contentL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView);
         make.left.equalTo(contentView).offset(20);
-        make.top.equalTo(self.titleL.mas_bottom).offset(8);
-        make.bottom.equalTo(self.collectionView.mas_top).offset(-20);
+        make.top.equalTo(self.titleL.mas_bottom).offset(10);
+        make.bottom.equalTo(self.collectionView.mas_top).offset(-25);
     }];
 }
 + (YJAnswerAlertView *)alertWithTitle:(NSString *)title normalMsg:(NSString *)normalMsg highLightMsg:(NSString *)highLightMsg destructiveTitle:(NSString *)destructiveTitle destructiveBlock:(void (^)(void))destructiveBlock{
@@ -103,14 +103,14 @@ static CGFloat kCellRowSpace = 10;
     return [self alertWithTitle:title normalMsg:normalMsg highLightMsg:highLightMsg cancelTitle:cancelTitle destructiveTitle:destructiveTitle choiceTitle:nil cancelBlock:cancelBlock destructiveBlock:destructiveBlock choiceBlock:nil];
 }
 + (YJAnswerAlertView *)alertWithTitle:(NSString *)title normalMsg:(NSString *)normalMsg highLightMsg:(NSString *)highLightMsg cancelTitle:(NSString *)cancelTitle destructiveTitle:(NSString *)destructiveTitle choiceTitle:(NSString *)choiceTitle cancelBlock:(void (^)(void))cancelBlock destructiveBlock:(void (^)(void))destructiveBlock choiceBlock:(void (^)(BOOL))choiceBlock{
-    CGFloat w = IsIPad ? 350 : LG_ScreenWidth*0.72;
+    CGFloat w = LG_ScreenWidth*0.72;
     CGFloat h = w;
     if (LG_ScreenWidth <= 320) {
-        h = w * 1.38;
+        h = w * 1.48;
     }else if (LG_ScreenWidth <= 375){
-        h = w * 1.28;
+        h = w * 1.38;
     }else{
-        h = w * 1.18;
+        h = w * 1.28;
     }
     CGFloat contentW = [normalMsg yj_widthWithFont:LG_SysFont(15)];
     CGFloat contentReferW = w - 20*2;
@@ -118,6 +118,14 @@ static CGFloat kCellRowSpace = 10;
         h -= 30;
     }else if (contentW <= contentReferW){
         h -= 30*2;
+    }
+    if (IsIPad) {
+        w = 400;
+        if (IsStrEmpty(choiceTitle)) {
+            h = 320;
+        }else{
+            h = 320 + kCellHeight;
+        }
     }
      YJAnswerAlertView *alertView = [[YJAnswerAlertView alloc] initWithFrame:CGRectMake(0, 0, w, h) choiceTitle:choiceTitle];
      alertView.maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
@@ -218,7 +226,7 @@ static CGFloat kCellRowSpace = 10;
 }
 - (CGFloat)alertWidth{
     if (IsIPad) {
-        return 350;
+        return 400;
     }
     return LG_ScreenWidth*0.72;
 }
