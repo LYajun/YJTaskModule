@@ -381,6 +381,7 @@
 				"${BUILT_PRODUCTS_DIR}/YJSearchController/YJSearchController.framework",
 				"${BUILT_PRODUCTS_DIR}/YJTaskMark/YJTaskMark.framework",
 				"${BUILT_PRODUCTS_DIR}/YJTaskModule/YJTaskModule.framework",
+				"${BUILT_PRODUCTS_DIR}/YJUtils/YJUtils.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -403,6 +404,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJSearchController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJTaskMark.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJTaskModule.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YJUtils.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

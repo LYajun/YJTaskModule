@@ -42,6 +42,9 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 
 static NSString *YJTaskModule_ImageLabelBgHidden_UserDefault_Key = @"YJTaskModule_ImageLabelBgHidden_UserDefault_Key";
 
+static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
+
+
 static NSString *YJTaskBundle_Cell = @"Cell";
 static NSString *YJTaskBundle_Empty = @"EmptyPage";
 static NSString *YJTaskBundle_ListenView = @"ListenView";

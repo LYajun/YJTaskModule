@@ -25,11 +25,13 @@ static NSString *kHpStuName = @"";
         return @"";
     }
     html = html.yj_deleteWhitespaceCharacter;
-    if ([html.lowercaseString hasPrefix:@"<p"] && [html.lowercaseString hasSuffix:@"p>"]) {
-        html = [html stringByReplacingOccurrencesOfString:@"<p" withString:@"<strong"];
-        html = [html stringByReplacingOccurrencesOfString:@"<P" withString:@"<strong"];
-        html = [html stringByReplacingOccurrencesOfString:@"p>" withString:@"strong>"];
-        html = [html stringByReplacingOccurrencesOfString:@"P>" withString:@"strong>"];
+    if ([html.lowercaseString hasPrefix:@"<p"] && [html.lowercaseString hasSuffix:@"p></p>"]) {
+        NSMutableString *hString = html.mutableCopy;
+        [hString replaceCharactersInRange:NSMakeRange(0, 2) withString:@"<b"];
+        NSRange range = [hString.lowercaseString rangeOfString:@"<p"];
+        [hString deleteCharactersInRange:NSMakeRange(0, range.location)];
+        [hString deleteCharactersInRange:NSMakeRange(hString.length-4, 4)];
+        html = hString;
     }
     if ([html hasSuffix:@"<br>"] || [html hasSuffix:@"<BR>"]) {
         html = [html substringToIndex:html.length-4];

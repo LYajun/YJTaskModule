@@ -146,9 +146,9 @@
 
 - (void)ApplicationWillResign:(NSNotification *) noti{
     if (self.listenPlayer.isPlaying) {
-        self.pauseByResign = YES;
         [self pausePlayer];
     }
+    self.pauseByResign = YES;
 
 }
 - (void)stopPlayer{
@@ -167,19 +167,19 @@
     if (IsArrEmpty(urlArr)) {
         return;
     }
-    if (urlArr.count <= 1) {
+//    if (urlArr.count <= 1) {
         self.listenListBtn.hidden = YES;
         [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
             make.width.mas_equalTo(0);
         }];
         self.titleNameL.hidden = YES;
-    }else{
-        self.listenListBtn.hidden = NO;
-        [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.width.mas_equalTo(28);
-        }];
-        self.titleNameL.hidden = NO;
-    }
+//    }else{
+//        self.listenListBtn.hidden = NO;
+//        [self.listenListBtn mas_updateConstraints:^(MASConstraintMaker *make) {
+//            make.width.mas_equalTo(28);
+//        }];
+//        self.titleNameL.hidden = NO;
+//    }
     self.titleNameL.text = self.urlNameArr[self.currentIndex];
     NSString *url = self.urlArr[self.currentIndex];
     if ([url.lowercaseString hasPrefix:@"http"]) {
@@ -201,6 +201,8 @@
     self.listenListBtn.imageView.transform = CGAffineTransformMakeRotation(M_PI);
 }
 - (void)buttonAction:(UIButton *)button{
+    [[NSNotificationCenter defaultCenter] postNotificationName:YJTaskModule_StopYJTaskTopicVoicePlay_Notification object:nil userInfo:nil];
+    self.pauseByResign = NO;
     if (self.delegate && [self.delegate respondsToSelector:@selector(didClickPlay)]) {
         [self.delegate didClickPlay];
     }
@@ -282,7 +284,6 @@
     self.totalPlayTimeL.text = [self timeWithInterVal:totalDuration];
     if (!self.pauseByResign) {
         self.BtnTapBlock();
-        self.pauseByResign = NO;
     }
 }
 - (void)yj_listenPlayer:(YJListenPlayer *)player totalBuffer:(CGFloat)totalBuffer{

@@ -127,7 +127,8 @@
         if (self.bigTopicView.taskStageType == YJTaskStageTypeAnalysis ||
             self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
             self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
-            self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer) {
+            self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeViewer) {
             self.splitView.dragEnable = YES;
         }else{
             self.splitView.dragEnable = NO;
@@ -150,6 +151,7 @@
 #pragma mark Public
 
 - (void)stopListen{
+    [self stopTaskBaseSmallItemVoicePlay];
     [self.bigTopicView stopListen];
 }
 - (void)pauseListen{
@@ -216,6 +218,9 @@
         }
     }
 }
+- (void)YJ_taskTopicCellDidPlayVoice{
+   [self.bigTopicView stopListen];
+}
 #pragma mark Setter
 - (void)setBottomDistance:(CGFloat)bottomDistance{
     _bottomDistance = bottomDistance;
@@ -237,9 +242,18 @@
         }
     }
 }
+- (void)stopTaskBaseSmallItemVoicePlay{
+    UIView *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
+    if ([smallItem isKindOfClass:[YJTaskBaseSmallItem class]]) {
+        [(YJTaskBaseSmallItem *)smallItem stopVoicePlay];
+    }
+    
+}
 - (void)setCurrentSmallIndex:(NSInteger)currentSmallIndex{
+    [self stopTaskBaseSmallItemVoicePlay];
     _currentSmallIndex = currentSmallIndex;
     self.bigTopicView.highlightSmallIndex = currentSmallIndex;
+
     [self.smallScrollView layoutIfNeeded];
     self.smallScrollView.contentOffset = CGPointMake(LG_ScreenWidth*self.currentSmallIndex, 0);
     if (self.bigModel.yj_topicCarkMode) {
@@ -262,7 +276,8 @@
             if (self.bigTopicView.taskStageType == YJTaskStageTypeAnalysis ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
-                self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer) {
+                self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
+                self.bigTopicView.taskStageType == YJTaskStageTypeViewer) {
                 if (IsStrEmpty(self.bigModel.yj_topicContent)) {
                     return titleH+pintroH;
                 }else{

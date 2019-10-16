@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.2.2'
+  s.version          = '1.2.3'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -125,6 +125,7 @@ TODO: Add long description of the pod here.
         cell.dependency 'YJNetManager'
         cell.dependency 'LGAlertHUD'
         cell.dependency 'SDWebImage'
+        cell.dependency 'YJUtils'
     end
 
     s.subspec 'YJProgressView' do |progressView|

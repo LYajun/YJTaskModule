@@ -19,7 +19,7 @@
 - (void)loadPaperData{
     //测试数据
     
-    NSString *path = [[NSBundle mainBundle] pathForResource:@"task" ofType:@"json"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:@"task_writting" ofType:@"json"];
     NSData *data = [NSData dataWithContentsOfFile:path];
     NSString *jsonString = [data mj_JSONString];
     //防止界面卡顿

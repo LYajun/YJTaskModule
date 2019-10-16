@@ -19,6 +19,7 @@
 
 @interface YJAnaSmallItem ()<UITableViewDelegate,UITableViewDataSource>
 @property (strong,nonatomic) UITableView *tableView;
+@property (nonatomic,strong) YJTaskTopicCell *currentTaskTopicCell;
 @end
 @implementation YJAnaSmallItem
 - (instancetype)initWithFrame:(CGRect)frame smallPModel:(YJBasePaperSmallModel *)smallPModel taskStageType:(YJTaskStageType)taskStageType{
@@ -34,6 +35,11 @@
 }
 - (void)updateData{
     [self.tableView reloadData];
+}
+- (void)stopVoicePlay{
+    if (self.currentTaskTopicCell) {
+        [self.currentTaskTopicCell invalidatePlayer];
+    }
 }
 #pragma mark  UITableView dataSource & delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
@@ -64,7 +70,15 @@
     NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
     if (indexPath.row == 0) {
         YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
+        cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
         cell.textAttr = self.smallModel.yj_smallTopicAttrText;
+        self.currentTaskTopicCell = cell;
+        __weak typeof(self) weakSelf = self;
+        cell.playBlock = ^{
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_taskTopicCellDidPlayVoice)]) {
+                [weakSelf.delegate YJ_taskTopicCellDidPlayVoice];
+            }
+        };
         return cell;
     }else{
         NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];

@@ -16,6 +16,7 @@
 @optional
 - (void)YJ_blankAnswerUpdate;
 - (void)YJ_choiceTopicDidAnswer;
+- (void)YJ_taskTopicCellDidPlayVoice;
 @end
 
 @interface YJTaskBaseSmallItem : UIView
@@ -30,4 +31,5 @@
                   smallPModel:(YJBasePaperSmallModel *)smallPModel
                 taskStageType:(YJTaskStageType)taskStageType;
 - (void)updateData;
+- (void)stopVoicePlay;
 @end

@@ -53,5 +53,6 @@
 }
 - (void)updateData{
     
-};
+}
+- (void)stopVoicePlay{}
 @end

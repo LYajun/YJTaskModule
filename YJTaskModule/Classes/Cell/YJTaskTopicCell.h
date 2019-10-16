@@ -10,5 +10,8 @@
 
 @interface YJTaskTopicCell : LGBaseTableViewCell
 @property (nonatomic,copy) NSString *topicText;
+@property (nonatomic,copy) NSString *voiceUrl;
 @property (nonatomic,strong) NSMutableAttributedString *textAttr;
+@property (nonatomic,copy) void (^playBlock) (void);
+- (void)invalidatePlayer;
 @end
