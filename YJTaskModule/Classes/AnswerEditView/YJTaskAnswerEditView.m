@@ -130,7 +130,7 @@
         CGFloat x = 10;
         CGFloat y = (self.tabbarHeight-h)/2;
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectMake(x, y, w, h)];
-        _textView.font = [UIFont systemFontOfSize:16];
+        _textView.font = [UIFont systemFontOfSize:17];
         _textView.placeholder = @"请输入...";
         _textView.maxLength = 200;
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;

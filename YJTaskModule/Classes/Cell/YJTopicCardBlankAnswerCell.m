@@ -117,7 +117,7 @@
         _textView.placeholder = @"请输入...";
         _textView.maxLength = 100;
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
-        _textView.font = [UIFont systemFontOfSize:18];
+        _textView.font = [UIFont systemFontOfSize:17];
         _textView.editable = NO;
         _textView.scrollEnabled = NO;
         _textView.selectable = NO;

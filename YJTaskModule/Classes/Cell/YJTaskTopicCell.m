@@ -59,7 +59,7 @@
     if (!IsStrEmpty(self.voiceUrl)) {
         [attr insertAttributedString:@"      ".yj_toMutableAttributedString atIndex:0];
     }
-    [attr yj_setFont:16];
+    [attr yj_setFont:17];
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];

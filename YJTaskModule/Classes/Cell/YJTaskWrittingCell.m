@@ -227,7 +227,7 @@
         _textView.scrollEnabled = NO;
         _textView.selectable = NO;
         _textView.userInteractionEnabled = NO;
-        _textView.font = [UIFont systemFontOfSize:16];
+        _textView.font = [UIFont systemFontOfSize:17];
     }
     return _textView;
 }

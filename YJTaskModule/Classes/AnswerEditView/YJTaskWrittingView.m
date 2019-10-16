@@ -163,7 +163,8 @@
 - (void)setTopicInfoAttr:(NSMutableAttributedString *)topicInfoAttr{
     _topicInfoAttr = topicInfoAttr;
     NSMutableAttributedString *attr = topicInfoAttr.mutableCopy;
-    [attr yj_setFont:18];
+    [attr yj_setFont:17];
+    [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -231,12 +232,11 @@
 - (LGBaseTextView *)textView{
     if (!_textView) {
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
-        _textView.font = [UIFont systemFontOfSize:16];
         [_textView setAutoCursorPosition:YES];
 //        _textView.assistHeight = 40;
         _textView.placeholder = @"请输入...";
         _textView.maxLength = 1000;
-        _textView.font = LG_SysFont(18);
+        _textView.font = LG_SysFont(17);
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
     }
     return _textView;

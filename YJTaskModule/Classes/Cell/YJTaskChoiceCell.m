@@ -54,7 +54,8 @@
 }
 - (void)setTextAttr:(NSMutableAttributedString *)textAttr{
     _textAttr = textAttr;
-    [textAttr yj_setFont:16];
+    [textAttr yj_setFont:17];
+    [textAttr yj_setColor:LG_ColorWithHex(0x252525)];
     self.textView.attributedText = textAttr;
 }
 - (YJTaskChoiceLabel *)choiceLab{

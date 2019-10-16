@@ -12,7 +12,7 @@
 #import "YJConst.h"
 
 #define kYJTextColor LG_ColorWithHex(0x06C6F4)
-static CGFloat kYJTextFontSize = 16;
+static CGFloat kYJTextFontSize = 17;
 @implementation YJTextAttachment
 @end
 
@@ -102,6 +102,7 @@ static CGFloat kYJTextFontSize = 16;
     }
     
     [blankAttrString yj_setFont:kYJTextFontSize];
+    [blankAttrString yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [blankAttrString dataFromRange:NSMakeRange(0,blankAttrString.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -116,6 +117,7 @@ static CGFloat kYJTextFontSize = 16;
 - (void)setTopicContentAttr:(NSAttributedString *)topicContentAttr{
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:topicContentAttr];
     [attr yj_setFont:kYJTextFontSize];
+    [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];

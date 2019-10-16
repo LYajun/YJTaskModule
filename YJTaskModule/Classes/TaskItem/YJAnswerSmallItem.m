@@ -242,7 +242,7 @@
             case YJSmallTopicTypeBlank:
             case YJSmallTopicTypeSimpleAnswer:
             {
-                if (self.smallModel.yj_translateTopic) {
+                if (self.smallModel.yj_translateTopic && !IsIPad) {
                     __weak typeof(self) weakSelf = self;
                     YJTaskWrittingView *answerView = [YJTaskWrittingView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
                         weakSelf.smallModel.yj_smallAnswer = result;

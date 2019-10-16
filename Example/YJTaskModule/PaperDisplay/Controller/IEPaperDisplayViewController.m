@@ -54,7 +54,7 @@
 }
 
 - (void)loadPaperDataSuccess{
-    self.dataModel.paperModel.yj_taskStageType = YJTaskStageTypeViewer;
+    self.dataModel.paperModel.yj_taskStageType = YJTaskStageTypeAnswer;
     [self.view addSubview:self.swipV];
     if (self.dataModel.paperModel.yj_isManualWorkRes) {
         [self.view addSubview:self.listenView];
