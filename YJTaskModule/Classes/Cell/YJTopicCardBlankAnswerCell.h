@@ -15,7 +15,8 @@
 @property (nonatomic,copy) NSString *answer;
 /** 弹出作答视图开关 */
 @property (nonatomic,assign) BOOL presentEnable;
-
+/** 英译中隐藏语音评测按钮 */
+@property (nonatomic,assign) BOOL hideSpeechBtn;
 
 @property (nonatomic,copy) void (^SpeechMarkBlock) (void);
 @end

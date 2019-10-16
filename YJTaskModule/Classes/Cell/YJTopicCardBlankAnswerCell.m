@@ -84,12 +84,15 @@
         self.textView.placeholder = @"未作答";
     }
 }
-
+- (void)setHideSpeechBtn:(BOOL)hideSpeechBtn{
+    _hideSpeechBtn = hideSpeechBtn;
+    self.recordBtn.hidden = hideSpeechBtn;
+}
 - (void)recordBtnLongTouchGes:(UILongPressGestureRecognizer *) longGes{
     if ([longGes state] == UIGestureRecognizerStateBegan) {
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [[YJSpeechManager defaultManager] startEngineAtRefText:nil markType:YJSpeechMarkTypeASR];
-        [YJSpeechMarkView showSpeechMarkViewWithTitle:@"系统正在给你识别\n请稍候..."];
+        [YJSpeechMarkView showSpeechRecognizeView];
         if (self.SpeechMarkBlock) {
             self.SpeechMarkBlock();
         }

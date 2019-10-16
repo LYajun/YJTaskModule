@@ -153,6 +153,7 @@
                 }else{
                     cell.editable = YES;
                 }
+                cell.hideSpeechBtn = self.smallModel.yj_hideSpeechBtn;
                 return cell;
             }
                 break;
@@ -167,6 +168,7 @@
                 }
                 cell.smallModel = self.smallModel;
                 cell.answerStr = self.smallModel.yj_smallAnswer;
+                cell.hideSpeechBtn = self.smallModel.yj_hideSpeechBtn;
                 return cell;
             }
                 break;
@@ -240,32 +242,41 @@
             case YJSmallTopicTypeBlank:
             case YJSmallTopicTypeSimpleAnswer:
             {
-                __weak typeof(self) weakSelf = self;
-                if (self.smallModel.yj_smallItemCount > 1) {
-                    NSInteger index = indexPath.row - 1;
-                    NSArray *answerArr = [self.smallModel.yj_smallAnswer componentsSeparatedByString:[NSString yj_Char1]];
-                    [YJTaskAnswerView showWithText:answerArr[index] answerResultBlock:^(NSString *result) {
-//                        YJTaskBlankCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//                        cell.answerStr = result;
-                        NSMutableArray *itemArr = weakSelf.smallModel.yj_smallAnswerArr.mutableCopy;
-                        [itemArr replaceObjectAtIndex:index withObject:result];
-                        weakSelf.smallModel.yj_smallAnswer = [itemArr componentsJoinedByString:[NSString yj_Char1]];
-                        weakSelf.smallModel.yj_smallAnswerArr = itemArr;
-                        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
-                            [weakSelf.delegate YJ_blankAnswerUpdate];
-                        }
-                        [weakSelf.tableView reloadData];
-                    }];
-                }else{
-                    [YJTaskAnswerView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
-//                        YJTaskBlankCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//                        cell.answerStr = result;
+                if (self.smallModel.yj_translateTopic) {
+                    __weak typeof(self) weakSelf = self;
+                    YJTaskWrittingView *answerView = [YJTaskWrittingView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
                         weakSelf.smallModel.yj_smallAnswer = result;
-                        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
-                            [weakSelf.delegate YJ_blankAnswerUpdate];
-                        }
                         [weakSelf.tableView reloadData];
                     }];
+                    answerView.topicInfoAttr = self.smallModel.yj_smallTopicAttrText;
+                }else{
+                    __weak typeof(self) weakSelf = self;
+                    if (self.smallModel.yj_smallItemCount > 1) {
+                        NSInteger index = indexPath.row - 1;
+                        NSArray *answerArr = [self.smallModel.yj_smallAnswer componentsSeparatedByString:[NSString yj_Char1]];
+                        [YJTaskAnswerView showWithText:answerArr[index] answerResultBlock:^(NSString *result) {
+                            //                        YJTaskBlankCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                            //                        cell.answerStr = result;
+                            NSMutableArray *itemArr = weakSelf.smallModel.yj_smallAnswerArr.mutableCopy;
+                            [itemArr replaceObjectAtIndex:index withObject:result];
+                            weakSelf.smallModel.yj_smallAnswer = [itemArr componentsJoinedByString:[NSString yj_Char1]];
+                            weakSelf.smallModel.yj_smallAnswerArr = itemArr;
+                            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
+                                [weakSelf.delegate YJ_blankAnswerUpdate];
+                            }
+                            [weakSelf.tableView reloadData];
+                        }];
+                    }else{
+                        [YJTaskAnswerView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
+                            //                        YJTaskBlankCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+                            //                        cell.answerStr = result;
+                            weakSelf.smallModel.yj_smallAnswer = result;
+                            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
+                                [weakSelf.delegate YJ_blankAnswerUpdate];
+                            }
+                            [weakSelf.tableView reloadData];
+                        }];
+                    }
                 }
             }
                 break;

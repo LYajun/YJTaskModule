@@ -83,6 +83,12 @@
         self.textView.placeholder = @"未作答";
     }
 }
+
+- (void)setHideSpeechBtn:(BOOL)hideSpeechBtn{
+    _hideSpeechBtn = hideSpeechBtn;
+    self.recordBtn.hidden = hideSpeechBtn;
+}
+
 - (void)setIndex:(NSInteger)index{
     if (_index == index) {
         return;
@@ -98,7 +104,7 @@
     if ([longGes state] == UIGestureRecognizerStateBegan) {
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [[YJSpeechManager defaultManager] startEngineAtRefText:nil markType:YJSpeechMarkTypeASR];
-        [YJSpeechMarkView showSpeechMarkViewWithTitle:@"系统正在给你识别\n请稍候..."];
+        [YJSpeechMarkView showSpeechRecognizeView];
     }else if ([longGes state] == UIGestureRecognizerStateEnded ||
               [longGes state] == UIGestureRecognizerStateCancelled){
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];

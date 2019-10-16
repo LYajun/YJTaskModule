@@ -45,6 +45,51 @@
     }];
     [alertView show];
 }
+
++ (void)showSpeechRecognizeView{
+    YJSpeechMarkView *alertView = [[YJSpeechMarkView alloc] initWithFrame:CGRectMake(0, 0, 200, 200)];
+    alertView.maskView = [[UIView alloc] initWithFrame:CGRectZero];
+    alertView.backgroundColor = LG_ColorWithHexA(0x000000, 0.6);
+    [alertView yj_clipLayerWithRadius:4 width:0 color:nil];
+    UIImageView *gifImg = [[UIImageView alloc] initWithFrame:CGRectZero];
+    [alertView addSubview:gifImg];
+    [gifImg mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(alertView);
+        make.centerY.equalTo(alertView).offset(-10);
+        make.width.height.mas_equalTo(100);
+    }];
+    [gifImg layoutIfNeeded];
+    [gifImg yj_clipLayerWithRadius:50 width:0 color:nil];
+    gifImg.backgroundColor = [UIColor whiteColor];
+    gifImg.animationImages = [YJSpeechMarkView yj_animationRecorderImages];
+    gifImg.animationDuration = gifImg.animationImages.count * 0.05;
+    [gifImg startAnimating];
+    UILabel *titleL = [UILabel new];
+    titleL.text = @"放开手指,完成录音";
+    titleL.textColor = [UIColor whiteColor];
+    titleL.textAlignment = NSTextAlignmentCenter;
+    titleL.font = [UIFont systemFontOfSize:15];
+    [alertView addSubview:titleL];
+    [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(alertView);
+        make.top.equalTo(gifImg.mas_bottom).offset(6);
+    }];
+    [alertView show];
+}
++ (NSArray<UIImage *> *)yj_animationRecorderImages{
+    //     CFAbsoluteTime startTime =CFAbsoluteTimeGetCurrent();
+    NSFileManager *fielM = [NSFileManager defaultManager];
+    NSArray *arrays = [fielM contentsOfDirectoryAtPath:[[YJTaskBundle() resourcePath] stringByAppendingPathComponent:@"RecorderGif"] error:nil];
+    NSMutableArray *imageArr = [NSMutableArray array];
+    for (int i = 0; i < arrays.count; i++) {
+        UIImage *image = [UIImage yj_imagePathName:[NSString stringWithFormat:@"Recorder_GIF_000%i",i+1] atDir:@"RecorderGif" atBundle:YJTaskBundle()];
+        if (image) {
+            [imageArr addObject:image];
+        }
+    }
+    //     NSLog(@"loadingGifImg Linked in %f ms", (CFAbsoluteTimeGetCurrent() - startTime) *1000.0);
+    return imageArr;
+}
 + (void)dismiss{
     UIWindow *rootWindow = [UIApplication sharedApplication].delegate.window;
     for (UIView *view in rootWindow.subviews) {

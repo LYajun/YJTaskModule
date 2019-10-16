@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @interface YJSpeechMarkView : UIView
 + (void)showSpeechMarkViewWithTitle:(NSString *)title;
 + (void)showSpeechMarkView;
++ (void)showSpeechRecognizeView;
 + (void)dismiss;
 @end
 

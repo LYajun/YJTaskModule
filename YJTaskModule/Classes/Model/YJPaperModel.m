@@ -39,6 +39,12 @@ static NSString *kHpStuName = @"";
     if ([html hasSuffix:@"</br>"] || [html hasSuffix:@"</BR>"]) {
         html = [html substringToIndex:html.length-5];
     }
+    if ([html.lowercaseString containsString:@"</p>"] && [html.lowercaseString componentsSeparatedByString:@"</p>"].count == 2) {
+        html = [html stringByReplacingOccurrencesOfString:@"<p" withString:@"<strong"];
+        html = [html stringByReplacingOccurrencesOfString:@"<P" withString:@"<strong"];
+        html = [html stringByReplacingOccurrencesOfString:@"p>" withString:@"strong>"];
+        html = [html stringByReplacingOccurrencesOfString:@"P>" withString:@"strong>"];
+    }
     return html;
 }
 - (YJTaskStageType)yj_taskStageType{
@@ -202,6 +208,18 @@ static NSString *kHpStuName = @"";
     }
     return smallType;
 }
+-  (BOOL)yj_hideSpeechBtn{
+    if ([self.TopicTypeID isEqualToString:@"g"] && !IsStrEmpty(self.TopicTypeName) && [self.TopicTypeName containsString:@"英译中"]) {
+        return YES;
+    }
+    return NO;
+}
+- (BOOL)yj_translateTopic{
+    if ([self.TopicTypeID isEqualToString:@"g"]){
+        return YES;
+    }
+    return NO;
+}
 - (NSInteger)yj_smallAnswerType{
     return self.AnswerType;
 }
@@ -337,6 +355,7 @@ static NSString *kHpStuName = @"";
     _Queses = Queses;
     for (YJPaperSmallModel *smallModel in Queses) {
         smallModel.TopicTypeID = self.TopicTypeID;
+        smallModel.TopicTypeName = self.yj_bigTopicTypeName;
     }
 }
 - (void)setTopicContent:(NSString *)TopicContent{
@@ -550,6 +569,9 @@ static NSString *kHpStuName = @"";
 - (NSString *)yj_bigTopicTypeName{
     if (!IsStrEmpty(self.TopicTypeOtherName)) {
         return self.TopicTypeOtherName;
+    }
+    if (!IsStrEmpty(self.TopicGenreName)) {
+        return self.TopicGenreName;
     }
     return self.TopicTypeName;
 }

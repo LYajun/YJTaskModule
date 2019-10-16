@@ -80,7 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *TopicTypeID;
 /** 新增 - 小题作答点数 */
 @property (nonatomic,assign) NSInteger itemCount;
-
+/** 新增 - 大题题型名 */
+@property (nonatomic,copy) NSString *TopicTypeName;
 
 /** 新增 - 分句朗读 */
 @property (nonatomic,strong) NSArray<YJSpeechClauseModel *> *ClauseList;

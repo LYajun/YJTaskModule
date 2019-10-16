@@ -105,6 +105,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 审核：互评评分的学生名 */
 - (NSString *)yj_taskHpStuName;
 
+/** 英译中隐藏语音按钮 */
+- (BOOL)yj_hideSpeechBtn;
+- (BOOL)yj_translateTopic;
 /** 文本资源地址 */
 - (NSString *)yj_smallTopicArticle;
 /** 是否离线 */

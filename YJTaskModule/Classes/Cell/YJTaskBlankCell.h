@@ -11,5 +11,7 @@
 @interface YJTaskBlankCell : LGBaseTableViewCell
 @property (nonatomic,copy) NSString *answerStr;
 @property (nonatomic,assign) BOOL editable;
+/** 英译中隐藏语音评测按钮 */
+@property (nonatomic,assign) BOOL hideSpeechBtn;
 @property (nonatomic,assign) NSInteger index;
 @end

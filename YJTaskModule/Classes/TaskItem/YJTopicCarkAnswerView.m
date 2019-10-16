@@ -54,6 +54,7 @@
                 }else{
                     cell.presentEnable = YES;
                 }
+                cell.hideSpeechBtn = smallModel.yj_hideSpeechBtn;
                 return cell;
             }else{
                 YJTopicCarkChoiceAnswerCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTopicCarkChoiceAnswerCell class]) forIndexPath:indexPath];
@@ -88,6 +89,7 @@
             cell.SpeechMarkBlock = ^{
                 weakSelf.currentSmallIndex = indexPath.row;
             };
+            cell.hideSpeechBtn = smallModel.yj_hideSpeechBtn;
             return cell;
         }
             break;
@@ -106,6 +108,7 @@
             cell.SpeechMarkBlock = ^{
                 weakSelf.currentSmallIndex = indexPath.row;
             };
+            cell.hideSpeechBtn = smallModel.yj_hideSpeechBtn;
             return cell;
         }
             break;

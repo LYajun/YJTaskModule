@@ -16,7 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL editable;
 @property (nonatomic,copy) NSString *answerStr;
 @property (nonatomic,strong) YJBasePaperSmallModel *smallModel;
-
+/** 英译中隐藏语音评测按钮 */
+@property (nonatomic,assign) BOOL hideSpeechBtn;
 @property (nonatomic,copy) void (^SpeechMarkBlock) (void);
 @end
 
