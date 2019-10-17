@@ -107,9 +107,9 @@
         layout.sectionInset = UIEdgeInsetsMake(3, 0, 3, 0);
         layout.minimumInteritemSpacing = 3;
         layout.minimumLineSpacing = 3;
-        CGFloat w = (kTaskCarkCellWidth-20*2-3*4)/5;
+        CGFloat w = (kTaskCarkCellWidth-20*2-3*4-3*2)/5;
         if (IsIPad) {
-            w = (kTaskCarkCellWidth-20*2-3*7)/8;
+            w = (kTaskCarkCellWidth-20*2-3*7-3*2)/8;
         }
         layout.itemSize = CGSizeMake(w, w);
         _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];

@@ -106,14 +106,14 @@
         }else{
             rowCount = cardModel.answerResults.count / 8 > 0 ? cardModel.answerResults.count / 8 + 1: 1;
         }
-        return rowCount * ((kTaskCarkViewWidth-20*2-3*7)/8 + 3) + 3 + 3 + 30;
+        return rowCount * ((kTaskCarkViewWidth-20*2-3*7-3*2)/8 + 3) + 3 + 3 + 30;
     }else{
         if (cardModel.answerResults.count % 5 == 0) {
             rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 : 1;
         }else{
             rowCount = cardModel.answerResults.count / 5 > 0 ? cardModel.answerResults.count / 5 + 1: 1;
         }
-        return rowCount * ((kTaskCarkViewWidth-20*2-3*4)/5 + 3) + 3 + 3 + 30;
+        return rowCount * ((kTaskCarkViewWidth-20*2-3*4-3*2)/5 + 3) + 3 + 3 + 30;
     }
     
 }
