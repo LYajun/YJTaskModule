@@ -220,6 +220,9 @@ static NSString *kHpStuName = @"";
     }
     return NO;
 }
+- (NSString *)yj_bigTopicTypeName{
+    return self.TopicTypeName;
+}
 - (NSInteger)yj_smallAnswerType{
     return self.AnswerType;
 }

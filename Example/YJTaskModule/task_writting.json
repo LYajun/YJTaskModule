@@ -116,7 +116,7 @@
             "TopicTheme": "main verb and copula",
             "Difficulty": 0.3,
             "QuesCount": 1,
-            "AudioResStr": "http://192.168.129.129:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/bktea6/2ce21ad4-4c0a-4e83-9f0e-45ca7b7ce42b/AfterClassProgram/P2019109931165760093125/39e2a4a93f741d1613f58f666e9ad512.mp3",
+            "AudioResStr": "http://192.168.129.130:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/gztea1/1cbb04f1-f832-4fb0-a286-f5c2e34c1ca3/AfterClassProgram/P20191016182572560183122/b55130777fea4243675bf48036124a48.mp3",
             "PicResStr": "",
             "IsQuesInContent": false,
             "AnswerTime": 0,
@@ -130,7 +130,7 @@
                     "AnswerType": 1,
                     "IsHpTimu": false,
                     "QuesAsk": "in this section, you will hear eight short conversations. At the end of each conversation, one or more questions will be asked about what was said. Both the conversation and the questions will be spoken only once",
-                    "QuesAudio": "http://192.168.129.129:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/bktea6/2ce21ad4-4c0a-4e83-9f0e-45ca7b7ce42b/AfterClassProgram/P2019109931165760093125/4064c7a45900bd4c2ccb4aae840ad850.mp3",
+                    "QuesAudio": "http://192.168.129.130:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/gztea1/1cbb04f1-f832-4fb0-a286-f5c2e34c1ca3/AfterClassProgram/P20191016182572560183122/e4bcab682b25ba33220b18264836b7e3.mp3",
                     "QuesAnswer": "B",
                     "QuesAnalysis": "",
                     "OptionKeyList": [
@@ -169,7 +169,7 @@
                     "AnswerType": 1,
                     "IsHpTimu": false,
                     "QuesAsk": "",
-                    "QuesAudio": "http://192.168.129.129:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/bktea6/2ce21ad4-4c0a-4e83-9f0e-45ca7b7ce42b/AfterClassProgram/P2019109931165760093125/5e59a5bc2144f09ffca824002b0b74b6.mp3",
+                    "QuesAudio": "http://192.168.129.130:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/gztea1/1cbb04f1-f832-4fb0-a286-f5c2e34c1ca3/AfterClassProgram/P20191016182572560183122/9068553f1ccd1b6e8fb1595609508881.mp3",
                     "QuesAnswer": "B",
                     "QuesAnalysis": "",
                     "OptionKeyList": [
@@ -208,7 +208,7 @@
                     "AnswerType": 1,
                     "IsHpTimu": false,
                     "QuesAsk": "",
-                    "QuesAudio": "http://192.168.129.129:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/bktea6/2ce21ad4-4c0a-4e83-9f0e-45ca7b7ce42b/AfterClassProgram/P2019109931165760093125/fa4a6de3636a85481da49acdbaeeacdf.mp3",
+                    "QuesAudio": "http://192.168.129.130:10103/TC_TeachCenter_HttpV2/LBD_TeachProgram/gztea1/1cbb04f1-f832-4fb0-a286-f5c2e34c1ca3/AfterClassProgram/P20191016182572560183122/54d41649cc8743afd33db2b330ba2626.mp3",
                     "QuesAnswer": "B",
                     "QuesAnalysis": "",
                     "OptionKeyList": [
@@ -246,3 +246,4 @@
     ],
     "HearData": null
 }
+

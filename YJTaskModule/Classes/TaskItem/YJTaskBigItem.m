@@ -209,6 +209,7 @@
 }
 - (void)YJ_choiceTopicDidAnswer{
     if (self.currentSmallIndex < self.bigModel.yj_smallTopicList.count-1) {
+        [self stopTaskBaseSmallItemVoicePlay];
         _currentSmallIndex++;
         self.bigTopicView.highlightSmallIndex = _currentSmallIndex;
         [self.smallScrollView setContentOffset:CGPointMake(LG_ScreenWidth*_currentSmallIndex, 0) animated:YES];

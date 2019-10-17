@@ -42,7 +42,7 @@
         make.width.mas_equalTo(40);
         make.height.mas_equalTo(40);
     }];
-
+    self.voiceBtn.hidden = YES;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invalidatePlayer) name:YJTaskModule_StopYJTaskTopicVoicePlay_Notification object:nil];
 }

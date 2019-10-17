@@ -108,6 +108,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 英译中隐藏语音按钮 */
 - (BOOL)yj_hideSpeechBtn;
 - (BOOL)yj_translateTopic;
+/** 大题题型名 */
+- (NSString *)yj_bigTopicTypeName;
 /** 文本资源地址 */
 - (NSString *)yj_smallTopicArticle;
 /** 是否离线 */
@@ -123,7 +125,7 @@ NS_ASSUME_NONNULL_BEGIN
 @optional
 /** 大题作答类型 */
 - (YJBigTopicType)yj_bigTopicType;
-/** 大题题型及分数 */
+/** 大题题型名 */
 - (NSString *)yj_bigTopicTypeName;
 /** 大题题干信息 */
 - (NSString *)yj_topicContent;

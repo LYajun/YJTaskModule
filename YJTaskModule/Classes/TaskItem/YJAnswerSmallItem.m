@@ -249,6 +249,7 @@
                         [weakSelf.tableView reloadData];
                     }];
                     answerView.topicInfoAttr = self.smallModel.yj_smallTopicAttrText;
+                    answerView.titleStr = self.smallModel.yj_bigTopicTypeName;
                 }else{
                     __weak typeof(self) weakSelf = self;
                     if (self.smallModel.yj_smallItemCount > 1) {
@@ -288,6 +289,7 @@
                     [weakSelf.tableView reloadData];
                 }];
                 answerView.topicInfoAttr = self.smallModel.yj_smallTopicAttrText;
+                answerView.titleStr = self.smallModel.yj_bigTopicTypeName;
             }
                 break;
             default:
