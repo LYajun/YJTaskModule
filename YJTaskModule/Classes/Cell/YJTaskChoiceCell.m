@@ -40,6 +40,10 @@
     BOOL isHideIndexBgImg = [NSUserDefaults yj_boolForKey:YJTaskModule_ImageLabelBgHidden_UserDefault_Key];
     self.choiceLab.isHideIndexBgImg = isHideIndexBgImg;
 }
+- (void)setIsHideIndexBgImg:(BOOL)isHideIndexBgImg{
+    _isHideIndexBgImg = isHideIndexBgImg;
+    self.choiceLab.isHideIndexBgImg = isHideIndexBgImg;
+}
 - (void)setIsChoiced:(BOOL)isChoiced{
     _isChoiced = isChoiced;
     self.choiceLab.isChoiced = isChoiced;

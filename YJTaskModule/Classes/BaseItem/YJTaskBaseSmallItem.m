@@ -31,10 +31,10 @@
         make.height.mas_equalTo(30);
     }];
 }
-- (void)setTotalTopicCount:(NSInteger)totalTopicCount{
-    _totalTopicCount = totalTopicCount;
-    self.titleView.taskName = [NSString stringWithFormat:@"(本题包含%li道小题)",totalTopicCount];
-}
+//- (void)setTotalTopicCount:(NSInteger)totalTopicCount{
+//    _totalTopicCount = totalTopicCount;
+//    self.titleView.taskName = [NSString stringWithFormat:@"(本题共%li道小题)",totalTopicCount];
+//}
 - (YJTaskTitleView *)titleView{
     if (!_titleView) {
         _titleView = [[YJTaskTitleView alloc] initWithFrame:CGRectZero];
@@ -45,10 +45,15 @@
 }
 - (void)setCurrentIndex:(NSInteger)currentIndex{
     _currentIndex = currentIndex;
+//    if (self.totalTopicCount > 1) {
+//        self.titleView.topicIndexAttr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"(%li)",currentIndex+1],[NSString stringWithFormat:@"/%li",self.totalTopicCount]] colors:@[[UIColor darkGrayColor],LG_ColorWithHex(0x989898)] fonts:@[@(15),@(12)]];
+//    }else{
+//        self.titleView.topicIndexAttr = [[NSAttributedString alloc] initWithString:@""];
+//    }
     if (self.totalTopicCount > 1) {
-        self.titleView.topicIndexAttr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"(%li)",currentIndex+1],[NSString stringWithFormat:@"/%li",self.totalTopicCount]] colors:@[[UIColor darkGrayColor],LG_ColorWithHex(0x989898)] fonts:@[@(15),@(12)]];
+        self.titleView.taskName = [NSString stringWithFormat:@"(本题共%li道小题,当前第%li小题)",self.totalTopicCount,currentIndex+1];
     }else{
-        self.titleView.topicIndexAttr = [[NSAttributedString alloc] initWithString:@""];
+        self.titleView.taskName = @"(本题共1道小题)";
     }
 }
 - (void)updateData{

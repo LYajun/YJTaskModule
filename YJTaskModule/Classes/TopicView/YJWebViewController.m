@@ -27,6 +27,8 @@
 /** 发生错误 */
 @property (strong, nonatomic) UIView *viewLoadError;
 @property (strong, nonatomic) UILabel *labLoadError;
+/** 已加载成功 */
+@property (nonatomic,assign) BOOL isLoadPdfSuccess;
 @end
 
 @implementation YJWebViewController
@@ -61,7 +63,11 @@
     if ([self.ResFileExtension.lowercaseString containsString:@"html"] && s) {
         [s setActive:NO error:nil];
     }
+    if (self.isLoadPdfSuccess) {
+        [self downloadOnlineFile];
+    }
 }
+
 - (NSString *)filePath{
     NSString *filePath = [NSString stringWithFormat:@"%@/Library/YJ_File/",NSHomeDirectory()];
     if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
@@ -147,6 +153,7 @@
 #pragma mark - WKNavigationDelegate
 
 - (void)webView:(WKWebView *)webView didFailProvisionalNavigation:(WKNavigation *)navigation withError:(NSError *)error{
+    self.isLoadPdfSuccess = NO;
     [self setTextLoadError:@"文件加载失败"];
     [self setViewLoadErrorShow:YES];
 }
@@ -154,6 +161,11 @@
     decisionHandler(WKNavigationActionPolicyAllow);
 }
 - (void)webView:(WKWebView *)webView didFinishNavigation:(WKNavigation *)navigation{
+    if ([self.ResFileExtension.lowercaseString containsString:@"pdf"]) {
+        self.isLoadPdfSuccess = YES;
+    }else{
+         self.isLoadPdfSuccess = NO;
+    }
      [self setViewLoadingShow:NO];
 }
 

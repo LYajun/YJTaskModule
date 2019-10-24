@@ -598,6 +598,13 @@ static NSString *kHpStuName = @"";
     }
     return arr;
 }
+- (NSArray<NSString *> *)yj_bigChioceBlankTopicIndexList{
+    NSMutableArray *arr = [NSMutableArray array];
+    for (YJPaperSmallModel *smallModel in self.Queses) {
+        [arr addObject:[NSString stringWithFormat:@"(%li)",smallModel.PaperIndex]];
+    }
+    return arr;
+}
 - (NSArray<id<YJPaperSmallProtocol>> *)yj_smallTopicList{
     return self.Queses;
 }
@@ -675,7 +682,7 @@ static NSString *kHpStuName = @"";
 }
 - (void)setYj_taskStageType:(YJTaskStageType)yj_taskStageType{
     [super setYj_taskStageType:yj_taskStageType];
-    [NSUserDefaults yj_setObject:@(yj_taskStageType) forKey:@"taskStageType"];
+    [NSUserDefaults yj_setObject:@(yj_taskStageType) forKey:UserDefaults_YJTaskStageType];
     if (yj_taskStageType == YJTaskStageTypeHp || yj_taskStageType == YJTaskStageTypeHpViewer) {
         int i = 0;
         for (YJPaperBigModel *bigModel in self.Topics) {

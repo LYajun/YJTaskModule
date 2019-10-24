@@ -16,6 +16,7 @@
 @interface YJTopicTextView : UITextView
 @property (nonatomic,assign) NSInteger currentSmallIndex;
 @property (nonatomic,strong) NSArray<NSString *> *answerResults;
+@property (nonatomic,strong) NSArray<NSString *> *topicIndexs;
 - (void)setBlankAttributedString:(NSAttributedString *)blankAttributedString;
 - (void)setTopicContentAttr:(NSAttributedString *) topicContentAttr;
 - (NSInteger)totalBlankCount;

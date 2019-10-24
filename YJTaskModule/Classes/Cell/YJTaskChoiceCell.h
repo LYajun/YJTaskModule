@@ -13,4 +13,6 @@
 @property (nonatomic,assign) BOOL isRight;
 @property (nonatomic,assign) NSInteger index;
 @property (nonatomic,strong) NSMutableAttributedString *textAttr;
+
+@property (nonatomic,assign) BOOL isHideIndexBgImg;
 @end

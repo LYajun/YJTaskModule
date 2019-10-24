@@ -145,6 +145,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 音频名数组 */
 - (NSArray *)yj_bigMediaNames;
 /** 选词作答(选词填空，匹配题等)作答答案List */
+- (NSArray<NSString *> *)yj_bigChioceBlankTopicIndexList;
 - (NSArray<NSString *> *)yj_bigChioceBlankAnswerList;
 /** 大题ID */
 - (NSString *)yj_bigTopicID;

@@ -128,7 +128,8 @@
             self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
             self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
             self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
-            self.bigTopicView.taskStageType == YJTaskStageTypeViewer) {
+            self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
             self.splitView.dragEnable = YES;
         }else{
             self.splitView.dragEnable = NO;
@@ -278,7 +279,8 @@
                 self.bigTopicView.taskStageType == YJTaskStageTypeAnalysisNoSubmit ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
-                self.bigTopicView.taskStageType == YJTaskStageTypeViewer) {
+                self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
+                 self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
                 if (IsStrEmpty(self.bigModel.yj_topicContent)) {
                     return titleH+pintroH;
                 }else{

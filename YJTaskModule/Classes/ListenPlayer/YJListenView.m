@@ -230,6 +230,7 @@
             };
         }else{
             button.selected = YES;
+            self.playProgress.userInteractionEnabled = YES;
             if (![self.listenPlayer isPlaying]) {
                 [self.listenPlayer play];
             }
@@ -300,6 +301,7 @@
     }
 }
 - (void)yj_listenPlayerDidPlayFinish{
+    self.playProgress.userInteractionEnabled = NO;
     self.playBtn.selected = NO;
     self.playProgress.value = 0;
     [self.listenPlayer stop];

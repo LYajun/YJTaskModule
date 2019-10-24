@@ -88,6 +88,12 @@
     if (self.playBlock) {
         self.playBlock();
     }
+    
+    if (self.audioPlayer.isPlaying) {
+        [self stopPlayVoice];
+        return;
+    }
+    
     [self.audioPlayer invalidate];
     self.audioPlayer.audioUrl = self.voiceUrl;
     [self.audioPlayer play];

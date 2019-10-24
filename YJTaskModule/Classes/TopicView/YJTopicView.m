@@ -49,6 +49,7 @@
         self.textView.scrollEnabled = YES;
         if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank ||
             self.bigModel.yj_bigTopicType == YJBigTopicTypeBigTextAndBlank || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"S"] || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"U"]) {// 添加听力填空
+            self.textView.topicIndexs = self.bigModel.yj_bigChioceBlankTopicIndexList;
             [self.textView setBlankAttributedString:self.bigModel.yj_bigTopicAttrText];
             self.textView.answerResults = self.bigModel.yj_bigChioceBlankAnswerList;
         }else{

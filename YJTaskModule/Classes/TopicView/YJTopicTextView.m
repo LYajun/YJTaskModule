@@ -83,6 +83,9 @@ static CGFloat kYJTextFontSize = 17;
                     textFiled.backgroundColor = kYJTextColor;
                     textFiled.textColor = [UIColor whiteColor];
                     NSString *placeholder = @"(1)";
+                    if (!IsArrEmpty(self.topicIndexs)) {
+                        placeholder = self.topicIndexs.firstObject;
+                    }
                     NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:[UIColor whiteColor],NSFontAttributeName:textFiled.font}];
                     textFiled.attributedPlaceholder = attrString;
                     YJTextAttachment *textAttachment = [[YJTextAttachment alloc] initWithData:nil ofType:nil] ;
@@ -143,6 +146,9 @@ static CGFloat kYJTextFontSize = 17;
     for (NSInteger i = 0; i < count; i++) {
         YJBlankTextField *textFiled = self.blankTextFieldArray[i];
         NSString *placeholder = [NSString stringWithFormat:@"(%li)",i+1];
+         if (!IsArrEmpty(self.topicIndexs) && i <= self.topicIndexs.count-1) {
+             placeholder = [self.topicIndexs yj_objectAtIndex:i];
+         }
         UIColor *placeholderColor;
         if (i == currentSmallIndex) {
             textFiled.backgroundColor = kYJTextColor;
@@ -165,6 +171,7 @@ static CGFloat kYJTextFontSize = 17;
     self.attributedText = attr;
     
 }
+
 - (void)setAnswerResults:(NSArray<NSString *> *)answerResults{
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:self.attributedText];
     // 匹配题容错处理
@@ -199,6 +206,9 @@ static CGFloat kYJTextFontSize = 17;
     btn.tag = self.blankTextFieldArray.count;
     [self.blankTextFieldArray addObject:btn];
     NSString *placeholder = [NSString stringWithFormat:@"(%li)",self.blankTextFieldArray.count];
+    if (!IsArrEmpty(self.topicIndexs) && self.topicIndexs.count >= self.blankTextFieldArray.count) {
+        placeholder = [self.topicIndexs yj_objectAtIndex:self.blankTextFieldArray.count-1];
+    }
     NSAttributedString *attrString = [[NSAttributedString alloc] initWithString:placeholder attributes:@{NSForegroundColorAttributeName:kYJTextColor,NSFontAttributeName:btn.font}];
     btn.attributedPlaceholder = attrString;
     btn.textColor = kYJTextColor;
