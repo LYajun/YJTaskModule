@@ -111,8 +111,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *PicResStr;
 /** 小题数量 */
 @property (nonatomic,assign) NSInteger QuesCount;
-/** 文本资源地址 */
+/** 文本资源地址:如听力原文 */
 @property (nonatomic,copy) NSString *TopicArticle;
+@property (nonatomic,copy) NSMutableAttributedString *TopicArticle_attr;
 /** 大题题目内容 */
 @property (nonatomic,copy) NSString *TopicContent;
 @property (nonatomic,copy) NSMutableAttributedString *TopicContent_attr;

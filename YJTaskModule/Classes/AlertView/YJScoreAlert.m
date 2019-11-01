@@ -33,7 +33,12 @@
     return self;
 }
 - (CGFloat)contentViewHeight{
-    return (self.height - 60) * 0.45 * 0.45;
+    NSString *scoreStr = [NSString stringWithFormat:@"%.1f",self.answerScore];
+    if ([scoreStr componentsSeparatedByString:@"."].lastObject.floatValue == 0) {
+        return (self.height - 60) * 0.45 * 0.41;
+    }else{
+        return (self.height - 60) * 0.45 * 0.31;
+    }
 }
 - (void)layoutUI{
     
@@ -148,8 +153,10 @@
 - (void)setIsPass:(BOOL)isPass{
     self.bgImgView.highlighted = isPass;
     self.flowerImgView.hidden = !isPass;
-    NSString *scoreStr = [NSString stringWithFormat:@"%.f",self.answerScore];
-    
+    NSString *scoreStr = [NSString stringWithFormat:@"%.1f",self.answerScore];
+    if ([scoreStr componentsSeparatedByString:@"."].lastObject.floatValue == 0) {
+        scoreStr = [scoreStr componentsSeparatedByString:@"."].firstObject;
+    }
      NSTextAttachment *scoreTitleAttachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil] ;
     if (isPass) {
         self.titleLab.text = @"恭喜你完成本次测试";
@@ -157,13 +164,25 @@
         scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
+            BOOL isPoint = NO;
             NSString *score = [scoreStr substringWithRange:NSMakeRange(i, 1)];
+            if ([score isEqualToString:@"."]) {
+                isPoint = YES;
+                score = [score stringByReplacingOccurrencesOfString:@"." withString:@"point"];
+            }
             NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
             attachment.image = [UIImage yj_imageNamed:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
             CGFloat width = attachment.image.size.width;
             CGFloat height = attachment.image.size.height;
             CGFloat rate = width/height;
             CGFloat imageH = self.contentViewHeight;
+            if (isPoint) {
+                if (IsIPad) {
+                    imageH = 20;
+                }else{
+                    imageH = 15;
+                }
+            }
             attachment.image = [attachment.image yj_transformtoSize:CGSizeMake(imageH*rate, imageH)];
             [attr appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
         }
@@ -173,13 +192,25 @@
         scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"wrong"] atBundle:YJTaskBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
+            BOOL isPoint = NO;
             NSString *score = [scoreStr substringWithRange:NSMakeRange(i, 1)];
+            if ([score isEqualToString:@"."]) {
+                isPoint = YES;
+                score = [score stringByReplacingOccurrencesOfString:@"." withString:@"point"];
+            }
             NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
             attachment.image = [UIImage yj_imageNamed:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"wrong"] atBundle:YJTaskBundle()];
             CGFloat width = attachment.image.size.width;
             CGFloat height = attachment.image.size.height;
             CGFloat rate = width/height;
             CGFloat imageH = self.contentViewHeight;
+            if (isPoint) {
+                if (IsIPad) {
+                    imageH = 20;
+                }else{
+                    imageH = 15;
+                }
+            }
             attachment.image = [attachment.image yj_transformtoSize:CGSizeMake(imageH*rate, imageH)];
             [attr appendAttributedString:[NSAttributedString attributedStringWithAttachment:attachment]];
         }

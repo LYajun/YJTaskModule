@@ -65,7 +65,10 @@ static NSString *kHpStuName = @"";
         }
     }
 }
-
+- (void)updateOptionContentList:(NSArray *)OptionContentList optionContentList_attr:(NSMutableArray *)optionContentList_attr{
+    _OptionContentList = OptionContentList;
+    _OptionContentList_attr = optionContentList_attr;
+}
 - (void)setQuesAsk:(NSString *)QuesAsk{
     QuesAsk = [self yj_filterPBrHtml:QuesAsk];
     _QuesAsk = QuesAsk;
@@ -321,7 +324,7 @@ static NSString *kHpStuName = @"";
     return @{@"Queses":[YJPaperSmallModel class]};
 }
 + (NSArray *)mj_ignoredPropertyNames{
-    return @[@"hash",@"superclass",@"description",@"debugDescription",@"TopicContent_attr"];
+    return @[@"hash",@"superclass",@"description",@"debugDescription",@"TopicContent_attr",@"TopicArticle_attr"];
 }
 - (void)setTopicPintroMidea:(NSString *)TopicPintroMidea{
     if (!IsStrEmpty(TopicPintroMidea) && [TopicPintroMidea containsString:@"\\"]) {
@@ -403,17 +406,38 @@ static NSString *kHpStuName = @"";
 }
 - (NSMutableAttributedString *)yj_bigTopicAttrText{
     if (!IsStrEmpty(self.TopicPintro)) {
-        NSString *topicPintro = [NSString stringWithFormat:@"%@\n",self.TopicPintro];
+        NSString *topicPintro = self.TopicPintro;
         if (self.TopicContent_attr) {
+            [topicPintro stringByAppendingString:@"\n"];
             [self.TopicContent_attr insertAttributedString:[[NSAttributedString alloc] initWithString:topicPintro] atIndex:0];
         }else{
             self.TopicContent_attr = [[NSMutableAttributedString alloc] initWithString:self.TopicPintro];
         }
     }
+     if ([self.listenTopicInfo objectForKey:self.TopicTypeID] && !IsStrEmpty(self.AudioResStr) && !IsStrEmpty(self.TopicArticle)) {
+         YJTaskStageType taskStateType = [NSUserDefaults yj_integerForKey:UserDefaults_YJTaskStageType];
+         NSInteger userType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
+         BOOL isShowTopicArticle = NO;
+         if (userType == 1) {
+             isShowTopicArticle = YES;
+         }else if(userType == 2){
+             if (taskStateType != YJTaskStageTypeAnswer && taskStateType != YJTaskStageTypeViewer) {
+                 isShowTopicArticle = YES;
+             }
+         }
+         if (isShowTopicArticle) {
+             [self.TopicContent_attr appendAttributedString:@"\n听力原文:\n".yj_toMutableAttributedString];
+             [self.TopicContent_attr appendAttributedString:self.TopicArticle_attr];
+         }
+     }
     return self.TopicContent_attr;
 }
 - (NSMutableAttributedString *)yj_bigTopicContentAttrText{
     return self.TopicContent_attr;
+}
+- (void)setTopicArticle:(NSString *)TopicArticle{
+    _TopicArticle = TopicArticle;
+    _TopicArticle_attr = TopicArticle.yj_htmlImgFrameAdjust.yj_toHtmlMutableAttributedString;
 }
 - (NSString *)yj_bigTopicArticle{
     return self.TopicArticle;
@@ -606,6 +630,14 @@ static NSString *kHpStuName = @"";
     return arr;
 }
 - (NSArray<id<YJPaperSmallProtocol>> *)yj_smallTopicList{
+    if ([self isMatch] && self.Queses.count > 1) {
+        for (int i = 0; i < self.Queses.count; i++) {
+            if (i > 0) {
+                YJPaperSmallModel *smallModel = self.Queses[i];
+                [smallModel updateOptionContentList:self.Queses.firstObject.OptionContentList optionContentList_attr:self.Queses.firstObject.OptionContentList_attr];
+            }
+        }
+    }
     return self.Queses;
 }
 - (NSInteger)yj_scoreLookRightQuesCount{
