@@ -180,7 +180,7 @@ static NSString *kHpStuName = @"";
 }
 - (NSString *)yj_smallIntelligenceScore{
     NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
-    if (UserType == 1 && self.AnswerType == 4 && ![self.TopicTypeID isEqualToString:@"f"]) {
+    if (UserType == 1) {
         return self.IntelligenceScore;
     }
     return @"";
