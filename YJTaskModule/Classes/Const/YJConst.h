@@ -40,7 +40,6 @@ static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType
 static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
 static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
-static NSString *YJTaskModule_ImageLabelBgHidden_UserDefault_Key = @"YJTaskModule_ImageLabelBgHidden_UserDefault_Key";
 
 static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
 

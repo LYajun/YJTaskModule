@@ -304,7 +304,9 @@ static NSString *kHpStuName = @"";
         }
     }
 }
-
+- (BOOL)yj_smallIsHpQues{
+    return self.IsHpQues;
+}
 - (BOOL)yj_offline{
     BOOL isOffline = [NSUserDefaults yj_boolForKey:UserDefaults_YJAnswerOfflineStatus];
     return isOffline;
@@ -414,9 +416,9 @@ static NSString *kHpStuName = @"";
             self.TopicContent_attr = [[NSMutableAttributedString alloc] initWithString:self.TopicPintro];
         }
     }
+    NSInteger userType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
+    YJTaskStageType taskStateType = [NSUserDefaults yj_integerForKey:UserDefaults_YJTaskStageType];
      if ([self.listenTopicInfo objectForKey:self.TopicTypeID] && !IsStrEmpty(self.AudioResStr) && !IsStrEmpty(self.TopicArticle)) {
-         YJTaskStageType taskStateType = [NSUserDefaults yj_integerForKey:UserDefaults_YJTaskStageType];
-         NSInteger userType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
          BOOL isShowTopicArticle = NO;
          if (userType == 1) {
              isShowTopicArticle = YES;
@@ -426,10 +428,35 @@ static NSString *kHpStuName = @"";
              }
          }
          if (isShowTopicArticle) {
-             [self.TopicContent_attr appendAttributedString:@"\n听力原文:\n".yj_toMutableAttributedString];
+             [self.TopicContent_attr appendAttributedString:@"\n【听力原文】\n".yj_toMutableAttributedString];
              [self.TopicContent_attr appendAttributedString:self.TopicArticle_attr];
          }
      }
+    
+    if (self.klgInfoDisplayEnable) {
+        BOOL isDisplay = NO;
+        if (userType == 1) {
+            isDisplay = YES;
+        }else if(userType == 2){
+            if (taskStateType != YJTaskStageTypeAnswer && taskStateType != YJTaskStageTypeViewer) {
+                isDisplay = YES;
+            }
+        }
+        
+        if (isDisplay) {
+            
+            if (!IsStrEmpty(self.ImporKnText)) {
+                 NSString *ImporKnText = [self.ImporKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
+                [self.TopicContent_attr appendAttributedString:[NSString stringWithFormat:@"\n【重要知识点】\n%@",ImporKnText].yj_toMutableAttributedString];
+            }
+            if (!IsStrEmpty(self.MainKnText)) {
+                NSString *MainKnText = [self.MainKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
+                [self.TopicContent_attr appendAttributedString:[NSString stringWithFormat:@"\n【次重要知识点】\n%@",MainKnText].yj_toMutableAttributedString];
+            }
+        }
+    }
+    
+    
     return self.TopicContent_attr;
 }
 - (NSMutableAttributedString *)yj_bigTopicContentAttrText{
@@ -727,7 +754,14 @@ static NSString *kHpStuName = @"";
     [super setYj_currentBigIndex:yj_currentBigIndex];
     _LastAnsTopic = yj_currentBigIndex;
 }
-
+- (void)setYj_taskKlgInfoDisplayEnable:(BOOL)yj_taskKlgInfoDisplayEnable{
+    [super setYj_taskKlgInfoDisplayEnable:yj_taskKlgInfoDisplayEnable];
+    
+    for (YJPaperBigModel *bigModel in self.Topics) {
+        bigModel.klgInfoDisplayEnable = yj_taskKlgInfoDisplayEnable;
+    }
+    
+}
 - (void)setTopics:(NSArray<YJPaperBigModel *> *)Topics{
     _Topics = Topics;
     for (YJPaperBigModel *bigModel in Topics) {

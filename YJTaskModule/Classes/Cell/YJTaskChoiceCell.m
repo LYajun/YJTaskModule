@@ -37,8 +37,6 @@
         make.height.greaterThanOrEqualTo(@44);
     }];
     
-    BOOL isHideIndexBgImg = [NSUserDefaults yj_boolForKey:YJTaskModule_ImageLabelBgHidden_UserDefault_Key];
-    self.choiceLab.isHideIndexBgImg = isHideIndexBgImg;
 }
 - (void)setIsHideIndexBgImg:(BOOL)isHideIndexBgImg{
     _isHideIndexBgImg = isHideIndexBgImg;

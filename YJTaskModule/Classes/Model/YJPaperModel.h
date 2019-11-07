@@ -99,9 +99,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *AudioResStr;
 /** 难度 */
 @property (nonatomic,copy) NSString *Difficulty;
-/** 重要知识点 */
+/** 重要知识点ID */
 @property (nonatomic,copy) NSString *ImportantKlg;
-/** 主要知识点 */
+/** 次要知识点ID */
 @property (nonatomic,copy) NSString *MainKlg;
 /** 大题索引 */
 @property (nonatomic,assign) NSInteger Index;
@@ -141,8 +141,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) YJCorrectModel *GCQues;
 /** 小题List */
 @property (nonatomic,strong) NSArray<YJPaperSmallModel *> *Queses;
-
+/** 重要知识点 */
 @property (nonatomic,copy) NSString *ImporKnText;
+/** 次要知识点 */
 @property (nonatomic,copy) NSString *MainKnText;
 @property (nonatomic,copy) NSString *ThemeKeywordCode;
 @property (nonatomic,copy) NSString *ThemeKeywordText;
@@ -156,6 +157,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *ResType;
 /** 听说作业ftp信息 */
 @property (nonatomic,copy) NSString *ftpPre;
+
+/** 是否显示知识点信息 */
+@property (nonatomic,assign) BOOL klgInfoDisplayEnable;
 @end
 
 @interface YJPaperModel : YJBasePaperModel

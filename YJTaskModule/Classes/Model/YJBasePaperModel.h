@@ -64,6 +64,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 当前大题索引 */
 @property (nonatomic,assign) NSInteger yj_currentBigIndex;
 
+/** 知识点信息显示开关 */
+@property (nonatomic,assign) BOOL yj_taskKlgInfoDisplayEnable;
+
 /** 已作答小题数 */
 - (NSInteger)quesAnswerItemSum;
 /** 已互评小题数 */
