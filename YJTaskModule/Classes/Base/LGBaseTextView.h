@@ -41,6 +41,7 @@ typedef NS_ENUM(NSInteger, YJTextViewLimitType)
 @property (nonatomic,assign) NSInteger maxLength;
 @property (nullable,nonatomic,weak) id<LGBaseTextViewDelegate> yjDelegate;
 
+@property (nonatomic,assign) CGPoint placeholdOrigin;
 /** 移除辅助视图 */
 - (void)deleteAccessoryView;
 /** 获取键盘高度 */

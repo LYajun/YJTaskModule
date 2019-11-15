@@ -43,6 +43,11 @@
         make.height.mas_equalTo(40);
     }];
     self.voiceBtn.hidden = YES;
+    if (IsIPad && CGAffineTransformIsIdentity(self.voiceBtn.transform)) {
+        self.voiceBtn.transform = CGAffineTransformMakeScale(1.3, 1.3);
+        self.voiceBtn.transform = CGAffineTransformTranslate(self.voiceBtn.transform, 0, 2);
+    }
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(invalidatePlayer) name:YJTaskModule_StopYJTaskTopicVoicePlay_Notification object:nil];
 }

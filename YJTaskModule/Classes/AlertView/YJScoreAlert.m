@@ -8,6 +8,7 @@
 #import "YJScoreAlert.h"
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
+#import "YJTaskMarLabel.h"
 
 @interface YJScoreAlert ()
 @property (nonatomic,strong) UIImageView *bgImgView;
@@ -24,6 +25,7 @@
 @property (nonatomic,strong) UILabel *topicCountLab;
 @property (nonatomic,strong) UIButton *closeBtn;
 @property(nonatomic,strong) UIView *maskView;
+@property (nonatomic,strong) YJTaskMarLabel *tipLab;
 @end
 @implementation YJScoreAlert
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -41,7 +43,7 @@
     }
 }
 - (void)layoutUI{
-    
+    _tipStr = @"【注】未评阅的习题，不统计个数且不纳入总得分";
     [self addSubview:self.closeBtn];
     [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
@@ -81,16 +83,25 @@
     [contentView addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView);
-        make.top.equalTo(self.bgImgView.mas_bottom).offset(30);
+        make.top.equalTo(self.bgImgView.mas_bottom).offset(LG_ScreenWidth > 320 ? 30 : -20);
+    }];
+    
+    [contentView addSubview:self.tipLab];
+    [self.tipLab mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.equalTo(contentView);
+        make.bottom.equalTo(contentView).offset(LG_ScreenWidth > 375 ? -30 : -20);
+        make.left.equalTo(contentView).offset(20);
     }];
     
     [contentView addSubview:self.topicCountLab];
     [self.topicCountLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView);
-        make.bottom.equalTo(contentView).offset(LG_ScreenWidth <= 375 ? -30 : -40);
+        make.bottom.equalTo(self.tipLab.mas_top).offset(LG_ScreenWidth > 375 ? -30 : -20);
         make.height.mas_equalTo(20);
     }];
     
+    self.tipLab.hidden = YES;
+    self.tipLab.text = self.tipStr;
     [contentView addSubview:self.rightCountTitleLab];
     [self.rightCountTitleLab mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView).offset(-57);
@@ -134,8 +145,24 @@
     }];
     self.flowerImgView.hidden = YES;
 }
-+ (YJScoreAlert *)scoreAlertWithSize:(CGSize)size{
-    YJScoreAlert *scoreAlert = [[YJScoreAlert alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
++ (YJScoreAlert *)scoreAlert{
+    CGFloat width = 0;
+    CGFloat height = 0;
+    if (IsIPad) {
+        width = 350;
+        height = 600;
+    }else{
+        width = LG_ScreenWidth * 0.75;
+        if (LG_ScreenWidth <= 320) {
+            height = 568 * 0.82;
+        }else if (LG_ScreenWidth <= 375){
+            height = 667 * 0.82;
+        }else{
+            height = 736 * 0.82;
+        }
+    }
+    
+    YJScoreAlert *scoreAlert = [[YJScoreAlert alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     scoreAlert.maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     scoreAlert.maskView.backgroundColor = LG_ColorWithHexA(0x000000, 0.6);
     return scoreAlert;
@@ -223,6 +250,21 @@
     scoreTitleAttachment.image = [scoreTitleAttachment.image yj_transformtoSize:CGSizeMake(imageH*rate, imageH)];
     self.scoreTitleLab.attributedText = [NSAttributedString attributedStringWithAttachment:scoreTitleAttachment];
 }
+- (void)setUnMarkCount:(NSInteger)unMarkCount{
+    _unMarkCount = unMarkCount;
+    self.tipLab.hidden = unMarkCount == 0;
+    [self.topicCountLab mas_updateConstraints:^(MASConstraintMaker *make) {
+        if (unMarkCount == 0) {
+            make.bottom.equalTo(self.tipLab.mas_top).offset(LG_ScreenWidth > 375 ? -10 : 0);
+        }else{
+            make.bottom.equalTo(self.tipLab.mas_top).offset(LG_ScreenWidth > 375 ? -30 : -20);
+        }
+    }];
+}
+- (void)setTipStr:(NSString *)tipStr{
+    _tipStr = tipStr;
+    self.tipLab.text = tipStr;
+}
 - (void)setRightCount:(NSInteger)rightCount{
     _rightCount = rightCount;
     self.rightCountLab.text = [NSString stringWithFormat:@"%li",rightCount];
@@ -275,6 +317,7 @@
     }];
 }
 - (void)hide{
+     [self.tipLab invalidateTimer];
     if (self.hideBlock) {
         self.hideBlock();
     }
@@ -290,6 +333,16 @@
 }
 
 #pragma mark - Getter
+
+- (YJTaskMarLabel *)tipLab{
+    if (!_tipLab) {
+        _tipLab = [YJTaskMarLabel new];
+        _tipLab.textAlignment = NSTextAlignmentCenter;
+        _tipLab.font = [UIFont systemFontOfSize:IsIPad ? 15 : 14];
+        _tipLab.textColor = [UIColor redColor];
+    }
+    return _tipLab;
+}
 - (UIImageView *)bgImgView{
     if (!_bgImgView) {
         _bgImgView = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"wrong_bg" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()] highlightedImage:[UIImage yj_imageNamed:@"right_bg" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];

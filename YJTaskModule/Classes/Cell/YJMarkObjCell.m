@@ -43,6 +43,12 @@
 }
 - (void)setTitleStr:(NSString *)titleStr{
     self.titleLab.text = titleStr;
+    if (!IsStrEmpty(titleStr) && [titleStr containsString:@"知识点"]) {
+        CGFloat width = [titleStr yj_widthWithFont:LG_SysFont(16)]+5;
+        [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.width.mas_equalTo(width);
+        }];
+    }
 }
 - (void)setTitleColor:(UIColor *)titleColor{
     self.titleLab.textColor = titleColor;
@@ -52,7 +58,7 @@
     if (!IsStrEmpty(text) && [text isEqualToString:@"未作答"]) {
         self.textView.textColor = LG_ColorWithHex(0x999999);
     }else{
-        self.textView.textColor = [UIColor darkGrayColor];
+        self.textView.textColor = LG_ColorWithHex(0x333333);
     }
 }
 - (void)setIsAddBgColor:(BOOL)isAddBgColor{
@@ -77,7 +83,7 @@
         _textView.selectable = NO;
         _textView.scrollEnabled = NO;
         _textView.font = LG_SysFont(16);
-        _textView.textColor = [UIColor darkGrayColor];
+        _textView.textColor = LG_ColorWithHex(0x333333);
     }
     return _textView;
 }

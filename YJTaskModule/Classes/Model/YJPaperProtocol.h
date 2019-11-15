@@ -129,6 +129,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_bigTopicTypeName;
 /** 大题题干信息 */
 - (NSString *)yj_topicContent;
+/** 听力原文信息 */
+- (NSString *)yj_topicListenText;
+/** 是否显示知识点信息 */
+- (BOOL)yj_showTopicKlgInfo;
+/** 重要知识点 */
+- (NSString *)yj_topicImpKlgInfo;
+/** 次重要知识点 */
+- (NSString *)yj_topicMainKlgInfo;
 /** 大题题干导语信息 */
 - (NSString *)yj_topicDirectionTxt;
 /** 大题题干信息(富文本) */

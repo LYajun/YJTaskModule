@@ -18,6 +18,7 @@
 #import "YJAnswerAlertChoiceCell.h"
 #import "YJAnswerAlertView.h"
 #import "YJScoreAlert.h"
+#import "YJTaskMarLabel.h"
 #import "YJTaskAnswerEditView.h"
 #import "YJTaskAnswerView.h"
 #import "YJTaskWrittingView.h"

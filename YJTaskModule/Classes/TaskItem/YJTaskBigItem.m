@@ -97,6 +97,7 @@
         for (int i = 0; i < self.bigModel.yj_smallTopicList.count; i++) {
             YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[i];
             YJTaskBaseSmallItem *smallItem = [[[self.bigModel taskClassByTaskStageType:taskStageType] alloc] initWithFrame:CGRectZero smallPModel:smallModel taskStageType:taskStageType];
+            smallItem.bigModel = self.bigModel;
             smallItem.delegate = self;
             smallItem.totalTopicCount = self.bigModel.yj_smallTopicList.count;
             smallItem.currentIndex = i;
@@ -264,7 +265,7 @@
 }
 #pragma mark Getter
 - (CGFloat)bigTopicViewHeight{
-    CGFloat pintroH = 30;
+    CGFloat pintroH = 30 * (IsIPad ? 2 : 3);
     if (IsStrEmpty(self.bigModel.yj_topicDirectionTxt)) {
         pintroH = 0;
     }
@@ -281,7 +282,7 @@
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
                  self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
-                if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH;
                 }else{
                     return self.height*0.3;
@@ -299,7 +300,7 @@
                 if (self.bigModel.yj_isCorrectTopic && (self.bigTopicView.taskStageType == YJTaskStageTypeAnswer || self.bigTopicView.taskStageType == YJTaskStageTypeViewer)) {
                     return self.height;
                 }else{
-                    if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                    if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                         return titleH+pintroH;
                     }else{
                         return self.height*0.3;
@@ -308,16 +309,20 @@
             }
         }
         case YJBigTopicTypeListen:
-            return titleH+pintroH+listenH;
+            if (IsStrEmpty(self.bigModel.yj_topicListenText)) {
+                return titleH+pintroH+listenH;
+            }else{
+                return titleH+listenH+self.height*0.3;
+            }
             break;
         case YJBigTopicTypeBigTextAndListen:
             if (self.bigModel.yj_topicCarkMode) {
-                return titleH+pintroH+listenH+self.height*0.4+10;
+                return titleH+listenH+self.height*0.4+10;
             }else{
-                if (IsStrEmpty(self.bigModel.yj_topicContent)) {
+                if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH+listenH+14;
                 }else{
-                    return titleH+pintroH+listenH+self.height*0.3+14;
+                    return titleH+listenH+self.height*0.3+14;
                 }
             }
             break;

@@ -157,6 +157,8 @@
 - (void)pausePlayer{
     [self.listenPlayer pause];
     self.playBtn.selected = NO;
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
 }
 
 - (void)slideAction:(UISlider *)slide{
@@ -240,6 +242,8 @@
         button.selected = NO;
         if ([self.listenPlayer isPlaying]) {
             [self.listenPlayer pause];
+            // 开启屏保
+            [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
         }
     }
 }
@@ -296,11 +300,18 @@
     self.playProgress.value = progress/_totalDuration;
     self.currentPlayTimeL.text = [self timeWithInterVal:progress];
     
+     if (_totalDuration > 0 && self.listenPlayer.isPlaying) {
+         // 关闭屏保
+         [[UIApplication sharedApplication] setIdleTimerDisabled:YES];
+     }
+    
     if (progress > 0 && self.delegate && [self.delegate respondsToSelector:@selector(YJListenView:currentPlayProgress:totalDuration:)]) {
         [self.delegate YJListenView:self currentPlayProgress:progress totalDuration:_totalDuration];
     }
 }
 - (void)yj_listenPlayerDidPlayFinish{
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     self.playProgress.userInteractionEnabled = NO;
     self.playBtn.selected = NO;
     self.playProgress.value = 0;
@@ -315,6 +326,8 @@
     [self.listenPlayer play];
 }
 - (void)yj_listenPlayerDidPlayFail{
+    // 开启屏保
+    [[UIApplication sharedApplication] setIdleTimerDisabled:NO];
     [self indicatorViewStop];
     [self.listenPlayer stop];
     self.playBtn.selected = NO;

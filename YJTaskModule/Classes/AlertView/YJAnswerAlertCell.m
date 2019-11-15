@@ -105,12 +105,16 @@
         _titleLab = [UILabel new];
         _titleLab.textColor = [UIColor whiteColor];
         _titleLab.textAlignment = NSTextAlignmentCenter;
-        if (LG_ScreenWidth <= 320) {
-            _titleLab.font = [UIFont systemFontOfSize:12];
-        }else if (LG_ScreenWidth <= 375) {
-            _titleLab.font = [UIFont systemFontOfSize:14];
+        if (IsIPad) {
+            _titleLab.font = [UIFont systemFontOfSize:17];
         }else{
-            _titleLab.font = [UIFont systemFontOfSize:16];
+            if (LG_ScreenWidth <= 320) {
+                _titleLab.font = [UIFont systemFontOfSize:12];
+            }else if (LG_ScreenWidth <= 375) {
+                _titleLab.font = [UIFont systemFontOfSize:14];
+            }else{
+                _titleLab.font = [UIFont systemFontOfSize:16];
+            }
         }
     }
     return _titleLab;

@@ -63,9 +63,9 @@
         
         [self.contentBgV addSubview:self.recordBtn];
         [self.recordBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.contentBgV).offset(0);
-            make.right.equalTo(self.contentBgV).offset(0);
-            make.width.height.mas_equalTo(isSpeechMarkEnable ? 35 : 0);
+            make.bottom.equalTo(self.contentBgV).offset(isSpeechMarkEnable ? (IsIPad ? -15 : -10) : 0);
+            make.right.equalTo(self.contentBgV).offset(IsIPad ? - 10 : -5);
+            make.width.height.mas_equalTo(isSpeechMarkEnable ? (IsIPad ? 32 : 28) : 0);
         }];
         
         self.recordBtn.hidden = !isSpeechMarkEnable;

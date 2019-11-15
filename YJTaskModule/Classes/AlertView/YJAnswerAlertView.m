@@ -164,14 +164,14 @@
         titleL.text = @"左右滑动切换题目";
         titleL.textColor = LG_ColorWithHex(0xffffff);
         titleL.textAlignment = NSTextAlignmentCenter;
-        titleL.font = [UIFont boldSystemFontOfSize:18];
+        titleL.font = [UIFont boldSystemFontOfSize:IsIPad ? 20 : 18];
         
         UIImageView *fingerimg = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"finger" atDir:YJTaskBundle_AlertView atBundle:YJTaskBundle()]];
         [alertView addSubview:fingerimg];
         [fingerimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.top.equalTo(alertView.mas_centerY);
-            make.width.mas_equalTo(LG_ScreenWidth*0.18);
+            make.width.mas_equalTo(IsIPad ? 100 : LG_ScreenWidth*0.18);
             make.height.equalTo(fingerimg.mas_width).multipliedBy(1.6);
         }];
         
@@ -181,7 +181,7 @@
         [sureimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.top.equalTo(fingerimg.mas_bottom).offset(LG_ScreenHeight*0.08);
-            make.width.mas_equalTo(LG_ScreenWidth*0.216);
+            make.width.mas_equalTo(IsIPad ? 110 : LG_ScreenWidth*0.216);
             make.height.equalTo(sureimg.mas_width).multipliedBy(0.407);
         }];
         
@@ -191,7 +191,8 @@
         [slideTipimg mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(alertView);
             make.bottom.equalTo(fingerimg.mas_top).offset(-LG_ScreenHeight*0.145);
-            make.left.equalTo(alertView).offset(20);
+            make.left.equalTo(alertView).offset(20).priority(999);
+            make.width.mas_lessThanOrEqualTo(500).priority(1000);
             make.height.equalTo(slideTipimg.mas_width).multipliedBy(0.129);
         }];
         
@@ -236,7 +237,7 @@
 - (void)setNormalMsg:(NSString *)normalMsg{
     _normalMsg = normalMsg;
     NSMutableAttributedString *attr = normalMsg.yj_toMutableAttributedString;
-    [attr yj_setFont:15];
+    [attr yj_setFont: IsIPad ? 17 : 15];
     [attr yj_setColor:LG_ColorWithHex(0x333333)];
     if ([self.highLightMsg containsString:@"&"]) {
         NSArray *highLightArr = [self.highLightMsg componentsSeparatedByString:@"&"];
@@ -397,9 +398,9 @@
         _titleL = [UILabel new];
         _titleL.textAlignment = NSTextAlignmentCenter;
         if(([[[UIDevice currentDevice] systemVersion] compare:@"8.2" options:NSNumericSearch] == NSOrderedAscending)) {
-             _titleL.font = [UIFont systemFontOfSize:18];
+            _titleL.font = [UIFont systemFontOfSize:IsIPad ? 21 : 18];
         } else {
-            _titleL.font = [UIFont systemFontOfSize:18 weight:UIFontWeightMedium];
+            _titleL.font = [UIFont systemFontOfSize:IsIPad ? 21 : 18 weight:UIFontWeightMedium];
         }
         _titleL.textColor = LG_ColorWithHex(0x222222);
         _titleL.text = @"温馨提示";

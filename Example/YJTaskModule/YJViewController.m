@@ -23,17 +23,19 @@
 }
 
 - (IBAction)gotoTaskMudule:(id)sender {
-    IEPaperDisplayViewController *vc = [[IEPaperDisplayViewController alloc] init];
-    [self.navigationController pushViewController:vc animated:YES];
-    CGFloat sW = [UIScreen mainScreen].bounds.size.width;
-    CGFloat sH = [UIScreen mainScreen].bounds.size.height;
-    YJScoreAlert *scoreAlert = [YJScoreAlert scoreAlertWithSize:CGSizeMake(sW*0.75, sH *0.75)];
+//    IEPaperDisplayViewController *vc = [[IEPaperDisplayViewController alloc] init];
+//    [self.navigationController pushViewController:vc animated:YES];
+ 
+    YJScoreAlert *scoreAlert = [YJScoreAlert scoreAlert];
     scoreAlert.totalScore = 200;
     scoreAlert.answerScore = 88;
 
     scoreAlert.rightCount = 101;
     scoreAlert.wrongCount = 23;
 
+    
+    scoreAlert.unMarkCount = 0;
+    
     scoreAlert.bigTopicCount = 23;
     scoreAlert.smallTopicCount = 133;
 

@@ -9,7 +9,7 @@
 #import <UIKit/UIKit.h>
 #import "YJPaperProtocol.h"
 
-@class YJBasePaperSmallModel,YJTaskTitleView;
+@class YJBasePaperBigModel,YJBasePaperSmallModel,YJTaskTitleView;
 
 @protocol YJTaskBaseSmallItemDelegate <NSObject>
 
@@ -25,6 +25,7 @@
 @property (nonatomic,assign) NSInteger currentIndex;
 @property (nonatomic,assign) YJTaskStageType taskStageType;
 @property (assign,nonatomic) YJBasePaperSmallModel *smallModel;
+@property (assign,nonatomic) YJBasePaperBigModel *bigModel;
 @property (strong,nonatomic) YJTaskTitleView *titleView;
 
 - (instancetype)initWithFrame:(CGRect)frame

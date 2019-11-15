@@ -19,6 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger rightCount;
 /** 错误题数 */
 @property (nonatomic,assign) NSInteger wrongCount;
+/** 未评阅题数 */
+@property (nonatomic,assign) NSInteger unMarkCount;
+/** 提示语,默认有值 */
+@property (nonatomic,copy) NSString *tipStr;
 
 /** 大题数 */
 @property (nonatomic,assign) NSInteger bigTopicCount;
@@ -28,7 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 隐藏回调 */
 @property (nonatomic,copy) void (^hideBlock) (void);
 
-+ (YJScoreAlert *)scoreAlertWithSize:(CGSize)size;
++ (YJScoreAlert *)scoreAlert;
 
 - (void)show;
 @end

@@ -108,12 +108,33 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 - (void)setSmallModel:(YJBasePaperSmallModel *)smallModel{
     _smallModel = smallModel;
     if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis)) {
-        self.analysisL.text = [NSString stringWithFormat:@"本题解析: %@",smallModel.yj_smallAnswerAnalysis];
+        self.analysisL.text = [NSString stringWithFormat:@"【本题解析】 %@",smallModel.yj_smallAnswerAnalysis];
     }
      [self.collectionView reloadData];
 }
+- (void)setImpKnText:(NSString *)impKnText{
+    _impKnText = impKnText;
+    if (!IsStrEmpty(impKnText)) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【重要知识点】 %@",impKnText]];
+        self.analysisL.text = text;
+    }
+}
 
-
+- (void)setMainKnText:(NSString *)mainKnText{
+    _mainKnText = mainKnText;
+    if (!IsStrEmpty(mainKnText)) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【次重要知识点】%@",mainKnText]];
+        self.analysisL.text = text;
+    }
+}
 - (UICollectionView *)collectionView{
     if (!_collectionView) {
         UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];

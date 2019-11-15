@@ -134,7 +134,12 @@
         self.placeholder = @"请输入...";
     }
     [placeHolderLabel sizeToFit];
-    placeHolderLabel.frame = CGRectMake(8, 8, CGRectGetWidth(self.frame)-16, CGRectGetHeight(placeHolderLabel.frame));
+    if (self.placeholdOrigin.x > 0 || self.placeholdOrigin.y > 0) {
+        placeHolderLabel.frame = CGRectMake(self.placeholdOrigin.x, self.placeholdOrigin.y, CGRectGetWidth(self.frame)-self.placeholdOrigin.x*2, CGRectGetHeight(placeHolderLabel.frame));
+    }else{
+        placeHolderLabel.frame = CGRectMake(8, 8, CGRectGetWidth(self.frame)-16, CGRectGetHeight(placeHolderLabel.frame));
+    }
+    
 }
 
 -(void)setPlaceholder:(NSString *)placeholder
