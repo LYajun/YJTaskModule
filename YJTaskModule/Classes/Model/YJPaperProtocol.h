@@ -92,6 +92,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_smallStuScore;
 /** 智能评阅得分 */
 - (NSString *)yj_smallIntelligenceScore;
+/** 小题评语 */
+- (NSString *)yj_smallComment;
 /** 小题审核互评得分 */
 - (NSString *)yj_smallCheckHpScore;
 /** 小题索引 */

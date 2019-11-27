@@ -20,6 +20,7 @@
 @interface YJAnaSmallItem ()<UITableViewDelegate,UITableViewDataSource>
 @property (strong,nonatomic) UITableView *tableView;
 @property (nonatomic,strong) YJTaskTopicCell *currentTaskTopicCell;
+@property (nonatomic,strong) NSMutableArray *analysisArr;
 @end
 @implementation YJAnaSmallItem
 - (instancetype)initWithFrame:(CGRect)frame smallPModel:(YJBasePaperSmallModel *)smallPModel taskStageType:(YJTaskStageType)taskStageType{
@@ -32,6 +33,36 @@
         }];
     }
     return self;
+}
+- (NSMutableArray *)analysisArr{
+    if (!_analysisArr) {
+        _analysisArr = [NSMutableArray array];
+    }
+    return _analysisArr;
+}
+- (void)configAnalysisInfo{
+    [self.analysisArr removeAllObjects];
+    if (self.smallModel.yj_smallAnswerType == 2 || self.smallModel.yj_smallAnswerType == 4) {
+        if (!IsStrEmpty(self.smallModel.yj_smallComment)) {
+            [self.analysisArr addObject:@{@"title":@"本题评语",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallComment}];
+        }
+        if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
+            [self.analysisArr addObject:@{@"title":@"本题解析",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
+        }
+        if (self.isShowKlgInfo) {
+            if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
+                [self.analysisArr addObject:@{@"title":@"重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicImpKlgInfo}];
+            }
+            if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
+                [self.analysisArr addObject:@{@"title":@"次重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+            }
+        }
+    }
+    
+}
+- (void)setBigModel:(YJBasePaperBigModel *)bigModel{
+    [super setBigModel:bigModel];
+    [self configAnalysisInfo];
 }
 - (void)updateData{
     [self.tableView reloadData];
@@ -62,30 +93,7 @@
         case YJSmallTopicTypeSimpleAnswer:
         case YJSmallTopicTypeWritting:
         {
-            if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
-                
-                if (self.isShowKlgInfo) {
-                    if ((!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) || (IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && !IsStrEmpty(self.bigModel.yj_topicMainKlgInfo))) {
-                        return 6;
-                    }
-                    if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && !IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-                        return 7;
-                    }
-                }
-                
-                return 5;
-            }
-            
-            if (self.isShowKlgInfo) {
-                if ((!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) || (IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && !IsStrEmpty(self.bigModel.yj_topicMainKlgInfo))) {
-                    return 5;
-                }
-                if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo) && !IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-                    return 6;
-                }
-            }
-            
-            return 4;
+            return 4 + self.analysisArr.count;
         }
             break;
         default:
@@ -182,37 +190,11 @@
                         cell.text = @"暂无评阅结果";
                     }
                 }else{
-                    if (indexP.row == 3) {
-                        if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
-                            cell.titleStr = @"本题解析";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.smallModel.yj_smallAnswerAnalysis;
-                        }else{
-                            if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                                cell.titleStr = @"重要知识点";
-                                cell.titleColor = LG_ColorWithHex(0x333333);
-                                cell.text = self.bigModel.yj_topicImpKlgInfo;
-                            }else{
-                                cell.titleStr = @"次重要知识点";
-                                cell.titleColor = LG_ColorWithHex(0x333333);
-                                cell.text = self.bigModel.yj_topicMainKlgInfo;
-                            }
-                        }
-                    }else if (indexP.row == 4){
-                        if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                            cell.titleStr = @"重要知识点";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.bigModel.yj_topicImpKlgInfo;
-                        }else{
-                            cell.titleStr = @"次重要知识点";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.bigModel.yj_topicMainKlgInfo;
-                        }
-                    }else{
-                        cell.titleStr = @"次重要知识点";
-                        cell.titleColor = LG_ColorWithHex(0x333333);
-                        cell.text = self.bigModel.yj_topicMainKlgInfo;
-                    }
+                    NSInteger analysisIndex = indexP.row - 3;
+                    NSDictionary *analysisDic = [self.analysisArr yj_objectAtIndex:analysisIndex];
+                    cell.titleStr = [analysisDic objectForKey:@"title"];
+                    cell.titleColor = [analysisDic objectForKey:@"color"];
+                    cell.text = [analysisDic objectForKey:@"text"];
                 }
                 return cell;
             }
@@ -261,37 +243,11 @@
                     }
                 }else{
                     cell.imgUrlArr = nil;
-                    if (indexP.row == 3) {
-                        if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
-                            cell.titleStr = @"本题解析";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.smallModel.yj_smallAnswerAnalysis;
-                        }else{
-                            if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                                cell.titleStr = @"重要知识点";
-                                cell.titleColor = LG_ColorWithHex(0x333333);
-                                cell.text = self.bigModel.yj_topicImpKlgInfo;
-                            }else{
-                                cell.titleStr = @"次重要知识点";
-                                cell.titleColor = LG_ColorWithHex(0x333333);
-                                cell.text = self.bigModel.yj_topicMainKlgInfo;
-                            }
-                        }
-                    }else if (indexP.row == 4){
-                        if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                            cell.titleStr = @"重要知识点";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.bigModel.yj_topicImpKlgInfo;
-                        }else{
-                            cell.titleStr = @"次重要知识点";
-                            cell.titleColor = LG_ColorWithHex(0x333333);
-                            cell.text = self.bigModel.yj_topicMainKlgInfo;
-                        }
-                    }else{
-                        cell.titleStr = @"次重要知识点";
-                        cell.titleColor = LG_ColorWithHex(0x333333);
-                        cell.text = self.bigModel.yj_topicMainKlgInfo;
-                    }
+                    NSInteger analysisIndex = indexP.row - 3;
+                    NSDictionary *analysisDic = [self.analysisArr yj_objectAtIndex:analysisIndex];
+                    cell.titleStr = [analysisDic objectForKey:@"title"];
+                    cell.titleColor = [analysisDic objectForKey:@"color"];
+                    cell.text = [analysisDic objectForKey:@"text"];
                 }
                 return cell;
             }

@@ -114,6 +114,8 @@
     if (!_taskNameL) {
         _taskNameL = [[UILabel alloc] initWithFrame:CGRectZero];
         _taskNameL.font = [UIFont systemFontOfSize:14];
+        _taskNameL.textColor = LG_ColorWithHex(0x989898);
+        _taskNameL.lineBreakMode = NSLineBreakByTruncatingMiddle;
     }
     return _taskNameL;
 }

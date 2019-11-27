@@ -107,10 +107,18 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 
 - (void)setSmallModel:(YJBasePaperSmallModel *)smallModel{
     _smallModel = smallModel;
-    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis)) {
-        self.analysisL.text = [NSString stringWithFormat:@"【本题解析】 %@",smallModel.yj_smallAnswerAnalysis];
+    if (!IsStrEmpty(smallModel.yj_smallComment)) {
+        self.analysisL.text = [NSString stringWithFormat:@"【本题评语】 %@",smallModel.yj_smallComment];
     }
-     [self.collectionView reloadData];
+    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis)) {
+        NSString *text = kApiParams(self.analysisL.text);
+        if (!IsStrEmpty(text)) {
+            text = [text stringByAppendingString:@"\n"];
+        }
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【本题解析】 %@",smallModel.yj_smallAnswerAnalysis]];
+        self.analysisL.text = text;
+    }
+    [self.collectionView reloadData];
 }
 - (void)setImpKnText:(NSString *)impKnText{
     _impKnText = impKnText;

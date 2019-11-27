@@ -178,6 +178,9 @@ static NSString *kHpStuName = @"";
 - (NSString *)yj_smallScore{
     return [NSString stringWithFormat:@"%.1f",self.QuesScore];
 }
+- (NSString *)yj_smallComment{
+    return self.Comment;
+}
 - (NSString *)yj_smallIntelligenceScore{
     NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
     if (UserType == 1) {

@@ -43,7 +43,7 @@
     }
 }
 - (void)layoutUI{
-    _tipStr = @"【注】未评阅的习题，不统计个数且不纳入总得分";
+    _tipStr = @"【注】未评阅的习题，不进行统计。";
     [self addSubview:self.closeBtn];
     [self.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self);
