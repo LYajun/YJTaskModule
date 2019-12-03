@@ -8,6 +8,16 @@
 
 #import "YJTaskBaseSmallItem.h"
 
+@class YJTaskTopicCell;
 @interface YJAnaSmallItem : YJTaskBaseSmallItem
+@property (nonatomic,strong) NSMutableArray *analysisArr;
+@property (nonatomic,assign) NSInteger analysisMutiBlankRowCount;
+@property (nonatomic,strong) YJTaskTopicCell *currentTaskTopicCell;
+- (void)configAnalysisInfo;
+- (BOOL)isShowKlgInfo;
+
+@end
+
+@interface YJAnaTeachSmallItem : YJAnaSmallItem
 
 @end

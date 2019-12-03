@@ -77,8 +77,14 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSMutableAttributedString *)yj_smallTopicAttrText;
 /** 小题题干信息(富文本)-不含索引 */
 - (NSMutableAttributedString *)yj_smallTopicContentAttrText;
+/** 答题点数 */
+- (NSInteger)yj_smallItemCount;
 /** 小题分值 */
 - (NSString *)yj_smallScore;
+/** 多答题点的小题分值 */
+- (NSString *)yj_smallMutiBlankScore;
+/** 多答题点的小题总得分 */
+- (NSString *)yj_smallMutiBlankAnswerScore;
 /** 小题解析 */
 - (NSString *)yj_smallAnswerAnalysis;
 /** 小题参考答案 */
@@ -98,6 +104,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_smallCheckHpScore;
 /** 小题索引 */
 - (NSInteger)yj_smallIndex;
+- (NSString *)yj_smallIndex_Ori;
 /** 小题自增索引 */
 - (NSInteger)yj_smallPaperIndex;
 /** 小题是否需要互评 */
@@ -196,6 +203,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 改错题导语 */
 - (NSString *)yj_correntTopicPintro;
 - (YJCorrectModel *)yj_correctModel;
+/** 是否教师分析阶段 */
+- (BOOL)yj_teachAnalysisStage;
+
 @end
 
 @protocol YJPaperProtocol <NSObject>

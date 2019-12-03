@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.3.3'
+  s.version          = '1.3.4'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -54,12 +54,21 @@ TODO: Add long description of the pod here.
         fileManager.source_files = 'YJTaskModule/Classes/YJFileManager/**/*'
 
     end
-
+    
+    s.subspec 'TopicCardView' do |topicCardView|
+        topicCardView.source_files = 'YJTaskModule/Classes/TopicCardView/**/*'
+        topicCardView.dependency 'YJTaskModule/ImageLabel'
+        
+        topicCardView.dependency 'YJTaskModule/Const'
+        topicCardView.dependency 'Masonry'
+    end
+    
     s.subspec 'Model' do |model|
         model.source_files = 'YJTaskModule/Classes/Model/**/*'
         model.dependency 'YJTaskModule/Base'
         model.dependency 'YJTaskModule/YJFileManager'
         model.dependency 'YJTaskModule/Const'
+        model.dependency 'YJTaskModule/TopicCardView'
         model.dependency 'TFHpple'
         model.dependency 'MJExtension'
         model.dependency 'YJNetManager'
@@ -162,13 +171,7 @@ TODO: Add long description of the pod here.
         topicView.dependency 'YJSearchController'
     end
 
-    s.subspec 'TopicCardView' do |topicCardView|
-        topicCardView.source_files = 'YJTaskModule/Classes/TopicCardView/**/*'
-        topicCardView.dependency 'YJTaskModule/ImageLabel'
-
-        topicCardView.dependency 'YJTaskModule/Const'
-        topicCardView.dependency 'Masonry'
-    end
+    
 
     s.subspec 'TaskItem' do |taskItem|
         taskItem.source_files = 'YJTaskModule/Classes/TaskItem/**/*'

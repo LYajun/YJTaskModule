@@ -188,7 +188,7 @@
     if (isPass) {
         self.titleLab.text = @"恭喜你完成本次测试";
         [self addAnimation];
-        scoreTitleAttachment.image = [UIImage yj_imageNamed:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
+        scoreTitleAttachment.image = [UIImage yj_imagePathName:@"分" atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
         NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
         for (int i = 0; i < scoreStr.length; i++) {
             BOOL isPoint = NO;
@@ -198,7 +198,7 @@
                 score = [score stringByReplacingOccurrencesOfString:@"." withString:@"point"];
             }
             NSTextAttachment *attachment = [[NSTextAttachment alloc] initWithData:nil ofType:nil];
-            attachment.image = [UIImage yj_imageNamed:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
+            attachment.image = [UIImage yj_imagePathName:score atDir:[YJTaskBundle_AlertView stringByAppendingPathComponent:@"right"] atBundle:YJTaskBundle()];
             CGFloat width = attachment.image.size.width;
             CGFloat height = attachment.image.size.height;
             CGFloat rate = width/height;

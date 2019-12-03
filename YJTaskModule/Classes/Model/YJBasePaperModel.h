@@ -9,10 +9,10 @@
 #import "LGBaseModel.h"
 #import "YJPaperProtocol.h"
 
+
 NS_ASSUME_NONNULL_BEGIN
+@class YJTaskCarkModel;
 @interface YJBasePaperSmallModel : LGBaseModel<YJPaperSmallProtocol>
-/** 答题点数 */
-@property (nonatomic,assign) NSInteger yj_smallItemCount;
 /** 单个答案 */
 @property (nonatomic,copy) NSString *yj_smallAnswer;
 /** 多个答案数组 */
@@ -66,6 +66,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 知识点信息显示开关 */
 @property (nonatomic,assign) BOOL yj_taskKlgInfoDisplayEnable;
+/** 是否教师分析阶段 */
+@property (nonatomic,assign) BOOL yj_taskStageTypeTeachAnalysis;
 
 /** 已作答小题数 */
 - (NSInteger)quesAnswerItemSum;
@@ -74,6 +76,8 @@ NS_ASSUME_NONNULL_BEGIN
 /** 作答小题数 */
 - (NSInteger)quesItemSum;
 
+
+- (NSArray<YJTaskCarkModel *> *)taskCarkModelArray;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -17,10 +17,185 @@
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
 
+#pragma mark - YJAnaTeachSmallItem
+@interface YJAnaTeachSmallItem ()
+
+@end
+
+@implementation YJAnaTeachSmallItem
+- (void)configAnalysisInfo{
+    [self.analysisArr removeAllObjects];
+    self.analysisMutiBlankRowCount = 0;
+    if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
+        self.analysisMutiBlankRowCount++;
+        [self.analysisArr addObject:@{@"title":@"本题解析",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
+    }
+    if (self.isShowKlgInfo) {
+        if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
+            [self.analysisArr addObject:@{@"title":@"重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicImpKlgInfo}];
+        }
+        if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
+            [self.analysisArr addObject:@{@"title":@"次重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+        }
+    }
+    
+}
+#pragma mark  UITableView dataSource & delegate
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (self.smallModel.yj_smallItemCount > 1) {
+        return self.smallModel.yj_smallItemCount;
+    }
+    return 1;
+}
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
+    switch (self.smallModel.yj_smallTopicType) {
+        case YJSmallTopicTypeChoice:
+        case YJSmallTopicTypeMoreChoice:
+            return self.smallModel.yj_smallOptions.count + 2 + self.analysisArr.count;
+            break;
+        case YJSmallTopicTypeBlank:
+        case YJSmallTopicTypeSimpleAnswer:
+        case YJSmallTopicTypeWritting:
+        {
+            if (self.smallModel.yj_smallItemCount > 1 && section == 0) {
+                return 2 + self.analysisMutiBlankRowCount;
+            }else{
+                return 2 + self.analysisArr.count;
+            }
+        }
+            break;
+        default:
+            return 0;
+            break;
+    }
+}
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
+    if (indexPath.row == 0) {
+        YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
+        cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
+        if (self.smallModel.yj_smallItemCount > 1) {
+            if (indexPath.section == 0) {
+                NSMutableAttributedString *attr = self.smallModel.yj_smallTopicAttrText.mutableCopy;
+                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:\n",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+                [attr appendAttributedString:indexAttr];
+                cell.textAttr = attr;
+            }else{
+                cell.textAttr = [NSString stringWithFormat:@"%@:",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+            }
+        }else{
+            cell.textAttr = self.smallModel.yj_smallTopicAttrText;
+        }
+        self.currentTaskTopicCell = cell;
+        __weak typeof(self) weakSelf = self;
+        cell.playBlock = ^{
+            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_taskTopicCellDidPlayVoice)]) {
+                [weakSelf.delegate YJ_taskTopicCellDidPlayVoice];
+            }
+        };
+        return cell;
+    }else{
+        NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
+        YJBasePaperSmallModel *smallModel = self.smallModel;
+        if (indexPath.section > 0) {
+            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                if (startIndex < indexP.section) {
+                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
+                }
+            }
+        }
+        switch (smallModel.yj_smallTopicType) {
+            case YJSmallTopicTypeChoice:
+            case YJSmallTopicTypeMoreChoice:
+            {
+                if (indexP.row >= smallModel.yj_smallOptions.count) {
+                    NSInteger choiceAnaIndex = indexP.row - smallModel.yj_smallOptions.count;
+                    YJMarkObjCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkObjCell class]) forIndexPath:indexPath];
+                    cell.isAddBgColor = NO;
+                    if (choiceAnaIndex == 0){
+                        cell.titleStr = @"参考答案";
+                        cell.titleColor = LG_ColorWithHex(0x009E00);
+                        cell.text = [smallModel.yj_smallStandardAnswer stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+                    }else{
+                        NSInteger analysisIndex = choiceAnaIndex - 1;
+                        NSDictionary *analysisDic = [self.analysisArr yj_objectAtIndex:analysisIndex];
+                        cell.titleStr = [analysisDic objectForKey:@"title"];
+                        cell.titleColor = [analysisDic objectForKey:@"color"];
+                        cell.text = [analysisDic objectForKey:@"text"];
+                    }
+                    return cell;
+                    
+                }else{
+                    YJTaskChoiceCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskChoiceCell class]) forIndexPath:indexPath];
+                    cell.textAttr = smallModel.yj_smallOptions[indexP.row];
+                    cell.index = indexP.row;
+                    cell.isChoiced = NO;
+                    cell.userInteractionEnabled = NO;
+                    return cell;
+                }
+            }
+                break;
+            case YJSmallTopicTypeBlank:
+            {
+                YJMarkObjCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkObjCell class]) forIndexPath:indexPath];
+                cell.isAddBgColor = NO;
+                if (indexP.row == 0){
+                    cell.titleStr = @"参考答案";
+                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
+                    if (!IsStrEmpty(standardAnswer)) {
+                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    }
+                    cell.text = standardAnswer;
+                }else{
+                    NSInteger analysisIndex = indexP.row - 1;
+                    NSDictionary *analysisDic = [self.analysisArr yj_objectAtIndex:analysisIndex];
+                    cell.titleStr = [analysisDic objectForKey:@"title"];
+                    cell.titleColor = [analysisDic objectForKey:@"color"];
+                    cell.text = [analysisDic objectForKey:@"text"];
+                }
+                return cell;
+            }
+                break;
+            case YJSmallTopicTypeSimpleAnswer:
+            case YJSmallTopicTypeWritting:
+            {
+                YJMarkSubCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkSubCell class]) forIndexPath:indexPath];
+                cell.isAddBgColor = NO;
+                if (indexP.row == 0){
+                    cell.imgUrlArr = nil;
+                    cell.titleStr = @"参考答案";
+                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
+                    if (!IsStrEmpty(standardAnswer)) {
+                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    }
+                    cell.text = standardAnswer;
+                }else{
+                    cell.imgUrlArr = nil;
+                    NSInteger analysisIndex = indexP.row - 1;
+                    NSDictionary *analysisDic = [self.analysisArr yj_objectAtIndex:analysisIndex];
+                    cell.titleStr = [analysisDic objectForKey:@"title"];
+                    cell.titleColor = [analysisDic objectForKey:@"color"];
+                    cell.text = [analysisDic objectForKey:@"text"];
+                }
+                return cell;
+            }
+                break;
+            default:
+                return nil;
+                break;
+        }
+    }
+}
+
+@end
+
+#pragma mark - YJAnaSmallItem
+
 @interface YJAnaSmallItem ()<UITableViewDelegate,UITableViewDataSource>
 @property (strong,nonatomic) UITableView *tableView;
-@property (nonatomic,strong) YJTaskTopicCell *currentTaskTopicCell;
-@property (nonatomic,strong) NSMutableArray *analysisArr;
+
 @end
 @implementation YJAnaSmallItem
 - (instancetype)initWithFrame:(CGRect)frame smallPModel:(YJBasePaperSmallModel *)smallPModel taskStageType:(YJTaskStageType)taskStageType{
@@ -42,11 +217,14 @@
 }
 - (void)configAnalysisInfo{
     [self.analysisArr removeAllObjects];
+    self.analysisMutiBlankRowCount = 0;
     if (self.smallModel.yj_smallAnswerType == 2 || self.smallModel.yj_smallAnswerType == 4) {
         if (!IsStrEmpty(self.smallModel.yj_smallComment)) {
+            self.analysisMutiBlankRowCount++;
             [self.analysisArr addObject:@{@"title":@"本题评语",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallComment}];
         }
         if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
+            self.analysisMutiBlankRowCount++;
             [self.analysisArr addObject:@{@"title":@"本题解析",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
         }
         if (self.isShowKlgInfo) {
@@ -74,13 +252,16 @@
 }
 - (BOOL)isShowKlgInfo{
     BOOL isShow = NO;
-    if (self.bigModel.yj_showTopicKlgInfo && self.currentIndex == self.bigModel.yj_smallTopicList.count-1) {
+    if (self.bigModel.yj_showTopicKlgInfo && self.lastSmallItem) {
         isShow = YES;
     }
     return isShow;
 }
 #pragma mark  UITableView dataSource & delegate
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
+    if (self.smallModel.yj_smallItemCount > 1) {
+        return self.smallModel.yj_smallItemCount;
+    }
     return 1;
 }
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section{
@@ -93,7 +274,11 @@
         case YJSmallTopicTypeSimpleAnswer:
         case YJSmallTopicTypeWritting:
         {
-            return 4 + self.analysisArr.count;
+            if (self.smallModel.yj_smallItemCount > 1 && section == 0) {
+                return 4 + self.analysisMutiBlankRowCount;
+            }else{
+                return 4 + self.analysisArr.count;
+            }
         }
             break;
         default:
@@ -106,7 +291,18 @@
     if (indexPath.row == 0) {
         YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
         cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
-        cell.textAttr = self.smallModel.yj_smallTopicAttrText;
+        if (self.smallModel.yj_smallItemCount > 1) {
+            if (indexPath.section == 0) {
+                NSMutableAttributedString *attr = self.smallModel.yj_smallTopicAttrText.mutableCopy;
+                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:\n",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+                [attr appendAttributedString:indexAttr];
+                cell.textAttr = attr;
+            }else{
+                cell.textAttr = [NSString stringWithFormat:@"%@:",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+            }
+        }else{
+            cell.textAttr = self.smallModel.yj_smallTopicAttrText;
+        }
         self.currentTaskTopicCell = cell;
         __weak typeof(self) weakSelf = self;
         cell.playBlock = ^{
@@ -117,18 +313,27 @@
         return cell;
     }else{
         NSIndexPath *indexP = [NSIndexPath indexPathForRow:indexPath.row-1 inSection:indexPath.section];
-        switch (self.smallModel.yj_smallTopicType) {
+        YJBasePaperSmallModel *smallModel = self.smallModel;
+        if (indexPath.section > 0) {
+            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                if (startIndex < indexP.section) {
+                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
+                }
+            }
+        }
+        switch (smallModel.yj_smallTopicType) {
             case YJSmallTopicTypeChoice:
             case YJSmallTopicTypeMoreChoice:
             {
-                if (indexP.row == self.smallModel.yj_smallOptions.count) {
+                if (indexP.row == smallModel.yj_smallOptions.count) {
                     YJAnaDetailChoiceCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJAnaDetailChoiceCell class]) forIndexPath:indexPath];
                     if (self.taskStageType == YJTaskStageTypeAnalysis) {
                         cell.isSubmit = YES;
                     }else{
                         cell.isSubmit = NO;
                     }
-                    cell.smallModel = self.smallModel;
+                    cell.smallModel = smallModel;
                     if (self.isShowKlgInfo) {
                         cell.impKnText = self.bigModel.yj_topicImpKlgInfo;
                         cell.mainKnText = self.bigModel.yj_topicMainKlgInfo;
@@ -137,12 +342,12 @@
                     
                 }else{
                     YJTaskChoiceCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskChoiceCell class]) forIndexPath:indexPath];
-                    cell.textAttr = self.smallModel.yj_smallOptions[indexP.row];
+                    cell.textAttr = smallModel.yj_smallOptions[indexP.row];
                     cell.index = indexP.row;
-                    if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
-                        NSInteger index = self.smallModel.yj_smallAnswer.yj_stringToASCIIInt-65;
+                    if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+                        NSInteger index = smallModel.yj_smallAnswer.yj_stringToASCIIInt-65;
                         if (index == indexP.row) {
-                            cell.isRight = (self.smallModel.yj_smallAnswerScore.floatValue >= self.smallModel.yj_smallScore.floatValue*0.6);
+                            cell.isRight = (smallModel.yj_smallAnswerScore.floatValue >= smallModel.yj_smallScore.floatValue*0.6);
                         }else{
                             cell.isChoiced = NO;
                         }
@@ -168,15 +373,15 @@
                         cell.titleStr = @"我的答案";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
-                    if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
-                        cell.text = self.smallModel.yj_smallAnswer;
+                    if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+                        cell.text = smallModel.yj_smallAnswer;
                     }else{
                         cell.text = @"未作答";
                     }
                 }else if (indexP.row == 1){
                     cell.titleStr = @"参考答案";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
-                    NSString *standardAnswer = self.smallModel.yj_smallStandardAnswer;
+                    NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
                     }
@@ -184,8 +389,8 @@
                 }else if (indexP.row == 2){
                     cell.titleStr = @"本题得分";
                     cell.titleColor = LG_ColorWithHex(0xFC0000);
-                    if (!IsStrEmpty(self.smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
-                        cell.text = [self.smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
+                    if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
+                        cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{
                         cell.text = @"暂无评阅结果";
                     }
@@ -205,7 +410,7 @@
                 YJMarkSubCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkSubCell class]) forIndexPath:indexPath];
                 cell.isAddBgColor = NO;
                 if (indexP.row == 0) {
-                    cell.imgUrlArr = self.smallModel.yj_imgUrlArr;
+                    cell.imgUrlArr = smallModel.yj_imgUrlArr;
                     cell.isAddBgColor = YES;
                     if (UserType == 1) {
                         cell.titleStr = @"学生答案";
@@ -213,10 +418,10 @@
                         cell.titleStr = @"我的答案";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
-                    if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
-                        cell.text = self.smallModel.yj_smallAnswer;
+                    if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+                        cell.text = smallModel.yj_smallAnswer;
                     }else{
-                        if (IsArrEmpty(self.smallModel.yj_imgUrlArr)) {
+                        if (IsArrEmpty(smallModel.yj_imgUrlArr)) {
                             cell.text = @"未作答";
                         }else{
                             cell.isAddBgColor = NO;
@@ -227,7 +432,7 @@
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"参考答案";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
-                    NSString *standardAnswer = self.smallModel.yj_smallStandardAnswer;
+                    NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
                     }
@@ -236,8 +441,8 @@
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"本题得分";
                     cell.titleColor = LG_ColorWithHex(0xFC0000);
-                    if (!IsStrEmpty(self.smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
-                        cell.text = [self.smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
+                    if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
+                        cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{
                         cell.text = @"暂无评阅结果";
                     }

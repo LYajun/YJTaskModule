@@ -36,7 +36,7 @@
 - (void)stopListen;
 - (void)pauseListen;
 
-- (void)updateCurrentSmallItem;
+- (void)updateCurrentSmallItemWithAnswer:(NSString *)answer;
 - (void)updateTopicCardCurrentSmallItemWithAnswer:(NSString *)answer;
 
 @end

@@ -105,6 +105,9 @@
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [[YJSpeechManager defaultManager] startEngineAtRefText:nil markType:YJSpeechMarkTypeASR];
         [YJSpeechMarkView showSpeechRecognizeView];
+        if (self.SpeechMarkBlock) {
+            self.SpeechMarkBlock();
+        }
     }else if ([longGes state] == UIGestureRecognizerStateEnded ||
               [longGes state] == UIGestureRecognizerStateCancelled){
         [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
@@ -117,7 +120,7 @@
     if (!_indexLab) {
         _indexLab = [UILabel new];
         _indexLab.textAlignment = NSTextAlignmentCenter;
-        _indexLab.font = [UIFont systemFontOfSize:16];
+        _indexLab.font = [UIFont boldSystemFontOfSize:18];
         _indexLab.textColor = [UIColor darkGrayColor];
     }
     return _indexLab;

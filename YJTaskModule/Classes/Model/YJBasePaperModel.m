@@ -8,7 +8,7 @@
 
 #import "YJBasePaperModel.h"
 #import "YjConst.h"
-
+#import "YJTaskCarkModel.h"
 @implementation YJBasePaperSmallModel
 
 @end
@@ -75,6 +75,14 @@
             SmallItem = NSClassFromString(@"YJStatisticTopicClassLookTopicDetailSmallItem");
             break;
         case YJTaskStageTypeAnalysis:
+        {
+            if (self.yj_teachAnalysisStage) {
+                SmallItem = NSClassFromString(@"YJAnaTeachSmallItem");
+            }else{
+                SmallItem = NSClassFromString(@"YJAnaSmallItem");
+            }
+        }
+            break;
         case YJTaskStageTypeAnalysisNoSubmit:
             SmallItem = NSClassFromString(@"YJAnaSmallItem");
             break;
@@ -176,12 +184,11 @@
 - (NSInteger)quesItemSum{
     NSInteger count = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
-        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
-            if (smallModel.yj_smallItemCount > 1) {
-                count += smallModel.yj_smallItemCount;
-            }else{
-                count++;
-            }
+        if (IsStrEmpty(bigModel.yj_smallTopicList.firstObject.yj_smallIndex_Ori)) {
+            count += bigModel.yj_smallTopicList.count;
+        }else{
+            NSInteger c = [[bigModel.yj_smallTopicList.lastObject.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue]+1;
+            count += c ;
         }
     }
     return count;
@@ -201,21 +208,83 @@
 - (NSInteger)quesAnswerItemSum{
     NSInteger itemFinishSum = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
+        NSInteger answerCount = 0;
         for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
-            if (!IsStrEmpty(smallModel.yj_smallAnswer) || (smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
-                if (smallModel.yj_smallItemCount > 1 && [smallModel.yj_smallAnswer containsString:[NSString yj_Char1]]) {
-                    NSArray *answerArr = [smallModel.yj_smallAnswer componentsSeparatedByString:[NSString yj_Char1]];
-                    for (NSString *str in answerArr) {
-                        if (str.length > 0) {
+            if (smallModel.yj_smallItemCount > 1 && !IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
+                if (endIndex == 0) {
+                    answerCount = 0;
+                }
+                if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+                    if (endIndex <= smallModel.yj_smallItemCount - 1) {
+                        answerCount++;
+                        if (endIndex == smallModel.yj_smallItemCount - 1 && answerCount == smallModel.yj_smallItemCount) {
                             itemFinishSum++;
                         }
                     }
-                }else{
+                }
+            }else{
+                if (!IsStrEmpty(smallModel.yj_smallAnswer) || (smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
                     itemFinishSum++;
                 }
             }
         }
     }
     return itemFinishSum;
+}
+
+- (NSArray<YJTaskCarkModel *> *)taskCarkModelArray{
+    NSMutableArray *dataArr = [NSMutableArray array];
+    for (int i = 0; i < self.yj_bigTopicList.count; i++) {
+        YJBasePaperBigModel *bigModel = (YJBasePaperBigModel *)self.yj_bigTopicList[i];
+        NSMutableArray *answers = [NSMutableArray array];
+        NSMutableArray *indexs = [NSMutableArray array];
+        NSInteger answerCount = 0;
+        NSInteger unAnswerCount = 0;
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            if (smallModel.yj_smallItemCount > 1 && !IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
+                if (endIndex == 0) {
+                    answerCount = 0;
+                    unAnswerCount = 0;
+                }
+                if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+                    if (endIndex <= smallModel.yj_smallItemCount - 1) {
+                        answerCount++;
+                        if (endIndex == smallModel.yj_smallItemCount - 1) {
+                            if (answerCount == smallModel.yj_smallItemCount) {
+                                [answers addObject:@(1)];
+                                [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                            }else{
+                                [answers addObject:@(0)];
+                                [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                            }
+                        }
+                    }
+                }else{
+                   if (endIndex == smallModel.yj_smallItemCount - 1) {
+                       [answers addObject:@(0)];
+                       [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                   }
+                }
+            }else{
+                if (!IsStrEmpty(smallModel.yj_smallAnswer) ||(smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsArrEmpty(smallModel.yj_imgUrlArr))) {
+                    [answers addObject:@(1)];
+                    [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                }else{
+                    [answers addObject:@(0)];
+                    [indexs addObject:@(smallModel.yj_smallPaperIndex)];
+                }
+            }
+        }
+        YJTaskCarkModel *model = [[YJTaskCarkModel alloc] init];
+        model.topcTypeName = bigModel.yj_bigTopicTypeName;
+        model.answerResults = answers;
+        model.indexs = indexs;
+        model.topicIndex = bigModel.yj_bigIndex;
+        [dataArr addObject:model];
+    }
+    return dataArr;
+    
 }
 @end

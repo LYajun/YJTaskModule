@@ -94,12 +94,30 @@
             }
         }
     }else{
-        for (int i = 0; i < self.bigModel.yj_smallTopicList.count; i++) {
+        NSInteger smallCount = 0;
+        YJBasePaperSmallModel *lastSmallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList.lastObject;
+        if (!IsStrEmpty(lastSmallModel.yj_smallIndex_Ori)) {
+            smallCount = [[lastSmallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue]+1;
+        }else{
+            smallCount = lastSmallModel.yj_smallIndex+1;
+        }
+        for (int i = 0; i < smallCount; i++) {
             YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[i];
+            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori) && smallModel.yj_smallItemCount > 1) {
+                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
+                if (startIndex < i && endIndex > 0) {
+                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(i + smallModel.yj_smallItemCount - 1)];
+                }
+                
+            }
             YJTaskBaseSmallItem *smallItem = [[[self.bigModel taskClassByTaskStageType:taskStageType] alloc] initWithFrame:CGRectZero smallPModel:smallModel taskStageType:taskStageType];
+            if (i == smallCount-1) {
+                smallItem.lastSmallItem = YES;
+            }
             smallItem.bigModel = self.bigModel;
             smallItem.delegate = self;
-            smallItem.totalTopicCount = self.bigModel.yj_smallTopicList.count;
+            smallItem.totalTopicCount = smallCount;
             smallItem.currentIndex = i;
             [contentView addSubview:smallItem];
             if (i == 0) {
@@ -115,7 +133,7 @@
                     make.width.mas_equalTo(LG_ScreenWidth);
                 }];
             }
-            if (i == self.bigModel.yj_smallTopicList.count-1) {
+            if (i == smallCount-1) {
                 [contentView mas_makeConstraints:^(MASConstraintMaker *make) {
                     make.right.equalTo(smallItem.mas_right);
                 }];
@@ -159,10 +177,19 @@
 - (void)pauseListen{
     [self.bigTopicView pauseListen];
 }
-- (void)updateCurrentSmallItem{
+- (void)updateCurrentSmallItemWithAnswer:(NSString *)answer{
     YJTaskBaseSmallItem *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
+    YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[self.currentSmallIndex];
+    if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+        NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+        if (startIndex < smallItem.currentSmallIndex ) {
+            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
+        }
+    }
+    smallModel.yj_smallAnswer = [NSString stringWithFormat:@"%@ %@",kApiParams(smallModel.yj_smallAnswer),answer];
+    
     [smallItem updateData];
-    YJBasePaperSmallModel *smallModel = [self.bigModel.yj_smallTopicList yj_objectAtIndex:self.currentSmallIndex];
+    
     if (!self.bigModel.yj_topicCarkMode && (smallModel.yj_smallTopicType == YJSmallTopicTypeBlank)) {
         [self YJ_blankAnswerUpdate];
     }

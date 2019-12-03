@@ -107,10 +107,10 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 
 - (void)setSmallModel:(YJBasePaperSmallModel *)smallModel{
     _smallModel = smallModel;
-    if (!IsStrEmpty(smallModel.yj_smallComment)) {
+    if (!IsStrEmpty(smallModel.yj_smallComment) && ![kApiParams(self.analysisL.text) containsString:@"【本题评语】"]) {
         self.analysisL.text = [NSString stringWithFormat:@"【本题评语】 %@",smallModel.yj_smallComment];
     }
-    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis)) {
+    if (!IsStrEmpty(smallModel.yj_smallAnswerAnalysis) && ![kApiParams(self.analysisL.text) containsString:@"【本题解析】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
             text = [text stringByAppendingString:@"\n"];
@@ -122,7 +122,7 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 }
 - (void)setImpKnText:(NSString *)impKnText{
     _impKnText = impKnText;
-    if (!IsStrEmpty(impKnText)) {
+    if (!IsStrEmpty(impKnText) && ![kApiParams(self.analysisL.text) containsString:@"【重要知识点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
             text = [text stringByAppendingString:@"\n"];
@@ -134,7 +134,7 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 
 - (void)setMainKnText:(NSString *)mainKnText{
     _mainKnText = mainKnText;
-    if (!IsStrEmpty(mainKnText)) {
+    if (!IsStrEmpty(mainKnText) && ![kApiParams(self.analysisL.text) containsString:@"【次重要知识点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
             text = [text stringByAppendingString:@"\n"];

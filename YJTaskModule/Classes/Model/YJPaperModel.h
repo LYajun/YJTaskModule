@@ -12,6 +12,10 @@
 #import "YJCorrectModel.h"
 #import <YJTaskMark/YJSpeechResultModel.h>
 
+@interface YJPaperTextAttachment: NSTextAttachment
+
+@end
+
 NS_ASSUME_NONNULL_BEGIN
 @interface YJPaperSmallModel : YJBasePaperSmallModel
 @property (nonatomic,strong) NSArray *AnswerImgUrlList;
@@ -28,6 +32,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float HpScore;
 /** 小题索引 */
 @property (nonatomic,assign) NSInteger Index;
+@property (nonatomic,copy) NSString *IndexOri;
 /** 该题是否需要互评 */
 @property (nonatomic,assign) BOOL IsHpQues;
 /** 该题是否需要互评 */
@@ -39,6 +44,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSMutableArray *OptionContentList_attr;
 /** 整份试卷第几题 */
 @property (nonatomic,assign) NSInteger PaperIndex;
+@property (nonatomic,assign) NSInteger PaperIndexOri;
 /** 题目解析 */
 @property (nonatomic,copy) NSString *QuesAnalysis;
 /** 参考答案 */
@@ -87,7 +93,12 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSArray<YJSpeechClauseModel *> *ClauseList;
 /**  新增 - 评测结果 */
 @property (nonatomic,strong) YJSpeechResultModel *speechResultModel;
-
+/** 新增 - 是否显示多答题点 */
+@property (nonatomic,assign) BOOL mutiBlankDisplayEnable;
+/** 新增 - 多答题点试题总分 */
+@property (nonatomic,assign) float mutiBlankQuesScore;
+/** 新增 - 多答题点试题总得分 */
+@property (nonatomic,assign) float mutiBlankQuesStuScore;
 @end
 
 @interface YJPaperBigModel : YJBasePaperBigModel
@@ -141,6 +152,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) YJCorrectModel *GCQues;
 /** 小题List */
 @property (nonatomic,strong) NSArray<YJPaperSmallModel *> *Queses;
+@property (nonatomic,strong) NSArray *QuesOri;
 /** 重要知识点 */
 @property (nonatomic,copy) NSString *ImporKnText;
 /** 次要知识点 */
@@ -158,8 +170,11 @@ NS_ASSUME_NONNULL_BEGIN
 /** 听说作业ftp信息 */
 @property (nonatomic,copy) NSString *ftpPre;
 
-/** 是否显示知识点信息 */
+/** 新增 - 是否显示知识点信息 */
 @property (nonatomic,assign) BOOL klgInfoDisplayEnable;
+/** 新增-是否教师分析阶段 */
+@property (nonatomic,assign) BOOL taskStageTypeTeachAnalysis;
+
 @end
 
 @interface YJPaperModel : YJBasePaperModel
