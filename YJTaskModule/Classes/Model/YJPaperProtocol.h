@@ -105,6 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 小题索引 */
 - (NSInteger)yj_smallIndex;
 - (NSString *)yj_smallIndex_Ori;
+- (NSInteger)yj_smallMutiBlankIndex;
 /** 小题自增索引 */
 - (NSInteger)yj_smallPaperIndex;
 /** 小题是否需要互评 */

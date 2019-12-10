@@ -99,6 +99,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float mutiBlankQuesScore;
 /** 新增 - 多答题点试题总得分 */
 @property (nonatomic,assign) float mutiBlankQuesStuScore;
+/** 新增 - 多答题点实际索引 */
+@property (nonatomic,assign) NSInteger mutiBlankIndex;
 @end
 
 @interface YJPaperBigModel : YJBasePaperBigModel

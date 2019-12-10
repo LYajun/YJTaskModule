@@ -287,4 +287,5 @@
     return dataArr;
     
 }
+- (void)updateMutiBlankScoreInfo{};
 @end

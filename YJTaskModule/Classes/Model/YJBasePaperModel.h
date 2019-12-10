@@ -78,6 +78,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 - (NSArray<YJTaskCarkModel *> *)taskCarkModelArray;
+
+- (void)updateMutiBlankScoreInfo;
 @end
 
 NS_ASSUME_NONNULL_END

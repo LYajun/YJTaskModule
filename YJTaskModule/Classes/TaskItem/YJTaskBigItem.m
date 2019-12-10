@@ -103,12 +103,8 @@
         }
         for (int i = 0; i < smallCount; i++) {
             YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[i];
-            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori) && smallModel.yj_smallItemCount > 1) {
-                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-                NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
-                if (startIndex < i && endIndex > 0) {
-                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(i + smallModel.yj_smallItemCount - 1)];
-                }
+            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori) ) {
+                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
                 
             }
             YJTaskBaseSmallItem *smallItem = [[[self.bigModel taskClassByTaskStageType:taskStageType] alloc] initWithFrame:CGRectZero smallPModel:smallModel taskStageType:taskStageType];
@@ -181,10 +177,9 @@
     YJTaskBaseSmallItem *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
     YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[self.currentSmallIndex];
     if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-        NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-        if (startIndex < smallItem.currentSmallIndex ) {
-            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
-        }
+        smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
+        smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
+        
     }
     smallModel.yj_smallAnswer = [NSString stringWithFormat:@"%@ %@",kApiParams(smallModel.yj_smallAnswer),answer];
     

@@ -168,6 +168,9 @@ static NSString *kHpStuName = @"";
 - (NSInteger)yj_smallIndex{
     return self.Index;
 }
+- (NSInteger)yj_smallMutiBlankIndex{
+    return self.mutiBlankIndex;
+}
 - (NSString *)yj_smallIndex_Ori{
     if (self.mutiBlankDisplayEnable) {
         return self.IndexOri;
@@ -339,7 +342,7 @@ static NSString *kHpStuName = @"";
     return kHpStuName;
 }
 - (NSString *)yj_smallStuScore{
-    if ([self yj_taskStageType] == YJTaskStageTypeCheck) {
+    if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer) {
         return [NSString stringWithFormat:@"%.1f",self.AnswerScore];
     }else{
         return [NSString stringWithFormat:@"%.1f",self.HpScore];
@@ -353,7 +356,7 @@ static NSString *kHpStuName = @"";
 }
 - (void)setYj_smallAnswerScore:(NSString *)yj_smallAnswerScore{
     [super setYj_smallAnswerScore:yj_smallAnswerScore];
-    if ([self yj_taskStageType] == YJTaskStageTypeCheck) {
+    if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer) {
         if (self.yj_smallTopicType == YJSmallTopicTypeWritting) {
             NSArray *scores = [yj_smallAnswerScore componentsSeparatedByString:@"*"];
             _WordRichMarkScoreStr = scores[0];
@@ -886,6 +889,18 @@ static NSString *kHpStuName = @"";
         }
     }
 }
+- (NSInteger)LastAnsTopic{
+    if (_LastAnsTopic < 0) {
+        return 0;
+    }
+    return _LastAnsTopic;
+}
+- (NSInteger)LastAnsQues{
+    if (_LastAnsQues < 0) {
+        return 0;
+    }
+    return _LastAnsQues;
+}
 - (void)setYj_currentBigIndex:(NSInteger)yj_currentBigIndex{
     [super setYj_currentBigIndex:yj_currentBigIndex];
     _LastAnsTopic = yj_currentBigIndex;
@@ -919,6 +934,7 @@ static NSString *kHpStuName = @"";
             bigModel.TopicContent = bigModel.TopicPintro_copy;
             bigModel.TopicPintro = @"";
         }
+       
         CGFloat score = 0;
         CGFloat stuScore = 0;
         for (YJPaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
@@ -945,6 +961,53 @@ static NSString *kHpStuName = @"";
                 smallModel.mutiBlankQuesScore = 0;
             }
             
+        }
+        
+        YJPaperSmallModel *lastSModel = bigModel.Queses.lastObject;
+        if (!IsStrEmpty(lastSModel.yj_smallIndex_Ori)) {
+            NSInteger smallCount = [[lastSModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue]+1;
+            for (int i = 0; i < smallCount; i++) {
+                YJPaperSmallModel *iSmallModel = bigModel.Queses[i];
+                for (YJPaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+                    NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                    if (startIndex == i) {
+                        iSmallModel.mutiBlankIndex = smallModel.Index;
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}
+- (void)updateMutiBlankScoreInfo{
+    for (YJPaperBigModel *bigModel in self.Topics) {
+        CGFloat score = 0;
+        CGFloat stuScore = 0;
+        if (!IsArrEmpty(bigModel.QuesOri)) {
+            for (YJPaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+                if (smallModel.yj_smallItemCount > 1) {
+                    NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                    NSInteger endIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].lastObject integerValue];
+                    if (endIndex == 0) {
+                        score = 0;
+                        stuScore = 0;
+                    }
+                    if (endIndex <= smallModel.yj_smallItemCount - 1) {
+                        score += smallModel.QuesScore;
+                        stuScore += smallModel.StuScore;
+                        if (endIndex == smallModel.yj_smallItemCount - 1) {
+                            for (NSInteger i = (startIndex + smallModel.yj_smallItemCount - 1); i >= startIndex; i--) {
+                                YJPaperSmallModel *lastSmallModel = (YJPaperSmallModel *)bigModel.yj_smallTopicList[i];
+                                lastSmallModel.mutiBlankQuesScore = score;
+                                lastSmallModel.mutiBlankQuesStuScore = stuScore;
+                            }
+                        }
+                    }
+                }else{
+                    smallModel.mutiBlankQuesScore = 0;
+                }
+                
+            }
         }
     }
 }

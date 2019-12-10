@@ -125,10 +125,9 @@
                     cell.index = indexP.row;
                     YJBasePaperSmallModel *smallModel = self.smallModel;
                     if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-                        NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-                        if (startIndex < indexP.row) {
-                            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.row + smallModel.yj_smallIndex)];
-                        }
+                       
+                        smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.row + smallModel.yj_smallIndex)];
+                        
                     }
                     cell.answerStr = smallModel.yj_smallAnswer;
                 }else{
@@ -246,10 +245,7 @@
                         NSInteger index = indexPath.row - 1;
                         YJBasePaperSmallModel *smallModel = self.smallModel;
                         if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-                            NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-                            if (startIndex < index) {
-                                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(index + smallModel.yj_smallIndex)];
-                            }
+                            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(index + smallModel.yj_smallIndex)];
                         }
                         [YJTaskAnswerView showWithText:smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
                             smallModel.yj_smallAnswer = result;

@@ -98,10 +98,8 @@
         YJBasePaperSmallModel *smallModel = self.smallModel;
         if (indexPath.section > 0) {
             if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-                if (startIndex < indexP.section) {
-                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
-                }
+                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
+                
             }
         }
         switch (smallModel.yj_smallTopicType) {
@@ -316,10 +314,7 @@
         YJBasePaperSmallModel *smallModel = self.smallModel;
         if (indexPath.section > 0) {
             if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
-                if (startIndex < indexP.section) {
-                    smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
-                }
+                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(indexP.section + smallModel.yj_smallIndex)];
             }
         }
         switch (smallModel.yj_smallTopicType) {
