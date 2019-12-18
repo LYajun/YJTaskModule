@@ -32,10 +32,10 @@
     }
     if (self.isShowKlgInfo) {
         if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-            [self.analysisArr addObject:@{@"title":@"重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicImpKlgInfo}];
+            [self.analysisArr addObject:@{@"title":@"重要考点",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
         }
         if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-            [self.analysisArr addObject:@{@"title":@"次重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+            [self.analysisArr addObject:@{@"title":@"次重要考点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
         }
     }
     
@@ -112,7 +112,7 @@
                     cell.isAddBgColor = NO;
                     if (choiceAnaIndex == 0){
                         cell.titleStr = @"参考答案";
-                        cell.titleColor = LG_ColorWithHex(0x009E00);
+                        cell.titleColor = LG_ColorWithHex(0x009900);
                         cell.text = [smallModel.yj_smallStandardAnswer stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                     }else{
                         NSInteger analysisIndex = choiceAnaIndex - 1;
@@ -139,7 +139,7 @@
                 cell.isAddBgColor = NO;
                 if (indexP.row == 0){
                     cell.titleStr = @"参考答案";
-                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
@@ -163,7 +163,7 @@
                 if (indexP.row == 0){
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"参考答案";
-                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
@@ -227,10 +227,10 @@
         }
         if (self.isShowKlgInfo) {
             if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                [self.analysisArr addObject:@{@"title":@"重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicImpKlgInfo}];
+                [self.analysisArr addObject:@{@"title":@"重要考点",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
             }
             if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-                [self.analysisArr addObject:@{@"title":@"次重要知识点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+                [self.analysisArr addObject:@{@"title":@"次重要考点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
             }
         }
     }
@@ -375,7 +375,7 @@
                     }
                 }else if (indexP.row == 1){
                     cell.titleStr = @"参考答案";
-                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
@@ -383,7 +383,7 @@
                     cell.text = standardAnswer;
                 }else if (indexP.row == 2){
                     cell.titleStr = @"本题得分";
-                    cell.titleColor = LG_ColorWithHex(0xFC0000);
+                    cell.titleColor = LG_ColorWithHex(0xFF0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{
@@ -426,7 +426,7 @@
                 }else if (indexP.row == 1){
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"参考答案";
-                    cell.titleColor = LG_ColorWithHex(0x009E00);
+                    cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
                         standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
@@ -435,7 +435,7 @@
                 }else if (indexP.row == 2){
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"本题得分";
-                    cell.titleColor = LG_ColorWithHex(0xFC0000);
+                    cell.titleColor = LG_ColorWithHex(0xFF0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
                     }else{

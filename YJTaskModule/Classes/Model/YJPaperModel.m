@@ -137,6 +137,9 @@ static NSString *kHpStuName = @"";
     _AnswerImgUrlList = yj_imgUrlArr;
 }
 - (void)setAnswerStr:(NSString *)AnswerStr{
+    if (!IsStrEmpty(AnswerStr) && IsStrEmpty([AnswerStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+        AnswerStr = @"";
+    }
     _AnswerStr = AnswerStr;
     self.yj_smallAnswer = AnswerStr;
 }
@@ -147,6 +150,9 @@ static NSString *kHpStuName = @"";
     }
     if ([self.QuesAnswer containsString:@"&nbsp;"]) {
        self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
+    }
+    if (!IsStrEmpty(self.QuesAnswer) && [self.QuesAnswer containsString:YJTaskModule_u2063]) {
+        self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2063 withString:@"\n"];
     }
     return [NSString yj_filterHTML:self.QuesAnswer];
 }
@@ -268,6 +274,32 @@ static NSString *kHpStuName = @"";
     }
     return @"";
 }
+- (NSArray *)yj_smallQuesAskList{
+    YJTaskStageType taskStateType = [NSUserDefaults yj_integerForKey:UserDefaults_YJTaskStageType];
+    if (!IsArrEmpty(self.QuesAskList) && self.QuesAskList.count > 1  && [self.TopicTypeID isEqualToString:@"g"] && (taskStateType == YJTaskStageTypeAnswer || taskStateType == YJTaskStageTypeViewer)) {
+        return self.QuesAskList;
+    }
+    return nil;
+}
+- (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index{
+    NSMutableArray *answerArr = [NSMutableArray array];
+    NSArray *answerStrList = nil;
+    if (!IsStrEmpty(self.yj_smallAnswer)) {
+        answerStrList = [self.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+    }
+    for (int i = 0; i < self.yj_smallQuesAskList.count; i++) {
+        if (i == index) {
+            [answerArr addObject:kApiParams(answer)];
+        }else{
+            if (!IsArrEmpty(answerStrList) && i <= answerStrList.count-1) {
+                [answerArr addObject:answerStrList[i]];
+            }else{
+                [answerArr addObject:@""];
+            }
+        }
+    }
+    self.yj_smallAnswer = [answerArr componentsJoinedByString:YJTaskModule_u2060];
+}
 - (YJSmallTopicType)yj_smallTopicType{
     YJSmallTopicType smallType = 0;
     switch (self.AnswerType) {
@@ -315,6 +347,9 @@ static NSString *kHpStuName = @"";
 
 
 - (void)setYj_smallAnswer:(NSString *)yj_smallAnswer{
+    if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+        yj_smallAnswer = @"";
+    }
     [super setYj_smallAnswer:yj_smallAnswer];
     if ([yj_smallAnswer containsString:[NSString yj_Char1]]) {
         yj_smallAnswer = [yj_smallAnswer stringByReplacingOccurrencesOfString:[NSString yj_Char1] withString:[NSString yj_StandardAnswerSeparatedStr]];

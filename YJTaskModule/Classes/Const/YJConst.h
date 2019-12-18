@@ -51,4 +51,5 @@ static NSString *YJTaskBundle_AlertView = @"AlertView";
 NSBundle *YJTaskBundle(void);
 
 
-
+static NSString *YJTaskModule_u2060 = @"\u2060";
+static NSString *YJTaskModule_u2063 = @"\u2063";

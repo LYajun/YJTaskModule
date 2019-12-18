@@ -81,7 +81,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *TopicID;
 /** 历次得分 */
 @property (nonatomic,strong) NSArray<YJSpeechSaveScoreModel *> *ScoreInfoList;
-
+/** 翻译题的断句List */
+@property (nonatomic,strong) NSArray *QuesAskList;
 /** 新增 - 大题题型ID */
 @property (nonatomic,copy) NSString *TopicTypeID;
 /** 新增 - 小题作答点数 */

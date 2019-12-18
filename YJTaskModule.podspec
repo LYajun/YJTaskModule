@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.3.5'
+  s.version          = '1.3.6'
   s.summary          = '作业库'
 
   s.description      = <<-DESC

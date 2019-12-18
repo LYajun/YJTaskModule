@@ -56,10 +56,16 @@
         case YJSmallTopicTypeBlank:
         case YJSmallTopicTypeSimpleAnswer:
         case YJSmallTopicTypeWritting:
+        {
+            if (!IsArrEmpty(self.smallModel.yj_smallQuesAskList)) {
+                return self.smallModel.yj_smallQuesAskList.count + 1;
+            }
             if (self.smallModel.yj_smallItemCount > 1) {
                 return self.smallModel.yj_smallItemCount + 1;
             }
             return 2;
+            
+        }
             break;
         default:
             return 0;
@@ -130,6 +136,18 @@
                         
                     }
                     cell.answerStr = smallModel.yj_smallAnswer;
+                }else if (!IsArrEmpty(self.smallModel.yj_smallQuesAskList)){
+                    cell.index = indexP.row;
+                    if (IsStrEmpty(self.smallModel.yj_smallAnswer)) {
+                        cell.answerStr = @"";
+                    }else{
+                        NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+                        if (indexP.row <= answerStrList.count - 1) {
+                            cell.answerStr = answerStrList[indexP.row];
+                        }else{
+                           cell.answerStr = @"";
+                        }
+                    }
                 }else{
                     cell.answerStr = self.smallModel.yj_smallAnswer;
                 }
@@ -231,39 +249,62 @@
             case YJSmallTopicTypeBlank:
             case YJSmallTopicTypeSimpleAnswer:
             {
-                if (self.smallModel.yj_translateTopic && !IsIPad) {
-                    __weak typeof(self) weakSelf = self;
-                    YJTaskWrittingView *answerView = [YJTaskWrittingView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
-                        weakSelf.smallModel.yj_smallAnswer = result;
+                if (!IsArrEmpty(self.smallModel.yj_smallQuesAskList)) {
+                   __weak typeof(self) weakSelf = self;
+                    NSString *answerStr = @"";
+                    NSInteger index = indexPath.row - 1;
+                    if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
+                        NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+                        if (index <= answerStrList.count - 1) {
+                            answerStr = answerStrList[index];
+                        }
+                    }
+                   YJTaskWrittingView *answerView = [YJTaskWrittingView showWithText:answerStr answerResultBlock:^(NSString *result) {
+                        [weakSelf.smallModel updateSmallAnswerStr:result atIndex:index];
+                        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
+                            [weakSelf.delegate YJ_blankAnswerUpdate];
+                        }
                         [weakSelf.tableView reloadData];
                     }];
-                    answerView.topicInfoAttr = self.smallModel.yj_smallTopicAttrText;
-                    answerView.titleStr = self.smallModel.yj_bigTopicTypeName;
+                    NSString *quesAskStr = [self.smallModel.yj_smallQuesAskList yj_objectAtIndex:index];
+                    answerView.topicInfoAttr = quesAskStr.yj_toMutableAttributedString;
+                    answerView.titleStr = [NSString stringWithFormat:@"%@-%@",self.smallModel.yj_bigTopicTypeName,[NSString yj_stringToSmallTopicIndexStringWithIntCount:index]];
                 }else{
-                    __weak typeof(self) weakSelf = self;
-                    if (self.smallModel.yj_smallItemCount > 1) {
-                        NSInteger index = indexPath.row - 1;
-                        YJBasePaperSmallModel *smallModel = self.smallModel;
-                        if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-                            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(index + smallModel.yj_smallIndex)];
-                        }
-                        [YJTaskAnswerView showWithText:smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
-                            smallModel.yj_smallAnswer = result;
-                            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
-                                [weakSelf.delegate YJ_blankAnswerUpdate];
-                            }
-                            [weakSelf.tableView reloadData];
-                        }];
-                        
-                    }else{
-                        [YJTaskAnswerView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
+                    if (self.smallModel.yj_translateTopic && !IsIPad) {
+                        __weak typeof(self) weakSelf = self;
+                        YJTaskWrittingView *answerView = [YJTaskWrittingView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
                             weakSelf.smallModel.yj_smallAnswer = result;
-                            if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
-                                [weakSelf.delegate YJ_blankAnswerUpdate];
-                            }
                             [weakSelf.tableView reloadData];
                         }];
+                        answerView.topicInfoAttr = self.smallModel.yj_smallTopicAttrText;
+                        answerView.titleStr = self.smallModel.yj_bigTopicTypeName;
+                    }else{
+                        __weak typeof(self) weakSelf = self;
+                        if (self.smallModel.yj_smallItemCount > 1) {
+                            NSInteger index = indexPath.row - 1;
+                            YJBasePaperSmallModel *smallModel = self.smallModel;
+                            if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                                smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(index + smallModel.yj_smallIndex)];
+                            }
+                            [YJTaskAnswerView showWithText:smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
+                                smallModel.yj_smallAnswer = result;
+                                if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
+                                    [weakSelf.delegate YJ_blankAnswerUpdate];
+                                }
+                                [weakSelf.tableView reloadData];
+                            }];
+                            
+                        }else{
+                            [YJTaskAnswerView showWithText:self.smallModel.yj_smallAnswer answerResultBlock:^(NSString *result) {
+                                weakSelf.smallModel.yj_smallAnswer = result;
+                                if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_blankAnswerUpdate)]) {
+                                    [weakSelf.delegate YJ_blankAnswerUpdate];
+                                }
+                                [weakSelf.tableView reloadData];
+                            }];
+                        }
                     }
+                    
                 }
             }
                 break;

@@ -22,6 +22,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 图片数组*/
 @property (nonatomic,strong) NSArray *yj_imgUrlArr;
+
+- (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index;
 @end
 
 @interface YJBasePaperBigModel : LGBaseModel<YJPaperBigProtocol>

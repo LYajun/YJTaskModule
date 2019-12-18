@@ -19,6 +19,8 @@ static NSString *UserDefaults_YJTaskStageType = @"UserDefaults_YJTaskStageType";
 static NSString *UserDefaults_YJTaskOfflineAssignmentID = @"UserDefaults_YJTaskOfflineAssignmentID";
 static NSString *UserDefaults_YJAnswerOfflineStatus = @"UserDefaults_YJAnswerOfflineStatus";
 static NSString *UserDefaults_YJAnswerOfflineAutoSubmitStatus = @"UserDefaults_YJAnswerOfflineAutoSubmitStatus";
+
+
 /** 作业阶段类型 */
 typedef NS_ENUM(NSInteger, YJTaskStageType) {
     YJTaskStageTypeAnswer = 0,              //作答
@@ -67,6 +69,8 @@ typedef NS_ENUM(NSInteger, YJSmallTopicType) {
 NS_ASSUME_NONNULL_BEGIN
 @protocol YJPaperSmallProtocol <NSObject>
 @optional
+/** 翻译题断句List */
+- (NSArray *)yj_smallQuesAskList;
 /** 小题作答类型 */
 - (YJSmallTopicType)yj_smallTopicType;
 /** 小题作答模式ID */

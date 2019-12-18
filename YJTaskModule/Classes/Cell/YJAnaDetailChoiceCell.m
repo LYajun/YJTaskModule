@@ -122,25 +122,45 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
 }
 - (void)setImpKnText:(NSString *)impKnText{
     _impKnText = impKnText;
-    if (!IsStrEmpty(impKnText) && ![kApiParams(self.analysisL.text) containsString:@"【重要知识点】"]) {
+    if (!IsStrEmpty(impKnText) && ![kApiParams(self.analysisL.text) containsString:@"【重要考点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
             text = [text stringByAppendingString:@"\n"];
         }
-        text = [text stringByAppendingString:[NSString stringWithFormat:@"【重要知识点】 %@",impKnText]];
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【重要考点】 %@",impKnText]];
         self.analysisL.text = text;
+    }
+    if (!IsStrEmpty(self.analysisL.text)) {
+        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
+        [attr yj_setFont:17];
+        [attr yj_setColor:LG_ColorWithHex(0x333333)];
+        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
+        if (range.location != NSNotFound) {
+            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
+        }
+        self.analysisL.attributedText = attr;
     }
 }
 
 - (void)setMainKnText:(NSString *)mainKnText{
     _mainKnText = mainKnText;
-    if (!IsStrEmpty(mainKnText) && ![kApiParams(self.analysisL.text) containsString:@"【次重要知识点】"]) {
+    if (!IsStrEmpty(mainKnText) && ![kApiParams(self.analysisL.text) containsString:@"【次重要考点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
             text = [text stringByAppendingString:@"\n"];
         }
-        text = [text stringByAppendingString:[NSString stringWithFormat:@"【次重要知识点】%@",mainKnText]];
+        text = [text stringByAppendingString:[NSString stringWithFormat:@"【次重要考点】%@",mainKnText]];
         self.analysisL.text = text;
+    }
+    if (!IsStrEmpty(self.analysisL.text)) {
+        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
+        [attr yj_setFont:17];
+        [attr yj_setColor:LG_ColorWithHex(0x333333)];
+        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
+        if (range.location != NSNotFound) {
+            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
+        }
+        self.analysisL.attributedText = attr;
     }
 }
 - (UICollectionView *)collectionView{

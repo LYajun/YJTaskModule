@@ -106,6 +106,9 @@ static CGFloat kYJTextFontSize = 17;
     
     [blankAttrString yj_setFont:kYJTextFontSize];
     [blankAttrString yj_setColor:LG_ColorWithHex(0x252525)];
+    if ([blankAttrString.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
+        [blankAttrString yj_setColor:LG_ColorWithHex(0xb06223) atRange:[blankAttrString.string rangeOfString:@"【听力原文】"]];
+    }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [blankAttrString dataFromRange:NSMakeRange(0,blankAttrString.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
@@ -121,6 +124,9 @@ static CGFloat kYJTextFontSize = 17;
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:topicContentAttr];
     [attr yj_setFont:kYJTextFontSize];
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
+    if ([attr.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
+        [attr yj_setColor:LG_ColorWithHex(0xb06223) atRange:[attr.string rangeOfString:@"【听力原文】"]];
+    }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
     TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];

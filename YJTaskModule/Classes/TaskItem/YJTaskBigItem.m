@@ -176,12 +176,25 @@
 - (void)updateCurrentSmallItemWithAnswer:(NSString *)answer{
     YJTaskBaseSmallItem *smallItem = [self.smallScrollContentView.subviews yj_objectAtIndex:self.currentSmallIndex];
     YJBasePaperSmallModel *smallModel = (YJBasePaperSmallModel *)self.bigModel.yj_smallTopicList[self.currentSmallIndex];
-    if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
-        smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
-        smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
-        
+    if (!IsArrEmpty(smallModel.yj_smallQuesAskList)) {
+        NSString *answerStr = @"";
+        if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
+            NSArray *answerStrList = [smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+            NSInteger index = smallItem.currentSmallIndex;
+            if (index <= answerStrList.count - 1) {
+                answerStr = answerStrList[index];
+            }
+        }
+      answerStr = [NSString stringWithFormat:@"%@ %@",answerStr,answer];
+      [smallModel updateSmallAnswerStr:answerStr atIndex:smallItem.currentSmallIndex];
+    }else{
+        if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:smallModel.yj_smallMutiBlankIndex];
+            smallModel = (YJBasePaperSmallModel *)[self.bigModel.yj_smallTopicList yj_objectAtIndex:(smallItem.currentSmallIndex + smallModel.yj_smallIndex)];
+            
+        }
+        smallModel.yj_smallAnswer = [NSString stringWithFormat:@"%@ %@",kApiParams(smallModel.yj_smallAnswer),answer];
     }
-    smallModel.yj_smallAnswer = [NSString stringWithFormat:@"%@ %@",kApiParams(smallModel.yj_smallAnswer),answer];
     
     [smallItem updateData];
     

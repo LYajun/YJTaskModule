@@ -208,7 +208,11 @@
     
     __weak typeof(self) weakSelf = self;
     if (btn.tag == 2 && self.answerResultBlock) {
-        self.answerResultBlock(self.textView.text);
+        NSString *text = self.textView.text;
+        if (!IsStrEmpty(text) && IsStrEmpty([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+            text = @"";
+        }
+        self.answerResultBlock(text);
         [UIView animateWithDuration:0.2 animations:^{
             weakSelf.alpha = 0;
         } completion:^(BOOL finished) {

@@ -100,6 +100,18 @@
     self.titleLab.textColor = titleColor;
 }
 - (void)setText:(NSString *)text{
+    if (!IsStrEmpty(text) && !IsStrEmpty(text.yj_deleteWhitespaceAndNewlineCharacter) && [text containsString:YJTaskModule_u2060]) {
+        text = [text stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@"\n"];
+        NSMutableString *textCopy = text.mutableCopy;
+        while ([textCopy hasSuffix:@" "] || [textCopy hasSuffix:@"\n"]) {
+            if ([textCopy hasSuffix:@" "]) {
+                [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-1, 1)];
+            }else if ([textCopy hasSuffix:@"\n"]){
+                [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-2, 2)];
+            }
+        }
+        text = textCopy;
+    }
     self.textView.text = text;
     if (IsIPad) {
         [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {

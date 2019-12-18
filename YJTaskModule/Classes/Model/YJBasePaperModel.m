@@ -10,7 +10,7 @@
 #import "YjConst.h"
 #import "YJTaskCarkModel.h"
 @implementation YJBasePaperSmallModel
-
+- (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index{};
 @end
 
 @implementation YJBasePaperBigModel

@@ -79,8 +79,11 @@
 }
 - (void)sureAction{
     if (self.answerResultBlock) {
-        NSString *html = self.textView.text;
-        self.answerResultBlock(html);
+        NSString *text = self.textView.text;
+        if (!IsStrEmpty(text) && IsStrEmpty([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+            text = @"";
+        }
+        self.answerResultBlock(text);
     }
     if (self.keyboardHideBlock) {
         self.keyboardHideBlock();
