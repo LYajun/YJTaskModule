@@ -28,14 +28,14 @@
     self.analysisMutiBlankRowCount = 0;
     if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
         self.analysisMutiBlankRowCount++;
-        [self.analysisArr addObject:@{@"title":@"本题解析",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
+        [self.analysisArr addObject:@{@"title":@"【本题解析】",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
     }
     if (self.isShowKlgInfo) {
         if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-            [self.analysisArr addObject:@{@"title":@"重要考点",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
+            [self.analysisArr addObject:@{@"title":@"【重要考点】",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
         }
         if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-            [self.analysisArr addObject:@{@"title":@"次重要考点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+            [self.analysisArr addObject:@{@"title":@"【次重要考点】",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
         }
     }
     
@@ -111,7 +111,7 @@
                     YJMarkObjCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkObjCell class]) forIndexPath:indexPath];
                     cell.isAddBgColor = NO;
                     if (choiceAnaIndex == 0){
-                        cell.titleStr = @"参考答案";
+                        cell.titleStr = @"【参考答案】";
                         cell.titleColor = LG_ColorWithHex(0x009900);
                         cell.text = [smallModel.yj_smallStandardAnswer stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
                     }else{
@@ -138,7 +138,7 @@
                 YJMarkObjCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJMarkObjCell class]) forIndexPath:indexPath];
                 cell.isAddBgColor = NO;
                 if (indexP.row == 0){
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
@@ -162,7 +162,7 @@
                 cell.isAddBgColor = NO;
                 if (indexP.row == 0){
                     cell.imgUrlArr = nil;
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
@@ -219,18 +219,18 @@
     if (self.smallModel.yj_smallAnswerType == 2 || self.smallModel.yj_smallAnswerType == 4) {
         if (!IsStrEmpty(self.smallModel.yj_smallComment)) {
             self.analysisMutiBlankRowCount++;
-            [self.analysisArr addObject:@{@"title":@"本题评语",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallComment}];
+            [self.analysisArr addObject:@{@"title":@"【本题评语】",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallComment}];
         }
         if (!IsStrEmpty(self.smallModel.yj_smallAnswerAnalysis)) {
             self.analysisMutiBlankRowCount++;
-            [self.analysisArr addObject:@{@"title":@"本题解析",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
+            [self.analysisArr addObject:@{@"title":@"【本题解析】",@"color":LG_ColorWithHex(0x333333),@"text":self.smallModel.yj_smallAnswerAnalysis}];
         }
         if (self.isShowKlgInfo) {
             if (!IsStrEmpty(self.bigModel.yj_topicImpKlgInfo)) {
-                [self.analysisArr addObject:@{@"title":@"重要考点",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
+                [self.analysisArr addObject:@{@"title":@"【重要考点】",@"color":LG_ColorWithHex(0xff6600),@"text":self.bigModel.yj_topicImpKlgInfo}];
             }
             if (!IsStrEmpty(self.bigModel.yj_topicMainKlgInfo)) {
-                [self.analysisArr addObject:@{@"title":@"次重要考点",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
+                [self.analysisArr addObject:@{@"title":@"【次重要考点】",@"color":LG_ColorWithHex(0x333333),@"text":self.bigModel.yj_topicMainKlgInfo}];
             }
         }
     }
@@ -330,8 +330,7 @@
                     }
                     cell.smallModel = smallModel;
                     if (self.isShowKlgInfo) {
-                        cell.impKnText = self.bigModel.yj_topicImpKlgInfo;
-                        cell.mainKnText = self.bigModel.yj_topicMainKlgInfo;
+                        [cell setImpKnText:self.bigModel.yj_topicImpKlgInfo mainKnText:self.bigModel.yj_topicMainKlgInfo];
                     }
                     return cell;
                     
@@ -342,7 +341,7 @@
                     if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
                         NSInteger index = smallModel.yj_smallAnswer.yj_stringToASCIIInt-65;
                         if (index == indexP.row) {
-                            cell.isRight = (smallModel.yj_smallAnswerScore.floatValue >= smallModel.yj_smallScore.floatValue*0.6);
+                            cell.isRight = (smallModel.yj_smallAnswerScore.floatValue > 0 && smallModel.yj_smallAnswerScore.floatValue >= smallModel.yj_smallScore.floatValue*0.6);
                         }else{
                             cell.isChoiced = NO;
                         }
@@ -363,9 +362,9 @@
                     cell.isAddBgColor = YES;
                     
                     if (UserType == 1) {
-                        cell.titleStr = @"学生答案";
+                        cell.titleStr = @"【学生答案】";
                     }else{
-                        cell.titleStr = @"我的答案";
+                        cell.titleStr = @"【我的答案】";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
                     if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
@@ -374,7 +373,7 @@
                         cell.text = @"未作答";
                     }
                 }else if (indexP.row == 1){
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
@@ -382,7 +381,7 @@
                     }
                     cell.text = standardAnswer;
                 }else if (indexP.row == 2){
-                    cell.titleStr = @"本题得分";
+                    cell.titleStr = @"【本题得分】";
                     cell.titleColor = LG_ColorWithHex(0xFF0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
@@ -408,9 +407,9 @@
                     cell.imgUrlArr = smallModel.yj_imgUrlArr;
                     cell.isAddBgColor = YES;
                     if (UserType == 1) {
-                        cell.titleStr = @"学生答案";
+                        cell.titleStr = @"【学生答案】";
                     }else{
-                        cell.titleStr = @"我的答案";
+                        cell.titleStr = @"【我的答案】";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
                     if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
@@ -425,7 +424,7 @@
                     }
                 }else if (indexP.row == 1){
                     cell.imgUrlArr = nil;
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
                     if (!IsStrEmpty(standardAnswer)) {
@@ -434,7 +433,7 @@
                     cell.text = standardAnswer;
                 }else if (indexP.row == 2){
                     cell.imgUrlArr = nil;
-                    cell.titleStr = @"本题得分";
+                    cell.titleStr = @"【本题得分】";
                     cell.titleColor = LG_ColorWithHex(0xFF0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && self.smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
@@ -468,6 +467,7 @@
         [_tableView registerClass:[YJMarkObjCell class] forCellReuseIdentifier:NSStringFromClass([YJMarkObjCell class])];
         [_tableView registerClass:[YJMarkSubCell class] forCellReuseIdentifier:NSStringFromClass([YJMarkSubCell class])];
         [_tableView registerClass:[YJAnaDetailChoiceCell class] forCellReuseIdentifier:NSStringFromClass([YJAnaDetailChoiceCell class])];
+        _tableView.contentInset = UIEdgeInsetsMake(0, 0, 60, 0);
         _tableView.delegate = self;
         _tableView.dataSource = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;

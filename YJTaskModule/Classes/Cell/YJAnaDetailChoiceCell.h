@@ -14,7 +14,5 @@
 /** 是否提交 */
 @property (nonatomic,assign) BOOL isSubmit;
 @property (nonatomic,strong) YJBasePaperSmallModel *smallModel;
-
-@property (nonatomic,copy) NSString *impKnText;
-@property (nonatomic,copy) NSString *mainKnText;
+- (void)setImpKnText:(NSString *)impKnText mainKnText:(NSString *)mainKnText;
 @end

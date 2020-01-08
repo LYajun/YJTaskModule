@@ -35,7 +35,7 @@
 - (void)layoutUI{
     [self.contentView addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(10);
+        make.left.equalTo(self.contentView).offset(4);
         make.top.equalTo(self.contentView).offset(5);
         make.height.mas_equalTo(30);
     }];
@@ -61,15 +61,15 @@
 - (void)layoutUI_ipad{
     [self.contentView addSubview:self.titleLab];
     [self.titleLab mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.contentView).offset(10);
+        make.left.equalTo(self.contentView).offset(2);
         make.top.equalTo(self.contentView).offset(8);
-        make.width.mas_equalTo(80);
+        make.width.mas_equalTo(100);
         make.height.mas_equalTo(30);
     }];
     
     [self.contentView addSubview:self.imageBgV];
     [self.imageBgV mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.titleLab.mas_right).offset(5);
+        make.left.equalTo(self.titleLab.mas_right).offset(0);
         make.right.equalTo(self.contentView).offset(-10);
         make.bottom.equalTo(self.contentView).offset(-5);
         make.height.mas_equalTo(120);
@@ -77,7 +77,7 @@
     
     [self.contentView addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.left.equalTo(self.titleLab.mas_right).offset(5);
+        make.left.equalTo(self.titleLab.mas_right).offset(0);
         make.right.equalTo(self.contentView).offset(-10);
         make.top.equalTo(self.contentView).offset(5);
         make.bottom.equalTo(self.imageBgV.mas_top).offset(-5);
@@ -88,7 +88,7 @@
 - (void)setTitleStr:(NSString *)titleStr{
     self.titleLab.text = titleStr;
      if (IsIPad) {
-         if (!IsStrEmpty(titleStr) && [titleStr containsString:@"知识点"]) {
+         if (!IsStrEmpty(titleStr) && [titleStr containsString:@"考点"]) {
              CGFloat width = [titleStr yj_widthWithFont:LG_SysFont(16)]+5;
              [self.titleLab mas_updateConstraints:^(MASConstraintMaker *make) {
                  make.width.mas_equalTo(width);
@@ -107,7 +107,7 @@
             if ([textCopy hasSuffix:@" "]) {
                 [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-1, 1)];
             }else if ([textCopy hasSuffix:@"\n"]){
-                [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-2, 2)];
+                [textCopy deleteCharactersInRange:NSMakeRange(textCopy.length-1, 1)];
             }
         }
         text = textCopy;
@@ -125,7 +125,33 @@
     if (!IsStrEmpty(text) && [text isEqualToString:@"未作答"]) {
         self.textView.textColor = LG_ColorWithHex(0x999999);
     }else{
-        self.textView.textColor = LG_ColorWithHex(0x333333);
+        NSMutableArray *spanTextArray = [NSMutableArray array];
+        if ([text containsString:[NSString yj_Char1]]) {
+            NSArray *char1Arr = [text componentsSeparatedByString:[NSString yj_Char1]];
+            for (int i = 0; i < char1Arr.count-1; i++) {
+                if (i > 0) {
+                    NSString *spanText = char1Arr[i];
+                    if (!IsStrEmpty(spanText) && [spanText hasSuffix:[NSString stringWithFormat:@"%c",2]]) {
+                        [spanTextArray addObject:spanText];
+                    }
+                }
+            }
+        }
+        if (spanTextArray.count > 0) {
+            NSMutableAttributedString *attr = text.yj_toMutableAttributedString;
+            [attr yj_setFont:16];
+            [attr yj_setColor:LG_ColorWithHex(0x333333)];
+            for (NSString *spanText in spanTextArray) {
+                NSRange range = [attr.string rangeOfString:spanText];
+                if (range.location != NSNotFound) {
+                    [attr yj_setBoldFont:17 atRange:range];
+                    [attr yj_setColor:LG_ColorWithHex(0x252525) atRange:range];
+                }
+            }
+            self.textView.attributedText = attr;
+        }else{
+            self.textView.textColor = LG_ColorWithHex(0x333333);
+        }
     }
 }
 - (void)setIsAddBgColor:(BOOL)isAddBgColor{

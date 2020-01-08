@@ -1,6 +1,6 @@
 {
   "name": "YJTaskModule",
-  "version": "1.3.6",
+  "version": "1.3.7",
   "summary": "作业库",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/LYajun/YJTaskModule",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/LYajun/YJTaskModule.git",
-    "tag": "1.3.6"
+    "tag": "1.3.7"
   },
   "platforms": {
     "ios": "8.0"
@@ -26,18 +26,6 @@
       "source_files": "YJTaskModule/Classes/Const/**/*",
       "dependencies": {
         "YJExtensions": [
-
-        ]
-      }
-    },
-    {
-      "name": "AlertView",
-      "source_files": "YJTaskModule/Classes/AlertView/**/*",
-      "dependencies": {
-        "YJTaskModule/Const": [
-
-        ],
-        "Masonry": [
 
         ]
       }

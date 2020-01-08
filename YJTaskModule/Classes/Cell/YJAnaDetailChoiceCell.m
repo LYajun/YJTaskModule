@@ -120,8 +120,8 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
     }
     [self.collectionView reloadData];
 }
-- (void)setImpKnText:(NSString *)impKnText{
-    _impKnText = impKnText;
+
+- (void)setImpKnText:(NSString *)impKnText mainKnText:(NSString *)mainKnText{
     if (!IsStrEmpty(impKnText) && ![kApiParams(self.analysisL.text) containsString:@"【重要考点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
@@ -130,20 +130,7 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
         text = [text stringByAppendingString:[NSString stringWithFormat:@"【重要考点】 %@",impKnText]];
         self.analysisL.text = text;
     }
-    if (!IsStrEmpty(self.analysisL.text)) {
-        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
-        [attr yj_setFont:17];
-        [attr yj_setColor:LG_ColorWithHex(0x333333)];
-        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
-        if (range.location != NSNotFound) {
-            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
-        }
-        self.analysisL.attributedText = attr;
-    }
-}
-
-- (void)setMainKnText:(NSString *)mainKnText{
-    _mainKnText = mainKnText;
+    
     if (!IsStrEmpty(mainKnText) && ![kApiParams(self.analysisL.text) containsString:@"【次重要考点】"]) {
         NSString *text = kApiParams(self.analysisL.text);
         if (!IsStrEmpty(text)) {
@@ -153,15 +140,49 @@ static CGFloat YJAnaDetailChoiceCollectionCellHeight = 80;
         self.analysisL.text = text;
     }
     if (!IsStrEmpty(self.analysisL.text)) {
-        NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
-        [attr yj_setFont:17];
-        [attr yj_setColor:LG_ColorWithHex(0x333333)];
-        NSRange range = [attr.string rangeOfString:@"【重要考点】"];
-        if (range.location != NSNotFound) {
-            [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
-        }
-        self.analysisL.attributedText = attr;
+        [self updateImportInfoStyleWithImpKnText:impKnText mainKnText:mainKnText];
     }
+}
+
+- (void)updateImportInfoStyleWithImpKnText:(NSString *)impKnText mainKnText:(NSString *)mainKnText{
+    NSMutableArray *spanTextArray = [NSMutableArray array];
+    if (!IsStrEmpty(impKnText) && [impKnText containsString:[NSString yj_Char1]]) {
+        NSArray *char1Arr = [impKnText componentsSeparatedByString:[NSString yj_Char1]];
+        for (int i = 0; i < char1Arr.count-1; i++) {
+            if (i > 0) {
+                NSString *spanText = char1Arr[i];
+                if (!IsStrEmpty(spanText) && [spanText hasSuffix:[NSString stringWithFormat:@"%c",2]]) {
+                    [spanTextArray addObject:spanText];
+                }
+            }
+        }
+    }
+    if (!IsStrEmpty(mainKnText) && [mainKnText containsString:[NSString yj_Char1]]) {
+        NSArray *char1Arr = [mainKnText componentsSeparatedByString:[NSString yj_Char1]];
+        for (int i = 0; i < char1Arr.count-1; i++) {
+            if (i > 0) {
+                NSString *spanText = char1Arr[i];
+                if (!IsStrEmpty(spanText) && [spanText hasSuffix:[NSString stringWithFormat:@"%c",2]]) {
+                    [spanTextArray addObject:spanText];
+                }
+            }
+        }
+    }
+    NSMutableAttributedString *attr = self.analysisL.text.yj_toMutableAttributedString;
+    [attr yj_setFont:17];
+    [attr yj_setColor:LG_ColorWithHex(0x333333)];
+    NSRange range = [attr.string rangeOfString:@"【重要考点】"];
+    if (range.location != NSNotFound) {
+        [attr yj_setColor:LG_ColorWithHex(0xff6600) atRange:range];
+    }
+    for (NSString *spanText in spanTextArray) {
+        NSRange range = [attr.string rangeOfString:spanText];
+        if (range.location != NSNotFound) {
+            [attr yj_setBoldFont:18 atRange:range];
+            [attr yj_setColor:LG_ColorWithHex(0x252525) atRange:range];
+        }
+    }
+    self.analysisL.attributedText = attr;
 }
 - (UICollectionView *)collectionView{
     if (!_collectionView) {

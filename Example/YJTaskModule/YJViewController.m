@@ -8,7 +8,7 @@
 
 #import "YJViewController.h"
 #import "IEPaperDisplayViewController.h"
-#import <YJTaskModule/YJScoreAlert.h>
+
 
 @interface YJViewController ()
 

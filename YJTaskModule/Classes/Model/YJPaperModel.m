@@ -137,7 +137,7 @@ static NSString *kHpStuName = @"";
     _AnswerImgUrlList = yj_imgUrlArr;
 }
 - (void)setAnswerStr:(NSString *)AnswerStr{
-    if (!IsStrEmpty(AnswerStr) && IsStrEmpty([AnswerStr stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+    if (!IsStrEmpty(AnswerStr) && IsStrEmpty([AnswerStr stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         AnswerStr = @"";
     }
     _AnswerStr = AnswerStr;
@@ -347,7 +347,7 @@ static NSString *kHpStuName = @"";
 
 
 - (void)setYj_smallAnswer:(NSString *)yj_smallAnswer{
-    if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+    if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         yj_smallAnswer = @"";
     }
     [super setYj_smallAnswer:yj_smallAnswer];
@@ -554,31 +554,6 @@ static NSString *kHpStuName = @"";
              [self.TopicContent_attr appendAttributedString:self.TopicArticle_attr];
          }
      }
-    
-//    if (self.klgInfoDisplayEnable) {
-//        BOOL isDisplay = NO;
-//        if (userType == 1) {
-//            isDisplay = YES;
-//        }else if(userType == 2){
-//            if (taskStateType != YJTaskStageTypeAnswer && taskStateType != YJTaskStageTypeViewer) {
-//                isDisplay = YES;
-//            }
-//        }
-//
-//        if (isDisplay) {
-//
-//            if (!IsStrEmpty(self.ImporKnText)) {
-//                 NSString *ImporKnText = [self.ImporKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
-//                [self.TopicContent_attr appendAttributedString:[NSString stringWithFormat:@"\n【重要知识点】\n%@",ImporKnText].yj_toMutableAttributedString];
-//            }
-//            if (!IsStrEmpty(self.MainKnText)) {
-//                NSString *MainKnText = [self.MainKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
-//                [self.TopicContent_attr appendAttributedString:[NSString stringWithFormat:@"\n【次重要知识点】\n%@",MainKnText].yj_toMutableAttributedString];
-//            }
-//        }
-//    }
-    
-    
     return self.TopicContent_attr;
 }
 - (NSString *)yj_topicListenText{
@@ -616,16 +591,36 @@ static NSString *kHpStuName = @"";
     }
     return isDisplay;
 }
+- (void)setImport:(NSString *)Import{
+    if (!IsStrEmpty(Import)) {
+        Import = [Import stringByReplacingOccurrencesOfString:@"<span" withString:[NSString stringWithFormat:@"%@<span",[NSString yj_Char1]]];
+        Import = [Import stringByReplacingOccurrencesOfString:@"span>" withString:[NSString stringWithFormat:@"span>%@%@",[NSString stringWithFormat:@"%c",2],[NSString yj_Char1]]];
+        Import = Import.yj_toHtmlMutableAttributedString.string;
+    }
+    _Import = Import;
+}
+- (void)setMain:(NSString *)Main{
+    if (!IsStrEmpty(Main)) {
+        Main = [Main stringByReplacingOccurrencesOfString:@"<span" withString:[NSString stringWithFormat:@"%@<span",[NSString yj_Char1]]];
+         Main = [Main stringByReplacingOccurrencesOfString:@"span>" withString:[NSString stringWithFormat:@"span>%@%@",[NSString stringWithFormat:@"%c",2],[NSString yj_Char1]]];
+        Main = Main.yj_toHtmlMutableAttributedString.string;
+    }
+    _Main = Main;
+}
 - (NSString *)yj_topicImpKlgInfo{
     NSString *ImporKnText = @"";
-    if (!IsStrEmpty(self.ImporKnText)) {
+    if (!IsStrEmpty(self.Import)) {
+        ImporKnText = [self.Import stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
+    }else if (!IsStrEmpty(self.ImporKnText)) {
         ImporKnText = [self.ImporKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
     }
     return ImporKnText;
 }
 - (NSString *)yj_topicMainKlgInfo{
     NSString *MainKnText = @"";
-    if (!IsStrEmpty(self.MainKnText)) {
+    if (!IsStrEmpty(self.Main)) {
+        MainKnText = [self.Main stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
+    }else if (!IsStrEmpty(self.MainKnText)) {
         MainKnText = [self.MainKnText stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
     }
     return MainKnText;
@@ -746,6 +741,18 @@ static NSString *kHpStuName = @"";
     }else{
         return NO;
     }
+}
+- (NSDictionary<NSString *,NSString *> *)matchTopicInfo{
+    if (!IsStrEmpty(self.TopicTypeID) && !IsArrEmpty(self.Queses) && self.Queses.firstObject.AnswerType == 32) {
+        return @{self.TopicTypeID:@"匹配题"};
+    }
+    return @{@"match":@"NO"};
+}
+- (NSDictionary<NSString *,NSString *> *)listenTopicInfo{
+    if (!IsStrEmpty(self.TopicTypeID) && [self.TopicTypeID isEqualToString:@"G"] && !IsStrEmpty(self.AudioResStr)) {
+        return @{@"G":@"听力题"};
+    }
+    return [super listenTopicInfo];
 }
 - (void)configCorrectAnswerInfo:(NSDictionary *)answerInfo{
     NSMutableArray *keyArr = answerInfo.allKeys.mutableCopy;

@@ -160,6 +160,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *ImporKnText;
 /** 次要知识点 */
 @property (nonatomic,copy) NSString *MainKnText;
+/** 重要考点 */
+@property (nonatomic,copy) NSString *Import;
+/** 次重要到点 */
+@property (nonatomic,copy) NSString *Main;
 @property (nonatomic,copy) NSString *ThemeKeywordCode;
 @property (nonatomic,copy) NSString *ThemeKeywordText;
 @property (nonatomic,copy) NSString *UpperKnlgCode;

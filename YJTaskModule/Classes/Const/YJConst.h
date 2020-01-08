@@ -47,7 +47,7 @@ static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskMo
 static NSString *YJTaskBundle_Cell = @"Cell";
 static NSString *YJTaskBundle_Empty = @"EmptyPage";
 static NSString *YJTaskBundle_ListenView = @"ListenView";
-static NSString *YJTaskBundle_AlertView = @"AlertView";
+
 NSBundle *YJTaskBundle(void);
 
 
