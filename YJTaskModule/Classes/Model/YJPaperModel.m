@@ -95,6 +95,14 @@ static NSString *kHpStuName = @"";
     _OptionContentList_attr = optionContentList_attr;
 }
 - (void)setQuesAsk:(NSString *)QuesAsk{
+    if (!IsStrEmpty(QuesAsk)) {
+        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)<(span|p)[^>]*>[^<>]*((?<!\\d)(?=(\\d{1,3}(\\.|．|、)))[^<>]*)</(span|p)>" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSRange firstRange = [regularExpretion rangeOfFirstMatchInString:QuesAsk options:NSMatchingReportProgress range:NSMakeRange(0, QuesAsk.length)];
+        if (firstRange.location != NSNotFound) {
+            QuesAsk = [QuesAsk stringByReplacingCharactersInRange:firstRange withString:@""];
+        }
+    }
+    
     QuesAsk = [self yj_filterPBrHtml:QuesAsk];
     if (!IsStrEmpty(QuesAsk) &&
         [QuesAsk containsString:@"___"] &&
@@ -146,7 +154,7 @@ static NSString *kHpStuName = @"";
 
 - (NSString *)yj_smallStandardAnswer{
     if (IsStrEmpty(self.QuesAnswer)) {
-        return @"-";
+        return @"略";
     }
     if ([self.QuesAnswer containsString:@"&nbsp;"]) {
        self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
@@ -489,6 +497,10 @@ static NSString *kHpStuName = @"";
     }
 }
 - (void)setTopicContent:(NSString *)TopicContent{
+    if (!IsStrEmpty(TopicContent)) {
+        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)[_]*(<u>)*(\\d{1,3}(\\.|．|、)*)(</u>)*[_]+" options:NSRegularExpressionCaseInsensitive error:nil];
+        TopicContent = [regularExpretion stringByReplacingMatchesInString:TopicContent options:NSMatchingReportProgress range:NSMakeRange(0, TopicContent.length) withTemplate:@"____"];
+    }
     _TopicContent = TopicContent;
     _TopicContent_attr = TopicContent.yj_htmlImgFrameAdjust.yj_toHtmlMutableAttributedString;
 }

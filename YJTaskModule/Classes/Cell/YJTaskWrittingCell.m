@@ -222,7 +222,7 @@
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
         _textView.placeholder = @"请输入...";
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
-        _textView.maxLength = 1000;
+//        _textView.maxLength = 1000;
         _textView.editable = NO;
         _textView.scrollEnabled = NO;
         _textView.selectable = NO;

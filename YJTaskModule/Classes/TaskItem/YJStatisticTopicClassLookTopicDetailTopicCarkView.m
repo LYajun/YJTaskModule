@@ -95,7 +95,7 @@
         return cell;
     }else{
         YJStatisticTopicClassLookTopicDetailCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJStatisticTopicClassLookTopicDetailCell class]) forIndexPath:indexPath];
-        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"参考答案："];
+        NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"【参考答案】"];
         [attr yj_setColor:LG_ColorWithHex(0x009E00)];
         NSMutableAttributedString *contentAttr = smallModel.yj_smallStandardAnswer.yj_toMutableAttributedString;
         [contentAttr yj_setFont:17];

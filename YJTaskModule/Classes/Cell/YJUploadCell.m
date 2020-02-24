@@ -47,6 +47,7 @@
 @property (nonatomic,strong) UIImageView *imageView;
 @property (nonatomic, strong) YJTalkImageDeleteView *deleteView;
 @property (nonatomic, assign) CGPoint oriCenter;
+@property (nonatomic, strong) UILongPressGestureRecognizer *longGes;
 @end
 @implementation YJUploadCell
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -74,10 +75,14 @@
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(pan:)];
     [self.imageView addGestureRecognizer:pan];
     
-    UILongPressGestureRecognizer *longGes = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longGes:)];
-    longGes.delegate = self;
-    longGes.minimumPressDuration = 0.3;
-    [self.imageView addGestureRecognizer:longGes];
+    self.longGes = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(longGes:)];
+    self.longGes.delegate = self;
+    self.longGes.minimumPressDuration = 0.3;
+    [self.imageView addGestureRecognizer:self.longGes];
+}
+- (void)setIsForbidLongGes:(BOOL)isForbidLongGes{
+    _isForbidLongGes = isForbidLongGes;
+    self.longGes.enabled = !isForbidLongGes;
 }
 -(BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer{
     return YES;
@@ -99,6 +104,7 @@
     
     // 开始
     if (pan.state == UIGestureRecognizerStateBegan) {
+        self.isCancelPanGes = NO;
         self.oriCenter = tagButton.center;
         [UIView animateWithDuration:-.25 animations:^{
             tagButton.transform = CGAffineTransformMakeScale(1.2, 1.2);
@@ -130,7 +136,7 @@
         }
     }
     
-    if (pan.state == UIGestureRecognizerStateChanged) {
+    if (pan.state == UIGestureRecognizerStateChanged && !self.isCancelPanGes) {
         
         if (isDelete) {
             [self.deleteView setDeleteViewDeleteState];
@@ -141,11 +147,14 @@
     }
     
     // 结束
-    if (pan.state == UIGestureRecognizerStateEnded) {
+    if (pan.state == UIGestureRecognizerStateEnded || self.isCancelPanGes) {
         if (isDelete) {
             [tagButton removeFromSuperview];
             if (self.deleteBlock) {
                 self.deleteBlock();
+            }
+            if (self.deleteImgBlock) {
+                self.deleteImgBlock(self.imageView.image);
             }
         }
         [self.deleteView hide];

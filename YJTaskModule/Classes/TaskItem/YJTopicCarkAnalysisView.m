@@ -85,9 +85,9 @@
                     if (index == 1) {
                         cell.isAddBgColor = YES;
                         if (UserType == 1) {
-                            cell.titleStr = @"学生答案";
+                            cell.titleStr = @"【学生答案】";
                         }else{
-                            cell.titleStr = @"我的答案";
+                            cell.titleStr = @"【我的答案】";
                         }
                         cell.titleColor = LG_ColorThemeBlue;
                         if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
@@ -96,12 +96,12 @@
                             cell.text = @"未作答";
                         }
                     }else if (index == 2){
-                        cell.titleStr = @"参考答案";
+                        cell.titleStr = @"【参考答案】";
                         cell.titleColor = LG_ColorWithHex(0x009E00);
                         cell.text = smallModel.yj_smallStandardAnswer;
                     }else{
                         cell.isShowSeparator = YES;
-                        cell.titleStr = @"本题得分";
+                        cell.titleStr = @"【本题得分】";
                         cell.titleColor = LG_ColorWithHex(0xFC0000);
                         if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
                             cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
@@ -140,9 +140,9 @@
                 if (index == 1) {
                     cell.isAddBgColor = YES;
                     if (UserType == 1) {
-                        cell.titleStr = @"学生答案";
+                        cell.titleStr = @"【学生答案】";
                     }else{
-                        cell.titleStr = @"我的答案";
+                        cell.titleStr = @"【我的答案】";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
                     if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
@@ -151,12 +151,12 @@
                         cell.text = @"未作答";
                     }
                 }else if (index == 2){
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
                     cell.text = smallModel.yj_smallStandardAnswer;
                 }else{
                     cell.isShowSeparator = YES;
-                    cell.titleStr = @"本题得分";
+                    cell.titleStr = @"【本题得分】";
                     cell.titleColor = LG_ColorWithHex(0xFC0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
                          cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];
@@ -186,9 +186,9 @@
                     cell.imgUrlArr = smallModel.yj_imgUrlArr;
                     cell.isAddBgColor = YES;
                     if (UserType == 1) {
-                        cell.titleStr = @"学生答案";
+                        cell.titleStr = @"【学生答案】";
                     }else{
-                        cell.titleStr = @"我的答案";
+                        cell.titleStr = @"【我的答案】";
                     }
                     cell.titleColor = LG_ColorThemeBlue;
                     if (!IsStrEmpty(smallModel.yj_smallAnswer)) {
@@ -203,13 +203,13 @@
                     }
                 }else if (index == 2){
                      cell.imgUrlArr = nil;
-                    cell.titleStr = @"参考答案";
+                    cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009E00);
                     cell.text = smallModel.yj_smallStandardAnswer;
                 }else{
                      cell.imgUrlArr = nil;
                     cell.isShowSeparator = YES;
-                    cell.titleStr = @"本题得分";
+                    cell.titleStr = @"【本题得分】";
                     cell.titleColor = LG_ColorWithHex(0xFC0000);
                     if (!IsStrEmpty(smallModel.yj_smallAnswerScore) && smallModel.yj_smallAnswerScore.floatValue >= 0) {
                         cell.text = [smallModel.yj_smallAnswerScore stringByAppendingString:@"分"];

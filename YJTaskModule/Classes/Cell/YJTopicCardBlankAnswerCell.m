@@ -115,7 +115,7 @@
     if (!_textView) {
         _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
         _textView.placeholder = @"请输入...";
-        _textView.maxLength = 100;
+//        _textView.maxLength = 200;
         _textView.limitType = YJTextViewLimitTypeEmojiLimit;
         _textView.font = [UIFont systemFontOfSize:17];
         _textView.editable = NO;

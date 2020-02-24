@@ -18,7 +18,11 @@
 @interface YJUploadCell : UICollectionViewCell
 @property (nonatomic,copy) NSString *imgUrl;
 @property (nonatomic,assign) BOOL isBottom;
+@property (nonatomic,assign) BOOL isForbidLongGes;
+
+@property (nonatomic,assign) BOOL isCancelPanGes;
 @property (nonatomic,copy) void (^deleteBlock) (void);
+@property (nonatomic,copy) void (^deleteImgBlock) (UIImage *image);
 - (void)setTaskImage:(UIImage *)taskImage;
 
 @end

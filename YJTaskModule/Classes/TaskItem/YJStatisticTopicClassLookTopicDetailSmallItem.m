@@ -113,7 +113,7 @@
                         if (startIndex == [[self.smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue]) {
                             NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:[NSString stringWithFormat:@"%@%@:\n",endIndex > 0 ? @"\n":@"",[NSString yj_stringToSmallTopicIndexStringWithIntCount:endIndex]]];
                             [attr yj_setColor:LG_ColorWithHex(0x333333)];
-                            NSMutableAttributedString *titleAttr = [[NSMutableAttributedString alloc] initWithString:@"参考答案："];
+                            NSMutableAttributedString *titleAttr = [[NSMutableAttributedString alloc] initWithString:@"【参考答案】"];
                             [titleAttr yj_setColor:LG_ColorWithHex(0x009E00)];
                              [attr appendAttributedString:titleAttr];
                             NSMutableAttributedString *contentAttr = smallModel.yj_smallStandardAnswer.yj_toMutableAttributedString;
@@ -127,7 +127,7 @@
                     cell.userInteractionEnabled = NO;
                     cell.textAttr = textAttr;
                 }else{
-                    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"参考答案："];
+                    NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithString:@"【参考答案】"];
                     [attr yj_setColor:LG_ColorWithHex(0x009E00)];
                     NSMutableAttributedString *contentAttr = self.smallModel.yj_smallStandardAnswer.yj_toMutableAttributedString;
                     [contentAttr yj_setFont:17];
