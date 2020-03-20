@@ -19,10 +19,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *UserImg;
 /** 用户名 */
 @property (nonatomic,copy) NSString *UserName;
+/** 用户类型 */
+@property (nonatomic,copy) NSString *UserType;
 /** 回复用户ID */
 @property (nonatomic,copy) NSString *UserIDTo;
 /** 回复用户头像 */
 @property (nonatomic,copy) NSString *UserNameTo;
+/** 回复用户类型 */
+@property (nonatomic,copy) NSString *UserTypeTo;
 /** 回复用户名 */
 @property (nonatomic,copy) NSString *UserImgTo;
 /** 主题内容 */
@@ -74,10 +78,15 @@ NS_ASSUME_NONNULL_BEGIN
 
 /** 新增是否折叠属性 */
 @property (nonatomic,assign) BOOL isFold;
+/** 新增是否显示全文属性 */
+@property (nonatomic,assign) BOOL isAllContent;
+
 /** 问题回复数组 */
 @property (nonatomic,strong) NSArray<LGTTalkQuesModel *> *CommentList;
 
 - (CGFloat)tableHeaderHeight;
+- (BOOL)tableHeaderShowAllContentEnbale;
+
 @end
 
 NS_ASSUME_NONNULL_END

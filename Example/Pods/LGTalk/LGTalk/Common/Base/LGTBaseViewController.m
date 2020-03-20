@@ -98,7 +98,7 @@
     if (self.navBar_leftItemType == LGTNavBarLeftItemTypeBack){
         [self.navigationController popViewControllerAnimated:YES];
     }else{
-        [self dismissViewControllerAnimated:NO completion:nil];
+        [self dismissViewControllerAnimated:YES completion:nil];
     }
 }
 - (void)setNavBar_rightItemTitles:(NSArray *)titles{
@@ -188,10 +188,15 @@
         if (aView.superview) {
             [aView removeFromSuperview];
         }
-        [self.view addSubview:aView];
-        [self.view bringSubviewToFront:aView];
+        if (self.aboveView) {
+            [self.view insertSubview:aView belowSubview:self.aboveView];
+        }else{
+            [self.view addSubview:aView];
+            [self.view bringSubviewToFront:aView];
+        }
         [aView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self.view);
+            make.top.equalTo(self.view).offset(self.yj_loadingViewTopSpace);
+            make.centerX.left.bottom.equalTo(self.view);
         }];
     }
     else {
@@ -203,7 +208,7 @@
     if (!_viewLoading) {
         _viewLoading = [[UIView alloc]init];
         _viewLoading.backgroundColor = self.view.backgroundColor;
-        LGTActivityIndicatorView *activityIndicatorView = [[LGTActivityIndicatorView alloc] initWithType:LGTActivityIndicatorAnimationTypeBallPulse tintColor:[UIColor darkGrayColor]];
+        LGTActivityIndicatorView *activityIndicatorView = [[LGTActivityIndicatorView alloc] initWithType:LGTActivityIndicatorAnimationTypeBallPulse tintColor:LGT_ColorWithHex(0x989898)];
         [_viewLoading addSubview:activityIndicatorView];
         __weak typeof(self) weakSelf = self;
         [activityIndicatorView mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -237,6 +242,9 @@
             make.centerX.width.equalTo(self.viewNoData);
             make.top.equalTo(img.mas_bottom).offset(18);
         }];
+        
+        UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadErrorUpdate)];
+        [_viewNoData addGestureRecognizer:tap];
     }
     return _viewNoData;
 }
@@ -297,5 +305,17 @@
 //        _marqueeTitleLabel.marqueeType = MLContinuous;
     }
     return _marqueeTitleLabel;
+}
+
+- (BOOL)shouldAutorotate {
+    return NO;
+}
+
+- (UIInterfaceOrientationMask)supportedInterfaceOrientations {
+    return UIInterfaceOrientationMaskPortrait;
+}
+
+- (UIInterfaceOrientation)preferredInterfaceOrientationForPresentation {
+    return UIInterfaceOrientationPortrait;
 }
 @end

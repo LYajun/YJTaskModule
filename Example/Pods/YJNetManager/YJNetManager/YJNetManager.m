@@ -12,6 +12,8 @@
 #import <YJExtensions/YJExtensions.h>
 #import <LGLog/LGLog.h>
 
+#define kApiParams(_ref)    (IsObjEmpty(_ref) ? @"" : _ref)
+#define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
 @interface YJNetManager ()
 @property (nonatomic,copy) NSString *wUrl;
 @property (nonatomic,assign) YJRequestType wRequestType;
@@ -37,6 +39,7 @@
 + (YJNetManager *)createManager{
     YJNetManager *manager = [[YJNetManager alloc] init];
     manager.userID = [YJNetManager defaultManager].userID;
+    manager.token = [YJNetManager defaultManager].token;
     manager.serverTimeInteverval = [YJNetManager defaultManager].serverTimeInteverval;
     [manager replace];
     return manager;
@@ -70,7 +73,7 @@
     NSDictionary *originParams = self.wParameters;
     NSString *urlStr = [self.wUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     if (self.wParameters) {
-        urlStr = [NSString stringWithFormat:@"%@?%@",urlStr,[self.wParameters yj_URLQueryString]];
+        urlStr = [[NSString stringWithFormat:@"%@?%@",urlStr,[self.wParameters yj_URLQueryString]] stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     }
     NSURL *requestUrl = [NSURL URLWithString:urlStr];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl];
@@ -299,7 +302,9 @@
     NSString *urlString = [self.wUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     NSString *path = [[self cachePath] stringByAppendingPathComponent:fileName];
     if ([[NSFileManager defaultManager] fileExistsAtPath:path]) {
-        success(path);
+        if (success) {
+            success(path);
+        }
         return;
     };
     NSURL *url = [NSURL URLWithString:urlString];
@@ -333,10 +338,14 @@
     NSString *urlStr = url;
     NSString *dataStr = @"";
     if (self.wParameters) {
-        dataStr = [NSString yj_encryptWithKey:self.userID encryptStr:[self.wParameters yj_URLQueryString]];
+        NSString *parametersString = [self.wParameters yj_URLQueryString];
+        parametersString = [parametersString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
+        dataStr = [NSString yj_encryptWithKey:self.userID encryptStr:parametersString];
     }
-    urlStr = [NSString stringWithFormat:@"%@?%@",urlStr,dataStr];
-    NSURL *requestUrl = [NSURL URLWithString:[urlStr stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]];
+    if (dataStr.length > 0) {
+        urlStr = [NSString stringWithFormat:@"%@?%@",urlStr,dataStr];
+    }
+    NSURL *requestUrl = [NSURL URLWithString:urlStr];
     NSMutableURLRequest *request = [NSMutableURLRequest requestWithURL:requestUrl];
     request.allHTTPHeaderFields = [self exerciseMd5ParamsWithMd5Str:dataStr];
     return request;
@@ -359,7 +368,8 @@
     NSDictionary *md5Params = @{
                                     @"secret": secret,
                                     @"context":@"CONTEXT04",
-                                    @"platform":self.userID,
+                                    @"token": kApiParams(self.token) ,
+                                    @"platform":kApiParams(self.userID),
                                     @"timestamp":self.currentServiceTimeStamp,
                                     @"sign":sign
                                     };

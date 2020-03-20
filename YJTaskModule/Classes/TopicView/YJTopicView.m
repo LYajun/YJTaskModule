@@ -14,7 +14,7 @@
 #import "YJWebViewController.h"
 #import "YJCorrentView.h"
 #import "YJConst.h"
-
+#import <YJImageBrowser/YJImageBrowserView.h>
 
 @interface YJTopicView ()<UITextViewDelegate,YJMatchViewDelegate>
 @property (strong,nonatomic) YJListenView *listenView;
@@ -244,7 +244,20 @@
     }
 }
 #pragma mark UITextView delegate
-// NS_DEPRECATED_IOS(7_0, 10_0, "Use textView:shouldInteractWithTextAttachment:inRange:forInteractionType: instead");
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
+    NSString *urlStr = URL.absoluteString;
+    if (!IsStrEmpty(urlStr)) {
+        [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+    }
+    return NO;
+}
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
+     NSString *urlStr = URL.absoluteString;
+     if (!IsStrEmpty(urlStr)) {
+         [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+     }
+    return NO;
+}
 - (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange{
     if (![textAttachment isKindOfClass:[YJTextAttachment class]]) {
         return NO;
@@ -252,7 +265,7 @@
     NSInteger index = [(YJTextAttachment *)textAttachment textIndex];
     return [self yj_textView:textView didSelectTextIndex:index];
 }
-- (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction{
+- (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
     if (![textAttachment isKindOfClass:[YJTextAttachment class]]) {
         return NO;
     }

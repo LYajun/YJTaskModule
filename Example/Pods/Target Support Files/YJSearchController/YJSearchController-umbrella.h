@@ -19,6 +19,8 @@
 #import "YJPresentSearchAnimation.h"
 #import "YJSearchManager.h"
 #import "YJSearchRecordCell.h"
+#import "YJSearchRecordFlowCell.h"
+#import "YJSearchRecordFlowLayout.h"
 #import "YJSearchRecordFooterView.h"
 #import "YJSearchRecordManager.h"
 #import "YJSearchRecordViewController.h"

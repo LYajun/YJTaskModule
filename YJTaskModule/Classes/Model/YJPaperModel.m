@@ -8,8 +8,36 @@
 
 #import "YJPaperModel.h"
 #import "YJConst.h"
+#import <YJExtensions/YJEHpple.h>
 
 static NSString *kHpStuName = @"";
+
+
+
+NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
+    NSString *TopicContent = htmlStr;
+    if ([TopicContent.lowercaseString containsString:@"<img"]) {
+        NSRegularExpression *imgRegularExpretion = [NSRegularExpression regularExpressionWithPattern:@"<img[^>]*?>" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSArray<NSTextCheckingResult *> *arr = [imgRegularExpretion matchesInString:TopicContent options:NSMatchingReportCompletion range:NSMakeRange(0, TopicContent.length)];
+        if (!IsArrEmpty(arr)) {
+            for (NSTextCheckingResult *result in arr) {
+                NSRange matchRange = result.range;
+                NSString *str = [TopicContent substringWithRange:matchRange];
+                NSData *htmlData = [str dataUsingEncoding:NSUTF8StringEncoding];
+                YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
+                NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
+               if (!IsArrEmpty(imgArray)) {
+                   YJEHppleElement *hppleElement = imgArray.firstObject;
+                   NSDictionary *attributes = hppleElement.attributes;
+                   NSString *imgSrc = [attributes objectForKey:@"src"];
+                   TopicContent = [TopicContent stringByReplacingOccurrencesOfString:str withString:[NSString stringWithFormat:@"<a href=\"%@\">%@</a>",imgSrc,str]];
+               }
+            }
+        }
+    }
+    return TopicContent;
+}
+
 
 @implementation YJPaperTextAttachment
 @end
@@ -101,6 +129,7 @@ static NSString *kHpStuName = @"";
         if (firstRange.location != NSNotFound) {
             QuesAsk = [QuesAsk stringByReplacingCharactersInRange:firstRange withString:@""];
         }
+        QuesAsk = YJTaskModuleHandleImgLabInfo(QuesAsk);
     }
     
     QuesAsk = [self yj_filterPBrHtml:QuesAsk];
@@ -272,7 +301,14 @@ static NSString *kHpStuName = @"";
 - (NSString *)yj_smallMutiBlankScore{
     return [NSString stringWithFormat:@"%.1f",self.mutiBlankQuesScore];
 }
+- (void)yj_setSmallComment:(NSString *)comment{
+    _PyResult = comment;
+    _Comment = comment;
+}
 - (NSString *)yj_smallComment{
+    if (!IsStrEmpty(self.PyResult)) {
+        return self.PyResult;
+    }
     return self.Comment;
 }
 - (NSString *)yj_smallIntelligenceScore{
@@ -385,7 +421,7 @@ static NSString *kHpStuName = @"";
     return kHpStuName;
 }
 - (NSString *)yj_smallStuScore{
-    if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer) {
+    if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer ||[self yj_taskStageType] == YJTaskStageTypeManualMark || [self yj_taskStageType] == YJTaskStageTypeManualMarkViewer) {
         return [NSString stringWithFormat:@"%.1f",self.AnswerScore];
     }else{
         return [NSString stringWithFormat:@"%.1f",self.HpScore];
@@ -399,37 +435,41 @@ static NSString *kHpStuName = @"";
 }
 - (void)setYj_smallAnswerScore:(NSString *)yj_smallAnswerScore{
     [super setYj_smallAnswerScore:yj_smallAnswerScore];
-    if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer) {
-        if (self.yj_smallTopicType == YJSmallTopicTypeWritting) {
-            NSArray *scores = [yj_smallAnswerScore componentsSeparatedByString:@"*"];
-            _WordRichMarkScoreStr = scores[0];
-            _ThemeMarkScoreStr = scores[1];
-            _YuFaCentciMarkScoreStr = scores[2];
-            _SentenceMarkScoreStr = scores[3];
-            NSInteger WordRichStarCount = [[_WordRichMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger ThemeStarCount = [[_ThemeMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger YuFaStarCount = [[_YuFaCentciMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger SentenceStarCount = [[_SentenceMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            CGFloat score = (WordRichStarCount+ThemeStarCount+YuFaStarCount+SentenceStarCount)*self.QuesScore/20;
-            _AnswerScore = score;
-        }else{
-            _AnswerScore = yj_smallAnswerScore.floatValue;
-        }
+    if ([self yj_taskStageType] == YJTaskStageTypeManualMark || [self yj_taskStageType] == YJTaskStageTypeManualMarkViewer) {
+        _AnswerScore = yj_smallAnswerScore.floatValue;
     }else{
-        if (self.yj_smallTopicType == YJSmallTopicTypeWritting) {
-            NSArray *scores = [yj_smallAnswerScore componentsSeparatedByString:@"*"];
-            _WordRichScoreStr = scores[0];
-            _ThemeScoreStr = scores[1];
-            _YuFaCentciScoreStr = scores[2];
-            _SentenceScoreStr = scores[3];
-            NSInteger WordRichStarCount = [[_WordRichScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger ThemeStarCount = [[_ThemeScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger YuFaStarCount = [[_YuFaCentciScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            NSInteger SentenceStarCount = [[_SentenceScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
-            CGFloat score = (WordRichStarCount+ThemeStarCount+YuFaStarCount+SentenceStarCount)*self.QuesScore/20;
-            _HpScore = score;
+        if ([self yj_taskStageType] == YJTaskStageTypeCheck || [self yj_taskStageType] == YJTaskStageTypeCheckViewer) {
+            if (self.yj_smallTopicType == YJSmallTopicTypeWritting) {
+                NSArray *scores = [yj_smallAnswerScore componentsSeparatedByString:@"*"];
+                _WordRichMarkScoreStr = scores[0];
+                _ThemeMarkScoreStr = scores[1];
+                _YuFaCentciMarkScoreStr = scores[2];
+                _SentenceMarkScoreStr = scores[3];
+                NSInteger WordRichStarCount = [[_WordRichMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger ThemeStarCount = [[_ThemeMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger YuFaStarCount = [[_YuFaCentciMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger SentenceStarCount = [[_SentenceMarkScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                CGFloat score = (WordRichStarCount+ThemeStarCount+YuFaStarCount+SentenceStarCount)*self.QuesScore/20;
+                _AnswerScore = score;
+            }else{
+                _AnswerScore = yj_smallAnswerScore.floatValue;
+            }
         }else{
-            _HpScore = yj_smallAnswerScore.floatValue;
+            if (self.yj_smallTopicType == YJSmallTopicTypeWritting) {
+                NSArray *scores = [yj_smallAnswerScore componentsSeparatedByString:@"*"];
+                _WordRichScoreStr = scores[0];
+                _ThemeScoreStr = scores[1];
+                _YuFaCentciScoreStr = scores[2];
+                _SentenceScoreStr = scores[3];
+                NSInteger WordRichStarCount = [[_WordRichScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger ThemeStarCount = [[_ThemeScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger YuFaStarCount = [[_YuFaCentciScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                NSInteger SentenceStarCount = [[_SentenceScoreStr componentsSeparatedByString:@"/"].firstObject integerValue];
+                CGFloat score = (WordRichStarCount+ThemeStarCount+YuFaStarCount+SentenceStarCount)*self.QuesScore/20;
+                _HpScore = score;
+            }else{
+                _HpScore = yj_smallAnswerScore.floatValue;
+            }
         }
     }
 }
@@ -500,6 +540,7 @@ static NSString *kHpStuName = @"";
     if (!IsStrEmpty(TopicContent)) {
         NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)[_]*(<u>)*(\\d{1,3}(\\.|．|、)*)(</u>)*[_]+" options:NSRegularExpressionCaseInsensitive error:nil];
         TopicContent = [regularExpretion stringByReplacingMatchesInString:TopicContent options:NSMatchingReportProgress range:NSMakeRange(0, TopicContent.length) withTemplate:@"____"];
+        TopicContent = YJTaskModuleHandleImgLabInfo(TopicContent);
     }
     _TopicContent = TopicContent;
     _TopicContent_attr = TopicContent.yj_htmlImgFrameAdjust.yj_toHtmlMutableAttributedString;

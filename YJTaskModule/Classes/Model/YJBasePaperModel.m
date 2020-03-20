@@ -90,6 +90,10 @@
         case YJTaskStageTypeCheckViewer:
             SmallItem = NSClassFromString(@"YJCheckSmallItem");
             break;
+        case YJTaskStageTypeManualMark:
+        case YJTaskStageTypeManualMarkViewer:
+            SmallItem = NSClassFromString(@"YJManualMarkSmallItem");
+            break;
         default:
             break;
     }

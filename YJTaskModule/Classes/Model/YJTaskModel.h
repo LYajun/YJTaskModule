@@ -91,6 +91,10 @@ NS_ASSUME_NONNULL_BEGIN
 /** 离线限时作答：是否已自动提交到本地 */
 @property (nonatomic,assign) BOOL autoSubmitLocal;
 
+
+- (BOOL)isVideoRes;
+- (BOOL)isMusicRes;
+
 - (NSString *)bkFtpRelativePath;
 
 

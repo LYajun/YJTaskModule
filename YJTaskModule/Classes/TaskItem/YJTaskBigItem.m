@@ -144,7 +144,9 @@
             self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
             self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
             self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
-            self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
+            self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeManualMark ||
+            self.bigTopicView.taskStageType == YJTaskStageTypeManualMarkViewer) {
             self.splitView.dragEnable = YES;
         }else{
             self.splitView.dragEnable = NO;
@@ -316,7 +318,9 @@
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheck ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeCheckViewer ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeViewer ||
-                 self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer) {
+                 self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer ||
+                self.bigTopicView.taskStageType == YJTaskStageTypeManualMark ||
+                self.bigTopicView.taskStageType == YJTaskStageTypeManualMarkViewer) {
                 if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH;
                 }else{

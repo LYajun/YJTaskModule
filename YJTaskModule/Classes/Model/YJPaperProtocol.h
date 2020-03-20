@@ -30,6 +30,8 @@ typedef NS_ENUM(NSInteger, YJTaskStageType) {
     YJTaskStageTypeAnaLysisTopicViewer,     //试题分析试题查看
     YJTaskStageTypeCheck,                   //审核
     YJTaskStageTypeCheckViewer,             //审核查看
+    YJTaskStageTypeManualMark,              //人工评阅
+    YJTaskStageTypeManualMarkViewer,        //人工评阅查看
     YJTaskStageTypeAnalysis,                //分析
     YJTaskStageTypeAnalysisNoSubmit        //分析(未提交)
 };
@@ -103,6 +105,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 智能评阅得分 */
 - (NSString *)yj_smallIntelligenceScore;
 /** 小题评语 */
+- (void)yj_setSmallComment:(NSString *)comment;
 - (NSString *)yj_smallComment;
 /** 小题审核互评得分 */
 - (NSString *)yj_smallCheckHpScore;

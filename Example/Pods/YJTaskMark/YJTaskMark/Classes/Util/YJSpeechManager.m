@@ -133,6 +133,8 @@ static CGFloat kSoundOffset = 10;
    
     self.markType = markType;
     self.refText = refText;
+    self.isMarking = YES;
+    self.isEndMark = NO;
     if (![[NSUserDefaults standardUserDefaults] boolForKey:@"micAuthorization"]) {
         [self showResult:@"麦克风权限未打开"];
         return;
@@ -175,8 +177,6 @@ static CGFloat kSoundOffset = 10;
     config.sampleRate = 16000;
     config.sampleBytes = 2;
     __weak typeof(self) weakSelf = self;
-    self.isMarking = YES;
-    self.isEndMark = NO;
     [[KYTestEngine sharedInstance] startEngineWithTestConfig:config result:^(NSString *testResult) {
         [weakSelf showResult:testResult];
     }];
@@ -197,13 +197,14 @@ static CGFloat kSoundOffset = 10;
         }
     }else{
         [self removeTimeoutTimer];
-        if (!self.isEndMark) {
-            NSLog(@"评测异常结束");
-//            [self startEngineAtRefText:self.refText markType:self.markType];
-//            return;
-        }
         [[AVAudioSession sharedInstance] setCategory:AVAudioSessionCategoryPlayback error:nil];
         NSLog(@"评测结果:%@",result);
+        if (!self.isEndMark) {
+            NSLog(@"评测异常结束");
+        }
+        if (!self.isMarking && ![result isEqualToString:@"评测超时"]) {
+            return;
+        }
         dispatch_async(dispatch_get_main_queue(), ^{
             [LGAlert hide];
             YJSpeechResultModel *model = [[YJSpeechResultModel alloc] init];

@@ -35,7 +35,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (![self.ResFileExtension.lowercaseString containsString:@"html"] && ![self.ResFileExtension.lowercaseString containsString:@"pdf"]) {
+    if (![self.ResFileExtension.lowercaseString containsString:@"html"] && ![self.ResFileExtension.lowercaseString containsString:@"pdf"] && ![self.ResFileExtension.lowercaseString containsString:@"url"]) {
         [self setTextNoData:@"当前不支持查看此格式的资料哦!"];
         [self setViewNoDataShow:YES];
     }else{

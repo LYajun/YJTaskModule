@@ -25,8 +25,13 @@
         [self.contentView addSubview:self.imageView];
         [self.imageView mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.contentView);
-            make.left.equalTo(self.contentView.mas_left).offset(1);
-            make.top.equalTo(self.contentView.mas_top).offset(1);
+            if (LGT_IsIPad()) {
+                make.left.equalTo(self.contentView.mas_left).offset(2.5);
+                make.top.equalTo(self.contentView.mas_top).offset(2.5);
+            }else{
+                make.left.equalTo(self.contentView.mas_left).offset(1);
+                make.top.equalTo(self.contentView.mas_top).offset(1);
+            }
         }];
         self.imageView.clipsToBounds = YES;
     }
@@ -54,11 +59,17 @@
 }
 - (void)setImageUrls:(NSArray<NSString *> *)imageUrls{
     _imageUrls = imageUrls;
+    [self refreshFlowLayout];
     [self.collectionView reloadData];
 }
 - (void)setImageNames:(NSArray<NSString *> *)imageNames{
     _imageNames = imageNames;
+    [self refreshFlowLayout];
     [self.collectionView reloadData];
+}
+- (void)setBgColor:(UIColor *)bgColor{
+    _bgColor = bgColor;
+    self.collectionView.backgroundColor = bgColor;
 }
 #pragma mark UICollectionView delegate
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -122,17 +133,23 @@
     imageView.clipsToBounds = YES;
     return imageView;
 }
+- (void)refreshFlowLayout{
+    self.collectionView.collectionViewLayout = [self flowLayout];
+}
 #pragma mark Property init
+- (UICollectionViewFlowLayout *)flowLayout{
+    UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
+    layout.minimumInteritemSpacing = 0;
+    layout.minimumLineSpacing = 0;
+    layout.itemSize = CGSizeMake(self.selfWidth/3, self.selfWidth/3);
+    //        layout.headerReferenceSize = CGSizeMake(LGT_ScreenWidth, 1);
+    layout.sectionInset = UIEdgeInsetsZero;
+    layout.collectionView.backgroundColor = [UIColor whiteColor];
+    return layout;
+}
 - (UICollectionView *)collectionView{
     if (!_collectionView) {
-        UICollectionViewFlowLayout *layout = [[UICollectionViewFlowLayout alloc] init];
-        layout.minimumInteritemSpacing = 0;
-        layout.minimumLineSpacing = 0;
-        layout.itemSize = CGSizeMake(self.selfWidth/3, self.selfWidth/3);
-//        layout.headerReferenceSize = CGSizeMake(LGT_ScreenWidth, 1);
-        layout.sectionInset = UIEdgeInsetsZero;
-        layout.collectionView.backgroundColor = [UIColor whiteColor];
-        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:layout];
+        _collectionView = [[UICollectionView alloc] initWithFrame:CGRectZero collectionViewLayout:[self flowLayout]];
         _collectionView.scrollEnabled = NO;
         _collectionView.backgroundColor = [UIColor whiteColor];
         _collectionView.dataSource = self;

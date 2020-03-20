@@ -8,7 +8,9 @@
 
 #import "NSString+LGT.h"
 #import "LGTConst.h"
-#import <TFHpple/TFHpple.h>
+
+#import <YJExtensions/YJEHpple.h>
+
 
 @implementation NSString (LGT)
 - (NSString *)lgt_fileExtensionName{
@@ -20,6 +22,9 @@
 }
 - (NSString *)lgt_deleteWhitespaceCharacter{
     return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceCharacterSet]];
+}
+- (NSString *)lgt_deleteWhitespaceAndNewlineCharacter{
+    return [self stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
 }
 + (NSString *)lgt_stringToSmallTopicIndexStringWithIntCount:(NSInteger)intCount{
     NSDictionary *dic = @{
@@ -64,6 +69,17 @@
     }
     return [self characterAtIndex:0];
 }
++ (NSString *)lgt_HTML:(NSString *)html{
+    NSScanner *theScaner = [NSScanner scannerWithString:html];
+    NSDictionary *dict = @{@"<":@"&lt;", @">":@"&gt;"};
+    while ([theScaner isAtEnd] == NO) {
+        for (int i = 0; i <[dict allKeys].count; i ++) {
+            [theScaner scanUpToString:[dict allKeys][i] intoString:NULL];
+            html = [html stringByReplacingOccurrencesOfString:[dict allKeys][i] withString:[dict allValues][i]];
+        }
+    }
+    return html;
+}
 - (NSMutableAttributedString *)lgt_toMutableAttributedString{
      return [[NSMutableAttributedString alloc] initWithString:self];
 }
@@ -103,12 +119,12 @@
     }
     NSData *htmlData = [html dataUsingEncoding:NSUTF8StringEncoding];
     // 解析html数据
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     // 根据标签来进行过滤
     NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
     
     if (!LGT_IsArrEmpty(imgArray)) {
-        [imgArray enumerateObjectsUsingBlock:^(TFHppleElement *hppleElement, NSUInteger idx, BOOL * _Nonnull stop) {
+        [imgArray enumerateObjectsUsingBlock:^(YJEHppleElement *hppleElement, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *attributes = hppleElement.attributes;
             NSString *src = attributes[@"src"];
             NSString *srcSuf = [src componentsSeparatedByString:@"."].lastObject;

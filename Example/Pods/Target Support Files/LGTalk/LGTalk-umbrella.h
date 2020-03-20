@@ -21,6 +21,7 @@
 #import "LGTWrittingImageBrowserScrollView.h"
 #import "LGTWrittingImageViewer.h"
 #import "LGTMainViewController.h"
+#import "LGTMutiFilterModel.h"
 #import "LGTTalkModel.h"
 #import "LGTTalkReplyModel.h"
 #import "LGTMainTableService.h"
@@ -42,6 +43,7 @@
 #import "LGTBaseViewController.h"
 #import "LGTChatBox.h"
 #import "LGTClipView.h"
+#import "LGTPullDownMenu.h"
 #import "LGTExtension.h"
 #import "NSArray+LGT.h"
 #import "NSBundle+LGT.h"
@@ -69,7 +71,6 @@
 #import "LGTPhotoBrowser.h"
 #import "LGTPhotoBrowserAnimator.h"
 #import "LGTPhotoBrowserViewController.h"
-#import "LGTPresentPushAnimation.h"
 
 FOUNDATION_EXPORT double LGTalkVersionNumber;
 FOUNDATION_EXPORT const unsigned char LGTalkVersionString[];

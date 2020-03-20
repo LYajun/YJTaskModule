@@ -22,56 +22,60 @@
     if ((![lrc containsString:@"]"] && ![lrc containsString:@"["])) {
         return @{};
     }
+    lrc = [lrc stringByReplacingOccurrencesOfString:@"][" withString:@"]"];
     lrc = [lrc stringByReplacingOccurrencesOfString:@"]" withString:@"\n"];
     lrc = [lrc stringByReplacingOccurrencesOfString:@"[" withString:[[NSString yj_Char1] stringByAppendingString:@"\n"]];
     NSArray *singlearray = [lrc componentsSeparatedByString:@"\n"];
     NSMutableArray *begintimearray = [NSMutableArray array];
     NSMutableArray *subtitlesarray = [NSMutableArray array];
     NSString *subStr = @"";
+    int i = 0;
     int j = 0;
     for (NSString *s in singlearray) {
-        NSString *str = [s stringByReplacingOccurrencesOfString:@"\r" withString:@""];;
+        NSString *str = [s stringByReplacingOccurrencesOfString:@"\r" withString:@""];
         if ([str isEqualToString:[NSString yj_Char1]]) {
             j = 0;
         }
         
         switch (j) {
-            case 1:
+                case 1:
             {
                 //时间
                 NSString *timeStr = str;
                 NSArray *arr = [timeStr componentsSeparatedByString:@":"];
-                if ([self isContainLimitText:arr.lastObject]) {
+                if ([self isContainLimitText:arr.lastObject] || [self isContainLimitText:arr.firstObject]) {
                     j = 0;
-                    continue;
+                }else{
+                    NSMutableArray *arrCopy = arr.mutableCopy;
+                    if (arr.count == 1) {
+                        [arrCopy insertObject:@"00" atIndex:0];
+                    }
+                    arr = arrCopy;
+                    float teim  = [arr[arr.count-2] floatValue]*60 + [arr.lastObject floatValue];
+                    //将float类型转化成NSNumber类型才能存入数组
+                    NSNumber *beginnum = [NSNumber numberWithFloat:teim];
+                    [begintimearray addObject:beginnum];
                 }
-                NSMutableArray *arrCopy = arr.mutableCopy;
-                if (arr.count == 1) {
-                    [arrCopy insertObject:@"00" atIndex:0];
-                }
-                arr = arrCopy;
-                float teim  = [arr[arr.count-2] floatValue]*60 + [arr.lastObject floatValue];
-                //将float类型转化成NSNumber类型才能存入数组
-                NSNumber *beginnum = [NSNumber numberWithFloat:teim];
-                [begintimearray addObject:beginnum];
             }
                 break;
-            case 2:
+                case 2:
             {
-                NSString *nextS = [singlearray objectAtIndex:j+1];
-                NSString *nextStr = [nextS stringByReplacingOccurrencesOfString:@"\r" withString:@""];;
-                if ([nextStr isEqualToString:[NSString yj_Char1]]) {
-                    [subtitlesarray addObject:str];
-                    subStr = @"";
+                
+                if ([s isEqualToString:singlearray.lastObject]) {
+                    [subtitlesarray addObject:s];
                 }else{
-                    subStr = str;
-                    if ([s isEqualToString:singlearray.lastObject]) {
-                        [subtitlesarray addObject:subStr];
+                    NSString *nextS = [singlearray objectAtIndex:i+1];
+                    NSString *nextStr = [nextS stringByReplacingOccurrencesOfString:@"\r" withString:@""];
+                    if ([nextStr isEqualToString:[NSString yj_Char1]]) {
+                        [subtitlesarray addObject:str];
+                        subStr = @"";
+                    }else{
+                        subStr = str;
                     }
                 }
             }
                 break;
-            case 3:
+                case 3:
             {
                 if (str && str.length > 0) {
                     subStr = [subStr stringByAppendingFormat:@"\n%@",str];
@@ -85,6 +89,7 @@
             default:
                 break;
         }
+        i++;
         j++;
     }
     NSMutableArray *arr = [NSMutableArray array];

@@ -18,6 +18,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 @interface YJPaperSmallModel : YJBasePaperSmallModel
+/** 电子教材库-评语 */
+@property (nonatomic,copy) NSString *PyResult;
 @property (nonatomic,strong) NSArray *AnswerImgUrlList;
 /** 作答得分 */
 @property (nonatomic,assign) float AnswerScore;

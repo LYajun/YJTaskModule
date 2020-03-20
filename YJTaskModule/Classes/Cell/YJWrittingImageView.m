@@ -139,7 +139,7 @@ static NSInteger maxUploadCount = 3;
     __weak typeof(self) weakSelf = self;
     [LGTPhotoManage manage].ownController = [UIViewController yj_topControllerForController:[UIApplication sharedApplication].delegate.window.rootViewController];
 
-    [LGAlert alertSheetWithTitle:@"作业图片" message:nil canceTitle:@"取消" buttonTitles:@[@"拍摄照片",@"从本地相册中选取"] buttonBlock:^(NSInteger index) {
+    [LGAlert alertSheetWithTitle:nil message:nil canceTitle:@"取消" buttonTitles:@[@"拍摄照片",@"从本地相册中选取"] buttonBlock:^(NSInteger index) {
         if (index == 0) {
             [weakSelf.photoManager photoFromCamera];
         }else{

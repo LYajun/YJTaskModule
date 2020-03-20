@@ -27,7 +27,19 @@
              @"CourResList":[YJTaskCourResModel class]
              };
 }
+- (BOOL)isVideoRes{
+    if (!IsStrEmpty(_ResFileExtension) && [_ResFileExtension.lowercaseString containsString:@"mp4"]) {
+        return YES;
+    }
+    return NO;
+}
 
+- (BOOL)isMusicRes{
+    if (!IsStrEmpty(_ResFileExtension) && ([_ResFileExtension.lowercaseString containsString:@"mp3"] || [_ResFileExtension.lowercaseString containsString:@"wav"])) {
+        return YES;
+    }
+    return NO;
+}
 - (NSMutableDictionary *)htmlDic{
     if (!_htmlDic) {
         _htmlDic = [NSMutableDictionary dictionary];
