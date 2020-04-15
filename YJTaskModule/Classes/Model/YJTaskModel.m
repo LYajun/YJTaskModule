@@ -7,7 +7,7 @@
 //
 
 #import "YJTaskModel.h"
-#import <TFHpple/TFHpple.h>
+#import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
 
 @implementation YJTaskCourResModel
@@ -28,17 +28,11 @@
              };
 }
 - (BOOL)isVideoRes{
-    if (!IsStrEmpty(_ResFileExtension) && [_ResFileExtension.lowercaseString containsString:@"mp4"]) {
-        return YES;
-    }
-    return NO;
+    return YJTaskSupportVideoType(_ResFileExtension);
 }
 
 - (BOOL)isMusicRes{
-    if (!IsStrEmpty(_ResFileExtension) && ([_ResFileExtension.lowercaseString containsString:@"mp3"] || [_ResFileExtension.lowercaseString containsString:@"wav"])) {
-        return YES;
-    }
-    return NO;
+    return YJTaskSupportAudioType(_ResFileExtension);
 }
 - (NSMutableDictionary *)htmlDic{
     if (!_htmlDic) {
@@ -52,8 +46,8 @@
     NSArray *bodyImgArr = [self imgArrayByHtmlStr:html];
     if (!IsArrEmpty(bodyImgArr)) {
         for (int i = 0; i < bodyImgArr.count; i++) {
-            TFHppleElement *hppleElement = imgArr[i];
-            TFHppleElement *bodyHppleElement = bodyImgArr[i];
+            YJEHppleElement *hppleElement = imgArr[i];
+            YJEHppleElement *bodyHppleElement = bodyImgArr[i];
             [self.htmlDic setObject:hppleElement.attributes forKey:[bodyHppleElement.attributes objectForKey:@"src"]];
         }
     }
@@ -62,7 +56,7 @@
     NSArray *imgArr = [self imgArrayByHtmlStr:htmlStr];
     if (!IsArrEmpty(imgArr)) {
         for (int i = 0; i < imgArr.count; i++) {
-            TFHppleElement *hppleElement = imgArr[i];
+            YJEHppleElement *hppleElement = imgArr[i];
             NSDictionary *attrDic = hppleElement.attributes;
             NSString *str1 = [NSString stringWithFormat:@"<img src=\"%@\" alt=\"%@\"/>",attrDic[@"src"],attrDic[@"alt"]];
             NSDictionary *attrDic2 = self.htmlDic[attrDic[@"src"]];
@@ -84,7 +78,7 @@
 - (NSArray *)imgArrayByHtmlStr:(NSString *) htmlStr{
     NSData *htmlData = [htmlStr dataUsingEncoding:NSUTF8StringEncoding];
     // 解析html数据
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     // 根据标签来进行过滤
     NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
     return imgArray;
@@ -92,10 +86,10 @@
 - (void)setHtmlValueDic:(NSDictionary *) valueDic htmlAttr:(NSAttributedString *) htmlAttr{
     NSString *html = [self yj_htmlBodyContentWithHtmlAttributedText:htmlAttr];
     NSData *htmlData = [html dataUsingEncoding:NSUTF8StringEncoding];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
     if (!IsArrEmpty(imgArray)) {
-        TFHppleElement *hppleElement = imgArray.firstObject;
+        YJEHppleElement *hppleElement = imgArray.firstObject;
         NSDictionary *attributes = hppleElement.attributes;
         NSString *src = [attributes objectForKey:@"src"];
         [self.htmlDic setObject:valueDic forKey:src];
@@ -106,10 +100,10 @@
     if (attributedText && attributedText.length > 0) {
         NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
         NSData *htmlData = [attributedText dataFromRange:NSMakeRange(0,attributedText.length) documentAttributes:exportParams error:nil];
-        TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+        YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
         NSArray *bodyArray = [xpathParser searchWithXPathQuery:@"//body"];
         if (!IsArrEmpty(bodyArray)) {
-            TFHppleElement *hppleElement = bodyArray.firstObject;
+            YJEHppleElement *hppleElement = bodyArray.firstObject;
             html = hppleElement.raw;
             html = [html stringByReplacingOccurrencesOfString:@"<body>" withString:@""];
             html = [html stringByReplacingOccurrencesOfString:@"</body>" withString:@""];

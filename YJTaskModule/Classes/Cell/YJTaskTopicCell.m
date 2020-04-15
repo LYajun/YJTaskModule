@@ -8,13 +8,25 @@
 
 #import "YJTaskTopicCell.h"
 #import <Masonry/Masonry.h>
-#import <TFHpple/TFHpple.h>
+#import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
 #import <YJUtils/YJAudioPlayer.h>
 #import <LGAlertHUD/LGAlertHUD.h>
+#import <YJImageBrowser/YJImageBrowserView.h>
 
-@interface YJTaskTopicCell ()<YJAudioPlayerDelegate>
-@property (nonatomic,strong) UITextView *textView;
+@interface YJTaskTopicTextView : UITextView
+@end
+@implementation YJTaskTopicTextView
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    if (action == @selector(copy:)){
+        return YES;
+    }
+    return NO;
+}
+@end
+
+@interface YJTaskTopicCell ()<YJAudioPlayerDelegate,UITextViewDelegate>
+@property (nonatomic,strong) YJTaskTopicTextView *textView;
 @property (nonatomic,strong) YJAudioPlayer *audioPlayer;
 @property (strong, nonatomic) UIButton *voiceBtn;
 @end
@@ -25,6 +37,9 @@
         [self layoutUI];
     }
     return self;
+}
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    return NO;
 }
 - (void)layoutUI{
 //    self.userInteractionEnabled = NO;
@@ -68,7 +83,7 @@
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
     if (IsArrEmpty(tableArray)) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -104,6 +119,21 @@
     [self.audioPlayer play];
     self.voiceBtn.selected = YES;
 }
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
+    NSString *urlStr = URL.absoluteString;
+    if (!IsStrEmpty(urlStr)) {
+        [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+    }
+    return NO;
+}
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
+     NSString *urlStr = URL.absoluteString;
+     if (!IsStrEmpty(urlStr)) {
+         [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+     }
+    return NO;
+}
+
 #pragma mark - YJAudioPlayerDelegate
 - (void)yj_audioPlayerDidPlayFailed{
     [LGAlert showStatus:@"播放失败"];
@@ -120,12 +150,12 @@
     [self stopPlayVoice];
 }
 
-- (UITextView *)textView{
+- (YJTaskTopicTextView *)textView{
     if (!_textView) {
-        _textView = [[UITextView alloc] initWithFrame:CGRectZero];
+        _textView = [[YJTaskTopicTextView alloc] initWithFrame:CGRectZero];
         _textView.editable = NO;
-        _textView.selectable = NO;
         _textView.scrollEnabled = NO;
+        _textView.delegate = self;
         _textView.font = [UIFont systemFontOfSize:18];
         _textView.textColor = [UIColor darkGrayColor];
     }

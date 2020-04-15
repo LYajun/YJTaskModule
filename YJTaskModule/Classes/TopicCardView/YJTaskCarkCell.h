@@ -15,5 +15,6 @@
 @property (nonatomic,strong) YJTaskCarkModel *cardModel;
 @property (nonatomic,copy) NSString *currentSmallIndexStr;
 @property (nonatomic,assign) BOOL isTopicCardMode;
+@property (nonatomic,assign) BOOL isManualMarkMode;
 @property (nonatomic,copy) void (^SelectItemBlock) (NSInteger index);
 @end

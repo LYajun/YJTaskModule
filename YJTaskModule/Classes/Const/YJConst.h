@@ -26,7 +26,8 @@
 #define LG_ColorThemeBlue          LG_ColorWithHex(0x1379EC)
 #define LG_ColorLightGray          LG_ColorWithHex(0xEDEDED)
 
-
+#define kYJTextFontSize 17
+#define kYJTextLineSpacing 8
 //是否为空
 #define kApiParams(_ref)    (IsObjEmpty(_ref) ? @"" : _ref)
 #define IsStrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref)isEqualToString:@""]))
@@ -53,3 +54,12 @@ NSBundle *YJTaskBundle(void);
 
 static NSString *YJTaskModule_u2060 = @"\u2060";
 static NSString *YJTaskModule_u2063 = @"\u2063";
+
+NSArray *YJTaskSupportTextTypes(void);
+NSArray *YJTaskSupportAudioTypes(void);
+NSArray *YJTaskSupportVideoTypes(void);
+NSArray *YJTaskSupportResTypes(void);
+BOOL YJTaskSupportResType(NSString *ext);
+BOOL YJTaskSupportTextType(NSString *ext);
+BOOL YJTaskSupportAudioType(NSString *ext);
+BOOL YJTaskSupportVideoType(NSString *ext);

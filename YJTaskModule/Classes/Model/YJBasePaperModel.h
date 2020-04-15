@@ -77,7 +77,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSInteger)quesHpItemSum;
 /** 作答小题数 */
 - (NSInteger)quesItemSum;
-
+/** 未作答第一道题的索引 */
+- (NSIndexPath *)quesUnAnswerItemIndexPath;
 
 - (NSArray<YJTaskCarkModel *> *)taskCarkModelArray;
 

@@ -9,7 +9,7 @@
 #import "YJWebViewController.h"
 #import <AFNetworking/AFNetworking.h>
 
-#import "TFHpple.h"
+#import <YJExtensions/YJEHpple.h>
 #import  <AVFoundation/AVFoundation.h>
 #import <Masonry/Masonry.h>
 #import <YJSearchController/YJChineseInclude.h>
@@ -35,7 +35,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    if (![self.ResFileExtension.lowercaseString containsString:@"html"] && ![self.ResFileExtension.lowercaseString containsString:@"pdf"] && ![self.ResFileExtension.lowercaseString containsString:@"url"]) {
+    if (!YJTaskSupportTextType(self.ResFileExtension)) {
         [self setTextNoData:@"当前不支持查看此格式的资料哦!"];
         [self setViewNoDataShow:YES];
     }else{
@@ -85,11 +85,11 @@
     __block NSString *html = htmlStr.copy;
     NSData *htmlData = [html dataUsingEncoding:NSUTF8StringEncoding];
     // 解析html数据
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     // 根据标签来进行过滤
     NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
     if (!IsArrEmpty(imgArray)) {
-        [imgArray enumerateObjectsUsingBlock:^(TFHppleElement *hppleElement, NSUInteger idx, BOOL * _Nonnull stop) {
+        [imgArray enumerateObjectsUsingBlock:^(YJEHppleElement *hppleElement, NSUInteger idx, BOOL * _Nonnull stop) {
             NSDictionary *attributes = hppleElement.attributes;
             NSString *src = [attributes objectForKey:@"src"];
             if ([src containsString:@"/"]) {

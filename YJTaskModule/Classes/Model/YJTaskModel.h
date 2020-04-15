@@ -80,7 +80,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) float TotalScore;
 /** Paper */
 @property (nonatomic,strong) YJPaperModel *Paper;
-
+/** 班级ID */
+@property (nonatomic,copy) NSString *ClassID;
 /** 非标准多资料模型 */
 @property (nonatomic,strong) NSArray<YJTaskCourResModel *> *CourResList;
 

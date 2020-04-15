@@ -12,4 +12,5 @@
 @property (nonatomic,assign) NSInteger index;
 @property (nonatomic,assign) BOOL isFinishAnswer;
 @property (nonatomic,assign) BOOL isCurrentTopic;
+@property (nonatomic,assign) BOOL isManualMarkMode;
 @end

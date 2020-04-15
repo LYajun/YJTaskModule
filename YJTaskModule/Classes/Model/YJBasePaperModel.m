@@ -11,6 +11,12 @@
 #import "YJTaskCarkModel.h"
 @implementation YJBasePaperSmallModel
 - (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index{};
+- (NSString *)yj_smallAnswer{
+    if (self.yj_smallTopicType == YJSmallTopicTypeChoice && [NSString yj_isNum:_yj_smallAnswer]) {
+        return [NSString yj_stringToASCIIStringWithIntCount:_yj_smallAnswer.integerValue+64];
+    }
+    return _yj_smallAnswer;
+}
 @end
 
 @implementation YJBasePaperBigModel
@@ -201,14 +207,48 @@
     NSInteger itemFinishSum = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
         for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
-            if (smallModel.yj_smallAnswerType == 4 && !IsStrEmpty(smallModel.yj_smallStuScore) && smallModel.yj_smallStuScore.floatValue >= 0) {
-                itemFinishSum++;
+            if (smallModel.yj_smallAnswerType == 4) {
+                if (IsStrEmpty(smallModel.yj_smallAnswer)) {
+                    itemFinishSum++;
+                }else if (!IsStrEmpty(smallModel.yj_smallStuScore) && smallModel.yj_smallStuScore.floatValue >= 0){
+                    itemFinishSum++;
+                }
             }
         }
     }
     return itemFinishSum;
 }
-
+- (NSIndexPath *)quesUnAnswerItemIndexPath{
+    NSInteger bigIndex = 0;
+    NSInteger smallIndex = 0;
+    
+    int i = 0;
+    for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {
+        int j = 0;
+        for (YJBasePaperSmallModel *smallModel in bigModel.yj_smallTopicList) {
+            if (smallModel.yj_smallItemCount > 1 && !IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                NSInteger startIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                if (IsStrEmpty(smallModel.yj_smallAnswer)) {
+                  bigIndex = i;
+                  smallIndex = startIndex;
+                  return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+                }
+            }else{
+                if (IsStrEmpty(smallModel.yj_smallAnswer) && IsArrEmpty(smallModel.yj_imgUrlArr)) {
+                    bigIndex = i;
+                    smallIndex = j;
+                    if (!IsStrEmpty(smallModel.yj_smallIndex_Ori)) {
+                        smallIndex = [[smallModel.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+                    }
+                    return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+                }
+            }
+            j++;
+        }
+        i++;
+    }
+    return [NSIndexPath indexPathForRow:smallIndex inSection:bigIndex];
+}
 - (NSInteger)quesAnswerItemSum{
     NSInteger itemFinishSum = 0;
     for (YJBasePaperBigModel *bigModel in self.yj_bigTopicList) {

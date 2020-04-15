@@ -16,13 +16,13 @@ static NSString *kHpStuName = @"";
 
 NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     NSString *TopicContent = htmlStr;
-    if ([TopicContent.lowercaseString containsString:@"<img"]) {
+    if ([htmlStr.lowercaseString containsString:@"<img"]) {
         NSRegularExpression *imgRegularExpretion = [NSRegularExpression regularExpressionWithPattern:@"<img[^>]*?>" options:NSRegularExpressionCaseInsensitive error:nil];
-        NSArray<NSTextCheckingResult *> *arr = [imgRegularExpretion matchesInString:TopicContent options:NSMatchingReportCompletion range:NSMakeRange(0, TopicContent.length)];
+        NSArray<NSTextCheckingResult *> *arr = [imgRegularExpretion matchesInString:htmlStr options:NSMatchingReportCompletion range:NSMakeRange(0, htmlStr.length)];
         if (!IsArrEmpty(arr)) {
             for (NSTextCheckingResult *result in arr) {
                 NSRange matchRange = result.range;
-                NSString *str = [TopicContent substringWithRange:matchRange];
+                NSString *str = [htmlStr substringWithRange:matchRange];
                 NSData *htmlData = [str dataUsingEncoding:NSUTF8StringEncoding];
                 YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
                 NSArray *imgArray = [xpathParser searchWithXPathQuery:@"//img"];
@@ -124,7 +124,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 }
 - (void)setQuesAsk:(NSString *)QuesAsk{
     if (!IsStrEmpty(QuesAsk)) {
-        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)<(span|p)[^>]*>[^<>]*((?<!\\d)(?=(\\d{1,3}(\\.|．|、)))[^<>]*)</(span|p)>" options:NSRegularExpressionCaseInsensitive error:nil];
+        NSRegularExpression *regularExpretion = [NSRegularExpression regularExpressionWithPattern:@"(?isx)<(span|p)[^>]*>[^<>(]*((?<!\\d)(?=(\\d{1,3}(\\.|．|、|\\))))[^<>]*)</(span|p)>" options:NSRegularExpressionCaseInsensitive error:nil];
         NSRange firstRange = [regularExpretion rangeOfFirstMatchInString:QuesAsk options:NSMatchingReportProgress range:NSMakeRange(0, QuesAsk.length)];
         if (firstRange.location != NSNotFound) {
             QuesAsk = [QuesAsk stringByReplacingCharactersInRange:firstRange withString:@""];
@@ -391,6 +391,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 
 - (void)setYj_smallAnswer:(NSString *)yj_smallAnswer{
+    if (IsObjEmpty(yj_smallAnswer)) {
+        yj_smallAnswer = @"";
+    }
     if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         yj_smallAnswer = @"";
     }
@@ -875,7 +878,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         if (IsStrEmpty(smallModel.AnswerStr)) {
             [arr addObject:@""];
         }else{
-            [arr addObject:smallModel.AnswerStr];
+            [arr addObject:smallModel.yj_smallAnswer];
         }
     }
     return arr;

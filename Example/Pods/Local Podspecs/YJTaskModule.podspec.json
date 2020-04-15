@@ -1,6 +1,6 @@
 {
   "name": "YJTaskModule",
-  "version": "1.3.9",
+  "version": "1.4.0",
   "summary": "作业库",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/LYajun/YJTaskModule",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/LYajun/YJTaskModule.git",
-    "tag": "1.3.9"
+    "tag": "1.4.0"
   },
   "platforms": {
     "ios": "8.0"
@@ -61,9 +61,6 @@
         "Masonry": [
 
         ],
-        "TFHpple": [
-
-        ],
         "YJResizableSplitView": [
 
         ],
@@ -105,9 +102,6 @@
 
         ],
         "YJTaskModule/TopicCardView": [
-
-        ],
-        "TFHpple": [
 
         ],
         "MJExtension": [
@@ -236,9 +230,6 @@
         "YJTaskMark": [
 
         ],
-        "TFHpple": [
-
-        ],
         "Masonry": [
 
         ],
@@ -314,9 +305,6 @@
 
         ],
         "YJTaskModule/YJCorrect": [
-
-        ],
-        "TFHpple": [
 
         ],
         "Masonry": [

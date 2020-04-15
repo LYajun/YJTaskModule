@@ -21,6 +21,7 @@
 @property (nonatomic,strong) UIButton *closeBtn;
 @property(nonatomic,strong) UIView *maskView;
 @property (nonatomic,strong) UIImageView *headImageV;
+@property (nonatomic,strong) UILabel *titleL;
 @end
 @implementation YJTaskCarkView
 - (instancetype)initWithFrame:(CGRect)frame{
@@ -48,13 +49,9 @@
         make.width.equalTo(self.headImageV.mas_height).multipliedBy(1.04);
     }];
    
-    UILabel *titleL = [UILabel new];
-    titleL.textAlignment = NSTextAlignmentCenter;
-    titleL.font = [UIFont systemFontOfSize:17];
-    titleL.textColor = LG_ColorWithHex(0x666667);
-    titleL.text = @"答题卡";
-    [contentView addSubview:titleL];
-    [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
+    
+    [contentView addSubview:self.titleL];
+    [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(contentView);
         make.top.equalTo(contentView.mas_top).offset(headImageSpace-20);
         make.left.equalTo(contentView.mas_left).offset(20);
@@ -63,7 +60,7 @@
     [contentView addSubview:self.tableView];
     [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.left.bottom.right.equalTo(contentView);
-        make.top.equalTo(titleL.mas_bottom);
+        make.top.equalTo(self.titleL.mas_bottom);
     }];
 }
 + (YJTaskCarkView *)taskCarkView{
@@ -83,6 +80,14 @@
 - (void)setDataArr:(NSArray<YJTaskCarkModel *> *)dataArr{
     _dataArr = dataArr;
     [self.tableView reloadData];
+}
+- (void)setIsManualMarkMode:(BOOL)isManualMarkMode{
+    _isManualMarkMode = isManualMarkMode;
+    if (isManualMarkMode) {
+        self.titleL.text = @"评阅卡";
+    }else{
+        self.titleL.text = @"答题卡";
+    }
 }
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
     return 1;
@@ -135,6 +140,7 @@
             cell.currentSmallIndexStr = @"";
         }
     }
+    cell.isManualMarkMode = self.isManualMarkMode;
     cell.cardModel = self.dataArr[indexPath.row];
     __weak typeof(self) weakSelf = self;;
     cell.SelectItemBlock = ^(NSInteger index) {
@@ -177,6 +183,16 @@
         [weakSelf.maskView removeFromSuperview];
         [weakSelf removeFromSuperview];
     }];
+}
+- (UILabel *)titleL{
+    if (!_titleL) {
+        _titleL = [UILabel new];
+        _titleL.textAlignment = NSTextAlignmentCenter;
+        _titleL.font = [UIFont systemFontOfSize:17];
+        _titleL.textColor = LG_ColorWithHex(0x333333);
+        _titleL.text = @"答题卡";
+    }
+    return _titleL;
 }
 - (UIImageView *)headImageV{
     if (!_headImageV) {

@@ -8,11 +8,11 @@
 
 #import "YJTopicTextView.h"
 
-#import <TFHpple/TFHpple.h>
+#import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
 
 #define kYJTextColor LG_ColorWithHex(0x06C6F4)
-static CGFloat kYJTextFontSize = 17;
+
 @implementation YJTextAttachment
 @end
 
@@ -51,6 +51,9 @@ static CGFloat kYJTextFontSize = 17;
     return self;
 }
 - (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    if (action == @selector(copy:)){
+           return YES;
+       }
     return NO;
 }
 - (void)configure{
@@ -58,6 +61,7 @@ static CGFloat kYJTextFontSize = 17;
     self.bounces = NO;
     self.showsHorizontalScrollIndicator = NO;
     self.backgroundColor = [UIColor whiteColor];
+    self.textContainerInset = UIEdgeInsetsZero;//上下间距为零
     _blankTextFieldArray = nil;
     _blankRangeArray = nil;
 }
@@ -111,11 +115,11 @@ static CGFloat kYJTextFontSize = 17;
     }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [blankAttrString dataFromRange:NSMakeRange(0,blankAttrString.length) documentAttributes:exportParams error:nil];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
     if (IsArrEmpty(tableArray)) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = 8;
+        paragraphStyle.lineSpacing = kYJTextLineSpacing;
         [blankAttrString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, blankAttrString.length)];
     }
     self.attributedText = blankAttrString;
@@ -129,11 +133,11 @@ static CGFloat kYJTextFontSize = 17;
     }
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
     if (IsArrEmpty(tableArray)) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = 8;
+        paragraphStyle.lineSpacing = kYJTextLineSpacing;
         [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
     }
     

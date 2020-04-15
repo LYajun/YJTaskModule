@@ -10,7 +10,7 @@
 #import "LGBaseTextView.h"
 #import <Masonry/Masonry.h>
 #import <YJResizableSplitView/YJResizableSplitView.h>
-#import <TFHpple/TFHpple.h>
+#import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
 #import <LGAlertHUD/LGAlertHUD.h>
 
@@ -176,7 +176,7 @@
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
     NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
     NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    TFHpple *xpathParser = [[TFHpple alloc] initWithHTMLData:htmlData];
+    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
     NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
     if (IsArrEmpty(tableArray)) {
         NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];

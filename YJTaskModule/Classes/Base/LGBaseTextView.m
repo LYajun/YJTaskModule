@@ -342,7 +342,7 @@
     return modifyString;
 }
 - (BOOL)predicateMatchWithText:(NSString *) text matchFormat:(NSString *) matchFormat{
-    NSPredicate * predicate = [NSPredicate predicateWithFormat: @"SELF MATCHES %@", matchFormat];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat: @"SELF MATCHES %@", matchFormat];
     return [predicate evaluateWithObject:text];
 }
 

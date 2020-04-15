@@ -9,6 +9,7 @@
 #import <UIKit/UIKit.h>
 
 
+
 @interface YJTextAttachment: NSTextAttachment
 @property (nonatomic,assign) NSInteger textIndex;
 @end

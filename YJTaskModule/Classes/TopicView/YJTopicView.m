@@ -233,6 +233,7 @@
 
 #pragma mark YJMatchView delegate
 - (void)yj_matchView:(YJMatchView *)matchView didSelectedItemAtIndex:(NSInteger)index{
+    [NSUserDefaults yj_setObject:@(YES) forKey:UserDefaults_YJAnswerStatusChanged];
     NSMutableArray *arr = [NSMutableArray arrayWithArray:self.textView.answerResults];
     [arr replaceObjectAtIndex:self.currentSmallIndex withObject:[NSString yj_stringToASCIIStringWithIntCount:index+65]];
     self.textView.answerResults = arr;

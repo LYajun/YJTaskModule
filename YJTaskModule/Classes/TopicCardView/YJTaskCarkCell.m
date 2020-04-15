@@ -17,6 +17,7 @@
 
 @property (nonatomic,strong) UICollectionView *collectionView;
 @property (nonatomic,strong) UILabel *titleL;
+@property (nonatomic,strong) UIView *titleView;
 @end
 @implementation YJTaskCarkCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -26,27 +27,25 @@
     return self;
 }
 - (void)layoutUI{
-    UIView *titleView = [UIView new];
-    titleView.backgroundColor = LG_ColorWithHex(0xe2eff4);
-    [self.contentView addSubview:titleView];
-    [titleView mas_makeConstraints:^(MASConstraintMaker *make) {
+    [self.contentView addSubview:self.titleView];
+    [self.titleView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.top.left.right.equalTo(self.contentView);
         make.height.mas_equalTo(30);
     }];
-    [titleView addSubview:self.titleL];
+    [self.titleView addSubview:self.titleL];
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.right.equalTo(titleView);
-        make.left.equalTo(titleView).offset(20);
+        make.centerY.right.equalTo(self.titleView);
+        make.left.equalTo(self.titleView).offset(20);
     }];
     [self.contentView addSubview:self.collectionView];
     [self.collectionView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.equalTo(self.contentView);
         make.left.equalTo(self.contentView).offset(20);
-        make.top.equalTo(titleView.mas_bottom);
+        make.top.equalTo(self.titleView.mas_bottom);
          make.bottom.equalTo(self.contentView).offset(-3);
     }];
     
-    [titleView addSubview:self.curentImage];
+    [self.titleView addSubview:self.curentImage];
     [self.curentImage mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.titleL);
         make.right.equalTo(self.titleL.mas_left);
@@ -56,9 +55,18 @@
 }
 - (void)setCardModel:(YJTaskCarkModel *)cardModel{
     _cardModel = cardModel;
-    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li%@题",cardModel.topicIndex+1,(self.bigTopicTypeNameHideBig ? @"":@"大")],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
+    NSAttributedString *attr = [NSMutableAttributedString yj_AttributedStringByHtmls:@[[NSString stringWithFormat:@"第%li%@题",cardModel.topicIndex+1,(self.bigTopicTypeNameHideBig ? @"":@"大")],[NSString stringWithFormat:@"  %@",cardModel.topcTypeName]] colors:self.isManualMarkMode ?  @[LG_ColorWithHex(0x6CAF79),LG_ColorWithHex(0x6CAF79)] :@[LG_ColorWithHex(0x429fc5),LG_ColorWithHex(0x429fc5)] fonts:@[@(16),@(16)]];
     self.titleL.attributedText = attr;
     [self.collectionView reloadData];
+}
+- (void)setIsManualMarkMode:(BOOL)isManualMarkMode{
+    _isManualMarkMode = isManualMarkMode;
+    if (isManualMarkMode) {
+        self.titleView.backgroundColor = LG_ColorWithHex(0xEDF7EF);
+    }else{
+         self.titleView.backgroundColor = LG_ColorWithHex(0xe2eff4);
+    }
+    
 }
 #pragma mark UICollectionView delegate
 - (NSInteger)numberOfSectionsInCollectionView:(UICollectionView *)collectionView{
@@ -70,6 +78,7 @@
 - (UICollectionViewCell *)collectionView:(UICollectionView *)collectionView cellForItemAtIndexPath:(NSIndexPath *)indexPath{
     YJTaskCardItem *cell = [collectionView dequeueReusableCellWithReuseIdentifier:NSStringFromClass([YJTaskCardItem class]) forIndexPath:indexPath];
     cell.index = [self.cardModel.indexs[indexPath.row] integerValue];
+    cell.isManualMarkMode = self.isManualMarkMode;
     cell.isFinishAnswer = [self.cardModel.answerResults[indexPath.row] boolValue];
     if (!IsStrEmpty(self.currentSmallIndexStr) && indexPath.row == self.currentSmallIndexStr.integerValue) {
         if (self.isTopicCardMode) {
@@ -93,6 +102,12 @@
         _curentImage.hidden = YES;
     }
     return _curentImage;
+}
+- (UIView *)titleView{
+    if (!_titleView) {
+        _titleView = [UIView new];
+    }
+    return _titleView;
 }
 - (UILabel *)titleL{
     if (!_titleL) {

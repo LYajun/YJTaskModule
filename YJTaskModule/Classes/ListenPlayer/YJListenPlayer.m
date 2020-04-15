@@ -53,6 +53,7 @@
     return _isPlaying;
 }
 - (BOOL)isPlayingWithUrl:(NSString *)urlString{
+    urlString = [NSString yj_deleteURLDoubleSlashWithUrlStr:urlString];
     // 找出当前正在播放歌曲的url
     NSString *url = [(AVURLAsset *)self.player.currentItem.asset URL].absoluteString;
     // 判断
@@ -65,6 +66,7 @@
 }
 
 - (void)setPlayerWithUrlString:(NSString *)urlString{
+    urlString = [NSString yj_deleteURLDoubleSlashWithUrlStr:urlString];
     if ([YJChineseInclude isIncludeChineseInString:urlString] || [urlString containsString:@" "]) {
         urlString = [urlString stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]];
     }

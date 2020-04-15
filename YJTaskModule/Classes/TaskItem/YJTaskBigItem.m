@@ -301,6 +301,19 @@
     }
 }
 #pragma mark Getter
+- (CGFloat)bigTopicTextViewHeight{
+    CGFloat topicHeight = 0;
+    if (self.bigModel.yj_bigTopicContentAttrText) {
+        NSMutableAttributedString *attr = self.bigModel.yj_bigTopicContentAttrText.mutableCopy;
+        [attr yj_setFont:kYJTextFontSize];
+        NSString *topicContentInfo = [NSString stringWithFormat:@"%@%@",kApiParams(self.bigModel.yj_topicDirectionTxt),kApiParams(self.bigModel.yj_topicContent)];
+        if (![topicContentInfo.lowercaseString containsString:@"<table"]) {
+            [attr yj_addParagraphLineSpacing:kYJTextLineSpacing];
+        }
+        topicHeight = [attr boundingRectWithSize:CGSizeMake((self.width - 16), MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin | NSStringDrawingUsesFontLeading context:nil].size.height + 20;
+    }
+    return topicHeight;
+}
 - (CGFloat)bigTopicViewHeight{
     CGFloat pintroH = 30 * (IsIPad ? 2 : 3);
     if (IsStrEmpty(self.bigModel.yj_topicDirectionTxt)) {
@@ -308,6 +321,7 @@
     }
     CGFloat listenH = 44;
     CGFloat titleH = 36;
+    CGFloat heightRate = 0.35;
     switch (self.bigModel.yj_bigTopicType) {
         case YJBigTopicTypeDefault:
             return titleH+pintroH;
@@ -321,6 +335,13 @@
                  self.bigTopicView.taskStageType == YJTaskStageTypeAnaLysisTopicViewer ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeManualMark ||
                 self.bigTopicView.taskStageType == YJTaskStageTypeManualMarkViewer) {
+                CGFloat topicHeight = titleH+self.bigTopicTextViewHeight;
+                if (self.bigTopicTextViewHeight > 0) {
+                    if (topicHeight > self.height * heightRate) {
+                        return self.height * heightRate;
+                    }
+                    return topicHeight;
+                }
                 if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH;
                 }else{
@@ -339,6 +360,13 @@
                 if (self.bigModel.yj_isCorrectTopic && (self.bigTopicView.taskStageType == YJTaskStageTypeAnswer || self.bigTopicView.taskStageType == YJTaskStageTypeViewer)) {
                     return self.height;
                 }else{
+                    CGFloat topicHeight = titleH+self.bigTopicTextViewHeight;
+                    if (self.bigTopicTextViewHeight > 0) {
+                        if (topicHeight > self.height * heightRate) {
+                            return self.height * heightRate;
+                        }
+                        return topicHeight;
+                    }
                     if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                         return titleH+pintroH;
                     }else{
@@ -348,22 +376,41 @@
             }
         }
         case YJBigTopicTypeListen:
+        {
+            CGFloat topicHeight = titleH+listenH+self.bigTopicTextViewHeight;
+            if (self.bigTopicTextViewHeight > 0) {
+                if (topicHeight > self.height * heightRate) {
+                    return self.height * heightRate;
+                }
+                return topicHeight;
+            }
             if (IsStrEmpty(self.bigModel.yj_topicListenText)) {
                 return titleH+pintroH+listenH;
             }else{
                 return titleH+listenH+self.height*0.3;
             }
+        }
             break;
         case YJBigTopicTypeBigTextAndListen:
+        {
             if (self.bigModel.yj_topicCarkMode) {
                 return titleH+listenH+self.height*0.4+10;
             }else{
+                CGFloat topicHeight = titleH+listenH+self.bigTopicTextViewHeight;
+                if (self.bigTopicTextViewHeight > 0) {
+                    if (topicHeight > self.height * heightRate) {
+                        return self.height * heightRate;
+                    }
+                    return topicHeight+14;
+                }
                 if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                     return titleH+pintroH+listenH+14;
                 }else{
                     return titleH+listenH+self.height*0.3+14;
                 }
             }
+            
+        }
             break;
         default:
             return 0;

@@ -22,8 +22,6 @@
     if (self = [super initWithFrame:frame]) {
         self.indexL = [YJImageLabel new];
         self.indexL.fontSize = 17;
-        self.indexL.textColor = LG_ColorWithHex(0x252525);
-        self.indexL.bgImageName = @"lg_answer_card_nsel";
         [self.contentView addSubview:self.indexL];
         [self.indexL mas_makeConstraints:^(MASConstraintMaker *make) {
             make.center.equalTo(self.contentView);
@@ -38,7 +36,7 @@
         [self.indexL layoutIfNeeded];
         [self.indexL yj_clipLayerWithRadius:self.indexL.bounds.size.width/2 width:0 color:nil];
         
-        self.curentImage = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"lg_answer_card_ssanjiao" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()]];
+       self.curentImage = [[UIImageView alloc] initWithImage:[UIImage yj_imageNamed:@"lg_answer_card_ssanjiao" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()]];
         [self.contentView addSubview:self.curentImage];
         [self.curentImage mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.bottom.equalTo(self.contentView);
@@ -63,15 +61,31 @@
     _index = index;
     self.indexL.textStr = [NSString stringWithFormat:@"%li",index];
 }
-
+- (void)setIsManualMarkMode:(BOOL)isManualMarkMode{
+    _isManualMarkMode = isManualMarkMode;
+    if (isManualMarkMode) {
+        self.curentImage.image = [UIImage yj_imageNamed:@"lg_mark_card_ssanjiao" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()];
+    }else{
+        self.curentImage.image = [UIImage yj_imageNamed:@"lg_answer_card_ssanjiao" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()];
+    }
+}
 - (void)setIsFinishAnswer:(BOOL)isFinishAnswer{
     _isFinishAnswer = isFinishAnswer;
     if (_isFinishAnswer) {
-        self.indexL.bgImageName = @"lg_answer_card_sel";
+        if (self.isManualMarkMode) {
+            self.indexL.bgImageName = @"lg_mark_card_sel";
+        }else{
+            self.indexL.bgImageName = @"lg_answer_card_sel";
+        }
         self.indexL.textColor = [UIColor whiteColor];
     }else{
-        self.indexL.bgImageName = @"lg_answer_card_nsel";
-        self.indexL.textColor = LG_ColorWithHex(0x40A0EF);
+        if (self.isManualMarkMode) {
+            self.indexL.bgImageName = @"lg_mark_card_nsel";
+            self.indexL.textColor = LG_ColorWithHex(0x6CAF79);
+        }else{
+            self.indexL.bgImageName = @"lg_answer_card_nsel";
+            self.indexL.textColor = LG_ColorWithHex(0x40A0EF);
+        }
     }
 }
 @end
