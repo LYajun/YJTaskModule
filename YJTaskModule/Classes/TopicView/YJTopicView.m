@@ -7,7 +7,7 @@
 //
 
 #import "YJTopicView.h"
-#import "YJListenView.h"
+#import "YJTaskBaseListenView.h"
 #import "YJMatchView.h"
 #import "YJTopicTextView.h"
 #import <Masonry/Masonry.h>
@@ -17,7 +17,7 @@
 #import <YJImageBrowser/YJImageBrowserView.h>
 
 @interface YJTopicView ()<UITextViewDelegate,YJMatchViewDelegate>
-@property (strong,nonatomic) YJListenView *listenView;
+@property (strong,nonatomic) YJTaskBaseListenView *listenView;
 @property (strong,nonatomic) YJTopicTextView *textView;
 @property (nonatomic,strong) YJWebViewController *readVC;
 @property(nonatomic,strong) YJBasePaperBigModel *bigModel;
@@ -309,15 +309,16 @@
     }
     return NO;
 }
+
 - (YJCorrentView *)correntView{
     if (!_correntView) {
         _correntView = [[YJCorrentView alloc] initWithFrame:CGRectZero];
     }
     return _correntView;
 }
-- (YJListenView *)listenView{
+- (YJTaskBaseListenView *)listenView{
     if (!_listenView) {
-        _listenView = [[YJListenView alloc] initWithFrame:CGRectZero];
+        _listenView = [[[YJBasePaperBigModel taskListenViewClass] alloc] initWithFrame:CGRectZero];
     }
     return _listenView;
 }

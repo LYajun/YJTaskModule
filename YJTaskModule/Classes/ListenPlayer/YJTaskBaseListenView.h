@@ -10,7 +10,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YJTaskBaseListenView : UIView
+/** 音频地址数组 */
+@property (nonatomic,strong) NSArray<NSString *> *urlArr;
+@property (nonatomic,strong) NSArray<NSString *> *urlNameArr;
 
+- (void)pausePlayer;
+
+- (void)stopPlayer;
 @end
 
 NS_ASSUME_NONNULL_END

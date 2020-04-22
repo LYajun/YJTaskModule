@@ -35,6 +35,9 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSDictionary<NSString *,NSString *> *)matchTopicInfo;
 - (NSDictionary<NSString *,NSString *> *)listenTopicInfo;
 
+
++ (Class)taskListenViewClass;
+
 - (Class)taskClassByTaskStageType:(YJTaskStageType)taskStageType;
 
 - (Class)topicCardClassByTaskStageType:(YJTaskStageType)taskStageType;

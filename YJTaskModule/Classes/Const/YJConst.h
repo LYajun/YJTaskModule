@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <YJExtensions/YJExtensions.h>
+#import "YJTaskModuleConfig.h"
 
 // 屏幕尺寸
 #define LG_ScreenWidth      [UIScreen mainScreen].bounds.size.width
@@ -34,15 +35,6 @@
 #define IsArrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref) count] == 0))
 #define IsObjEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]))
 #define IsIPad (UI_USER_INTERFACE_IDIOM() == UIUserInterfaceIdiomPad)
-/** 配置 */
-static NSString *YJTaskModule_SysID_SpecialTraining = @"623";
-
-static NSString *YJTaskModule_SysID_UserDefault_Key = @"YJTaskModule_SysID_UserDefault_Key";
-static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
-static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
-static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
-static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
-static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
 
 
 static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";

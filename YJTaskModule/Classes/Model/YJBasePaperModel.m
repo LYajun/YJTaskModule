@@ -66,6 +66,14 @@
 }
 - (void)configCorrectAnswerInfo:(NSDictionary *)answerInfo{}
 
++ (Class)taskListenViewClass{
+    Class ListenView = NSClassFromString(@"YJListenView");
+    NSString *listenClassName = [NSUserDefaults yj_stringForKey:YJTaskModule_ListenClassName_UserDefault_Key];
+    if (!IsStrEmpty(listenClassName)){
+        ListenView = NSClassFromString(@"listenClassName");
+    }
+    return ListenView;
+}
 - (Class)taskClassByTaskStageType:(YJTaskStageType)taskStageType{
     Class SmallItem = NSClassFromString(@"YJAnswerSmallItem");
     switch (taskStageType) {

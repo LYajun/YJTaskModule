@@ -6,7 +6,8 @@
 //  Copyright © 2017年 刘亚军. All rights reserved.
 //
 
-#import <UIKit/UIKit.h>
+#import "YJTaskBaseListenView.h"
+
 @interface YJSlider : UISlider
 
 @end
@@ -20,11 +21,9 @@
 - (void)finishPlay;
 @end
 
-@interface YJListenView : UIView
+@interface YJListenView : YJTaskBaseListenView
 
-/** 音频地址数组 */
-@property (nonatomic,strong) NSArray<NSString *> *urlArr;
-@property (nonatomic,strong) NSArray<NSString *> *urlNameArr;
+
 
 //xy添加
 @property (nonatomic, assign) CGFloat allTime;
@@ -32,7 +31,5 @@
 @property (nonatomic,assign) id<YJListenViewDelegate> delegate;
 
 
-- (void)pausePlayer;
 
-- (void)stopPlayer;
 @end

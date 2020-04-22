@@ -165,7 +165,7 @@
     [self.listenPlayer seekToTime:slide.value * _totalDuration];
 }
 - (void)setUrlArr:(NSArray<NSString *> *)urlArr{
-    _urlArr = urlArr;
+    [super setUrlArr:urlArr];
     if (IsArrEmpty(urlArr)) {
         return;
     }
