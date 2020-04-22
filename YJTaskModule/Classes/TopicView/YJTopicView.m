@@ -85,16 +85,25 @@
     }
 }
 - (void)layoutTitleView{
+    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
     [self addSubview:self.titleL];
     [self.titleL mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerX.top.equalTo(self);
         make.left.equalTo(self.mas_left).offset(10);
-        if (self.bigModel.yj_topicCarkMode) {
+        if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
             make.height.mas_equalTo(5);
         }else{
-            make.height.mas_equalTo(36);
+            if (self.bigModel.yj_topicCarkMode) {
+                make.height.mas_equalTo(5);
+            }else{
+                make.height.mas_equalTo(36);
+            }
         }
     }];
+    
+     if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+         self.titleL.hidden = YES;
+     }
 }
 - (void)layoutListenView{
     [self addSubview:self.listenView];

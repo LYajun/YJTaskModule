@@ -221,6 +221,10 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return @"";
 }
 - (NSInteger)yj_smallPaperIndex{
+    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
+    if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        return self.Index + 1;
+    }
     if (self.mutiBlankDisplayEnable && self.PaperIndexOri > 0) {
         return self.PaperIndexOri;
     }
@@ -242,6 +246,10 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         score = [NSString stringWithFormat:@"[%.1f分]",self.mutiBlankQuesScore];
     }else{
         score = [NSString stringWithFormat:@"[%.1f分]",self.QuesScore];
+    }
+    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
+    if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining] && IsStrEmpty(_QuesAsk)) {
+        score = @"____";
     }
     if (self.QuesAsk_attr) {
         if (![self.QuesAsk_attr.string hasPrefix:index]) {
@@ -570,6 +578,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     if ([self yj_isCorrectTopic] && !IsStrEmpty(self.GCQues.QuesLeaderContent)) {
         _TopicPintro = self.GCQues.QuesLeaderContent;
     }
+    if ([self yj_isCorrectTopic] && !IsStrEmpty(self.GCQues.QuesBrief)) {
+        _TopicContent = self.GCQues.QuesBrief;
+    }
     if (!IsStrEmpty(self.TopicPintro)) {
         if (!IsStrEmpty(self.TopicContent)) {
             topicContent = [NSString stringWithFormat:@"%@\n%@",self.TopicPintro,self.TopicContent];
@@ -861,7 +872,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     if (!IsStrEmpty(self.TopicGenreName)) {
         return self.TopicGenreName;
     }
-    return self.TopicTypeName;
+    return kApiParams(self.TopicTypeName);
 }
 - (NSString *)yj_bigTopicID{
     return self.TopicID;

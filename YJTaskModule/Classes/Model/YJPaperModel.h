@@ -107,6 +107,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface YJPaperBigModel : YJBasePaperBigModel
+/** 专业化训练：大题计时 */
+@property (nonatomic,assign) NSInteger QueTraceTime;
 /** 大题已作答时间 */
 @property (nonatomic,assign) NSInteger AnswerTime;
 /** 大题单次作答时间 */
