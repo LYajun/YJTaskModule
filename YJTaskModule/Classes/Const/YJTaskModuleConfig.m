@@ -18,6 +18,7 @@
     [NSUserDefaults yj_setObject:kApiParams(self.userID) forKey:YJTaskModule_UserID_UserDefault_Key];
     [NSUserDefaults yj_setObject:kApiParams(self.sysID) forKey:YJTaskModule_SysID_UserDefault_Key];
     [NSUserDefaults yj_setObject:kApiParams(self.listenClassName) forKey:YJTaskModule_ListenClassName_UserDefault_Key];
+     [NSUserDefaults yj_setObject:kApiParams(self.speechAlertClassName) forKey:YJTaskModule_SpeechAlertClassName_UserDefault_Key];
     [NSUserDefaults yj_setObject:@(self.userType) forKey:YJTaskModule_UserType_UserDefault_Key];
     [NSUserDefaults yj_setObject:@(self.imgAnswerEnable) forKey:YJTaskModule_ImgAnswerEnable_UserDefault_Key];
     [NSUserDefaults yj_setObject:@(self.speechMarkEnable) forKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];

@@ -7,14 +7,12 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "YJSpeechMarkAlertProtocol.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface YJSpeechMarkView : UIView
-+ (void)showSpeechMarkViewWithTitle:(NSString *)title;
-+ (void)showSpeechMarkView;
-+ (void)showSpeechRecognizeView;
-+ (void)dismiss;
+@interface YJSpeechMarkView : UIView<YJSpeechMarkAlertProtocol>
+
 @end
 
 NS_ASSUME_NONNULL_END

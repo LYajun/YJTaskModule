@@ -19,6 +19,7 @@ static NSString *YJTaskModule_SysID_TeachingPlan = @"626";
 
 static NSString *YJTaskModule_SysID_UserDefault_Key = @"YJTaskModule_SysID_UserDefault_Key";
 static NSString *YJTaskModule_ListenClassName_UserDefault_Key = @"YJTaskModule_ListenClassName_UserDefault_Key";
+static NSString *YJTaskModule_SpeechAlertClassName_UserDefault_Key = @"YJTaskModule_SpeechAlertClassName_UserDefault_Key";
 static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
 static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
 
@@ -34,6 +35,8 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 @property (nonatomic,copy) NSString *sysID;
 /** 听力播放器类名 */
 @property (nonatomic,copy) NSString *listenClassName;
+/** 语音评测弹窗类名 */
+@property (nonatomic,copy) NSString *speechAlertClassName;
 /** 图片上传Url基础地址 */
 @property (nonatomic,copy) NSString *apiUrl;
 /** 用户ID */

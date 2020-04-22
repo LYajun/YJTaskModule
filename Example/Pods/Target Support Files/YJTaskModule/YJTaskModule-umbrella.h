@@ -80,7 +80,9 @@
 #import "YJCorrentView.h"
 #import "YJFileManager.h"
 #import "YJProgressView.h"
+#import "YJSpeechMarkAlertProtocol.h"
 #import "YJSpeechMarkView.h"
+#import "YJTaskSpeechMarkView.h"
 
 FOUNDATION_EXPORT double YJTaskModuleVersionNumber;
 FOUNDATION_EXPORT const unsigned char YJTaskModuleVersionString[];

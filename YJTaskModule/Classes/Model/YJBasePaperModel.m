@@ -70,7 +70,7 @@
     Class ListenView = NSClassFromString(@"YJListenView");
     NSString *listenClassName = [NSUserDefaults yj_stringForKey:YJTaskModule_ListenClassName_UserDefault_Key];
     if (!IsStrEmpty(listenClassName)){
-        ListenView = NSClassFromString(@"listenClassName");
+        ListenView = NSClassFromString(listenClassName);
     }
     return ListenView;
 }
