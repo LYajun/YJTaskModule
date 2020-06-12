@@ -28,7 +28,7 @@
 #define LG_ColorLightGray          LG_ColorWithHex(0xEDEDED)
 
 #define kYJTextFontSize 17
-#define kYJTextLineSpacing 8
+#define kYJTextLineSpacing 6
 //是否为空
 #define kApiParams(_ref)    (IsObjEmpty(_ref) ? @"" : _ref)
 #define IsStrEmpty(_ref)    (((_ref) == nil) || ([(_ref) isEqual:[NSNull null]]) ||([(_ref)isEqualToString:@""]))
@@ -58,3 +58,4 @@ BOOL YJTaskSupportResType(NSString *ext);
 BOOL YJTaskSupportTextType(NSString *ext);
 BOOL YJTaskSupportAudioType(NSString *ext);
 BOOL YJTaskSupportVideoType(NSString *ext);
+BOOL YJTaskSupportImgType(NSString *ext);

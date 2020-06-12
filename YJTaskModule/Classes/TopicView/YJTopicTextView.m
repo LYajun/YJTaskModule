@@ -10,7 +10,7 @@
 
 #import <YJExtensions/YJEHpple.h>
 #import "YJConst.h"
-
+#import <YJExtensions/YJEGumbo+Query.h>
 #define kYJTextColor LG_ColorWithHex(0x06C6F4)
 
 @implementation YJTextAttachment
@@ -107,41 +107,105 @@
             isFirstUnderLine = YES;
         }
     }
+    [self topicPintroWithAttr:blankAttrString];
+    [self obliquenessWithAttr:blankAttrString];
     
     [blankAttrString yj_setFont:kYJTextFontSize];
     [blankAttrString yj_setColor:LG_ColorWithHex(0x252525)];
     if ([blankAttrString.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
         [blankAttrString yj_setColor:LG_ColorWithHex(0xb06223) atRange:[blankAttrString.string rangeOfString:@"【听力原文】"]];
     }
-    NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
-    NSData *htmlData = [blankAttrString dataFromRange:NSMakeRange(0,blankAttrString.length) documentAttributes:exportParams error:nil];
-    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
-    NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
-    if (IsArrEmpty(tableArray)) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = kYJTextLineSpacing;
-        [blankAttrString addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, blankAttrString.length)];
-    }
+    
+    [self strongWithAttr:blankAttrString];
+    
+    [self tableWithAttr:blankAttrString];
     self.attributedText = blankAttrString;
 }
 - (void)setTopicContentAttr:(NSAttributedString *)topicContentAttr{
     NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] initWithAttributedString:topicContentAttr];
+    [self topicPintroWithAttr:attr];
+    [self obliquenessWithAttr:attr];
+    
     [attr yj_setFont:kYJTextFontSize];
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
     if ([attr.string rangeOfString:@"【听力原文】"].location != NSNotFound) {
         [attr yj_setColor:LG_ColorWithHex(0xb06223) atRange:[attr.string rangeOfString:@"【听力原文】"]];
     }
-    NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
-    NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
-    NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
-    if (IsArrEmpty(tableArray)) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = kYJTextLineSpacing;
-        [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
-    }
+   
+    
+    [self strongWithAttr:attr];
+    
+    [self tableWithAttr:attr];
     
     self.attributedText = attr;
+}
+- (void)topicPintroWithAttr:(NSMutableAttributedString *)attr{
+    if (!IsStrEmpty(self.topicPintro)) {
+        NSString *textAttrStr = attr.string;
+        NSRange range = [textAttrStr rangeOfString:self.topicPintro];
+        if (range.location != NSNotFound) {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = kYJTextLineSpacing;
+            [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+        }
+    }
+}
+- (void)tableWithAttr:(NSMutableAttributedString *)attr{
+    if (!IsStrEmpty(self.topicContent) && ![self.topicContent containsString:@"style=\""]) {
+        NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
+        NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
+        YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
+        NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
+        if (IsArrEmpty(tableArray)) {
+            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+            paragraphStyle.lineSpacing = kYJTextLineSpacing;
+            [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
+        }
+    }
+}
+- (void)strongWithAttr:(NSMutableAttributedString *)attr{
+    if (!IsStrEmpty(self.topicContent) && [self.topicContent.lowercaseString containsString:@"<strong"]) {
+        YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
+        NSArray *elements = document.Query(@"strong");
+        for (YJEGumboElement *element in elements) {
+            NSString *text = [element.text() yj_deleteWhitespaceAndNewlineCharacter];
+            if (!IsStrEmpty(text)) {
+                NSString *textAttrStr = attr.string;
+                NSRange range = [textAttrStr rangeOfString:text];
+                if (range.location != NSNotFound) {
+                    [attr yj_setBoldFont:17 atRange:range];
+                    NSString *class = kApiParams(element.attr(@"class"));
+                    if ([class isEqualToString:@"Ques-title"]) {
+                        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                        paragraphStyle.alignment = NSTextAlignmentCenter;
+                        [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+                    }
+                }
+            }
+        }
+    }
+}
+- (void)obliquenessWithAttr:(NSMutableAttributedString *)attr{
+    YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
+       NSArray *elements1 = document.Query(@"i");
+       NSArray *elements2 = document.Query(@"em");
+       NSMutableArray *elements = [NSMutableArray array];
+       if (!IsArrEmpty(elements1)) {
+           [elements addObjectsFromArray:elements1];
+       }
+       if (!IsArrEmpty(elements2)) {
+           [elements addObjectsFromArray:elements2];
+          }
+       for (YJEGumboElement *element in elements) {
+           NSString *text = [element.text() yj_deleteWhitespaceAndNewlineCharacter];
+           if (!IsStrEmpty(text)) {
+               NSString *textAttrStr = attr.string;
+               NSRange range = [textAttrStr rangeOfString:text];
+               if (range.location != NSNotFound) {
+                  [attr addAttribute:NSObliquenessAttributeName value:@(0.3) range:range];
+               }
+           }
+       }
 }
 - (void)setCurrentSmallIndex:(NSInteger)currentSmallIndex{
     _currentSmallIndex = currentSmallIndex;

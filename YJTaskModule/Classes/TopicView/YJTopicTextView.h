@@ -18,6 +18,8 @@
 @property (nonatomic,assign) NSInteger currentSmallIndex;
 @property (nonatomic,strong) NSArray<NSString *> *answerResults;
 @property (nonatomic,strong) NSArray<NSString *> *topicIndexs;
+@property (nonatomic,copy) NSString *topicPintro;
+@property (nonatomic,copy) NSString *topicContent;
 - (void)setBlankAttributedString:(NSAttributedString *)blankAttributedString;
 - (void)setTopicContentAttr:(NSAttributedString *) topicContentAttr;
 - (NSInteger)totalBlankCount;

@@ -70,6 +70,15 @@ static NSInteger maxUploadCount = 3;
     return (LG_ScreenWidth - 80)/3;
 }
 - (void)uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_Multimedia]) {
+        [self multimedia_uploadImageWithImgArr:imgArr Completion:completion];
+    }else if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_Preview]){
+        [self kq_uploadImageWithImgArr:imgArr Completion:completion];
+    }else{
+        [self task_uploadImageWithImgArr:imgArr Completion:completion];
+    }
+}
+- (void)task_uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{
     YJUploadModel *uploadModel = [[YJUploadModel alloc] init];
     NSMutableArray *imageDatas = [NSMutableArray array];
     NSMutableArray *fileNames = [NSMutableArray array];
@@ -112,9 +121,17 @@ static NSInteger maxUploadCount = 3;
             completion(nil);
         }
     }];
-    
 }
 - (void)deleteImgWithImgUrl:(NSString *)imgUrl{
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_Multimedia]) {
+        [self multimedia_deleteImgWithImgUrl:imgUrl];
+    }else if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_Preview]){
+        [self kq_deleteImgWithImgUrl:imgUrl];
+    }else{
+       [self task_deleteImgWithImgUrl:imgUrl];
+    }
+}
+- (void)task_deleteImgWithImgUrl:(NSString *)imgUrl{
     if (IsStrEmpty(imgUrl)) {
         return;
     }
@@ -134,6 +151,160 @@ static NSInteger maxUploadCount = 3;
         NSLog(@"删除图片失败");
     }];
     
+}
+- (void)kq_uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{
+    NSString *imgApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ImgApiUrl_UserDefault_Key];
+   
+    NSString *assignmentId = [NSUserDefaults yj_stringForKey:YJTaskModule_AssignmentID_UserDefault_Key];
+    NSString *resId = [NSUserDefaults yj_stringForKey:YJTaskModule_ResID_UserDefault_Key];
+    NSString *userId = [NSUserDefaults yj_stringForKey:YJTaskModule_UserID_UserDefault_Key];
+    NSDate *second = [NSDate date];
+    long secondTimeZone = [second timeIntervalSince1970];
+    NSString *timeStr = [NSString stringWithFormat:@"%ld",secondTimeZone];
+    NSString *str = [NSString stringWithFormat:@"%@%@",timeStr,userId];
+
+    NSString *md5Str = [NSString yj_md5EncryptStr:str].yj_reverse;
+    NSString *urlStr = [NSString stringWithFormat:@"%@fileHandler.ashx",imgApiUrl];
+      NSDictionary *params =@{@"userId":kApiParams(userId),
+                              @"assignmentId":kApiParams(assignmentId),
+                              @"resId":kApiParams((resId)),
+                              @"op":@"uploadFile",
+                              @"TimeStamp":timeStr,
+                              @"Key":md5Str,
+                              @"fileName":@""};
+   [LGAlert showIndeterminateWithStatus:@"上传图片..."];
+    [[YJNetManager defaultManager].setRequest(urlStr).setParameters(params) uploadFileWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+        for (int i = 0; i <imgArr.count; i++) {
+            [formData appendPartWithFileData:UIImageJPEGRepresentation([imgArr objectAtIndex:i], 0.5) name:@"userHeader" fileName:[NSString stringWithFormat:@"iOS%d%@.png",i+1,timeStr] mimeType:@"image/png"];
+        }
+    } progress:^(NSProgress * _Nonnull progress) {
+        
+    } success:^(id  _Nonnull responseObject) {
+        NSInteger suceessInt = [responseObject[@"code"] integerValue];
+        if (suceessInt == 0) {
+          NSArray *imagesUrls = [responseObject objectForKey:@"Data"];
+            if (!IsArrEmpty(imagesUrls)) {
+                NSMutableArray *array = [NSMutableArray array];
+                for (NSDictionary *dic in imagesUrls) {
+                    NSString *path = [dic objectForKey:@"httpPath"];
+                    NSString *imgUrl = [imgApiUrl stringByAppendingString:path];
+                    [array addObject:imgUrl];
+                }
+                imagesUrls = array;
+                [NSUserDefaults yj_setObject:@(YES) forKey:UserDefaults_YJAnswerStatusChanged];
+                [LGAlert showSuccessWithStatus:@"上传成功"];
+            }else{
+                [LGAlert showErrorWithStatus:@"上传失败"];
+            }
+            if (completion) {
+                completion(IsArrEmpty(imagesUrls) ? nil : imagesUrls);
+            }
+        }else{
+            [LGAlert showErrorWithStatus:@"上传失败"];
+            if (completion) {
+                completion(nil);
+            }
+        }
+    } failure:^(NSError * _Nonnull error) {
+         [LGAlert showErrorWithError:error];
+         if (completion) {
+             completion(nil);
+         }
+    }];
+}
+- (void)kq_deleteImgWithImgUrl:(NSString *)imgUrl{
+     NSString *imgApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ImgApiUrl_UserDefault_Key];
+    NSString *imageName = [imgUrl stringByReplacingOccurrencesOfString:imgApiUrl withString:@""];
+    NSString *assignmentId = [NSUserDefaults yj_stringForKey:YJTaskModule_AssignmentID_UserDefault_Key];
+    NSString *resId = [NSUserDefaults yj_stringForKey:YJTaskModule_ResID_UserDefault_Key];
+    NSString *userId = [NSUserDefaults yj_stringForKey:YJTaskModule_UserID_UserDefault_Key];
+    NSDate *second = [NSDate date];
+    long secondTimeZone = [second timeIntervalSince1970];
+    NSString *timeStr = [NSString stringWithFormat:@"%ld",secondTimeZone];
+    NSString *str = [NSString stringWithFormat:@"%@%@",timeStr,userId];
+
+    NSString *md5Str = [NSString yj_md5EncryptStr:str].yj_reverse;
+    NSString *urlStr = [NSString stringWithFormat:@"%@fileHandler.ashx",imgApiUrl];
+       NSDictionary *params =@{@"userId":kApiParams(userId),
+                               @"assignmentId":kApiParams(assignmentId),
+                               @"resId":kApiParams((resId)),
+                               @"op":@"deleteFile",
+                               @"TimeStamp":timeStr,
+                               @"Key":md5Str,
+                               @"fileName":imageName};
+    [[YJNetManager defaultManager].setRequest(urlStr).setParameters(params) uploadFileWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
+    } progress:^(NSProgress * _Nonnull progress) {
+    } success:^(id  _Nonnull responseObject) {
+        NSInteger suceessInt = [responseObject[@"code"] integerValue];
+        if (suceessInt == 0) {
+            NSLog(@"删除图片成功");
+        }else{
+            NSLog(@"删除图片失败");
+        }
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"删除图片失败");
+    }];
+}
+- (void)multimedia_uploadImageWithImgArr:(NSArray *)imgArr Completion:(void (^) (NSArray *imgUrlArr)) completion{
+    YJUploadModel *uploadModel = [[YJUploadModel alloc] init];
+    NSMutableArray *imageDatas = [NSMutableArray array];
+    NSMutableArray *fileNames = [NSMutableArray array];
+    for (UIImage *image in imgArr) {
+        [fileNames addObject:[NSString stringWithFormat:@"%@%li.png",[[NSUUID UUID] UUIDString],imageDatas.count]];
+        [imageDatas addObject:UIImageJPEGRepresentation([UIImage yj_fixOrientation:image], 0.5)];
+    }
+    uploadModel.uploadDatas = imageDatas;;
+    uploadModel.name = @"file";
+    uploadModel.fileNames = fileNames;
+    uploadModel.fileType = @"image/png";
+    
+    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ApiUrl_UserDefault_Key];
+    NSString *url = [exerciseApiUrl stringByAppendingString:@"/UploadResFile.ashx"];
+    [LGAlert showIndeterminateWithStatus:@"上传图片..."];
+    [[YJNetManager defaultManager].setRequest(url).setRequestType(YJRequestTypeUpload).setUploadModel(uploadModel) startRequestWithProgress:^(NSProgress *progress) {
+        NSLog(@"%f",progress.fractionCompleted);
+    } success:^(id response) {
+        NSLog(@"成功：%@",response);
+        if ([[response objectForKey:@"ReturnCode"] integerValue] == 1) {
+            NSArray *imagesUrls = [response objectForKey:@"Result"];
+            if (!IsArrEmpty(imagesUrls)) {
+                [NSUserDefaults yj_setObject:@(YES) forKey:UserDefaults_YJAnswerStatusChanged];
+                [LGAlert showSuccessWithStatus:@"上传成功"];
+            }else{
+                [LGAlert showErrorWithStatus:@"上传失败"];
+            }
+            if (completion) {
+                completion(IsArrEmpty(imagesUrls) ? nil : imagesUrls);
+            }
+        }else{
+            [LGAlert showErrorWithStatus:[response objectForKey:@"Msg"]];
+            if (completion) {
+                completion(nil);
+            }
+        }
+    } failure:^(NSError *error) {
+        [LGAlert showErrorWithError:error];
+        if (completion) {
+            completion(nil);
+        }
+    }];
+}
+- (void)multimedia_deleteImgWithImgUrl:(NSString *)imgUrl{
+    if (IsStrEmpty(imgUrl)) {
+        return;
+    }
+    NSString *exerciseApiUrl = [NSUserDefaults yj_stringForKey:YJTaskModule_ApiUrl_UserDefault_Key];
+    NSString *urlStr = [exerciseApiUrl stringByAppendingString:@"/WebService.asmx/DelImage"];
+    NSDictionary *params = @{@"filePath":imgUrl};
+     [[YJNetManager defaultManager].setRequest(urlStr).setRequestType(YJRequestTypeGET).setParameters(params) startRequestWithSuccess:^(id  _Nonnull response) {
+         if ([[response objectForKey:@"ReturnCode"] integerValue] == 1 && [[response objectForKey:@"Result"] boolValue]) {
+             NSLog(@"删除图片成功");
+         }else{
+             NSLog(@"删除图片失败");
+         }
+    } failure:^(NSError * _Nonnull error) {
+        NSLog(@"删除图片失败");
+    }];
 }
 - (void)selectImagesAction{
     __weak typeof(self) weakSelf = self;
@@ -165,6 +336,10 @@ static NSInteger maxUploadCount = 3;
         
         
         [self.collectionView reloadData];
+        
+        if (self.updateImgBlock) {
+            self.updateImgBlock(self.smallModel.yj_imgUrlArr);
+        }
     }
 }
 #pragma mark - LGTPhotoManageDelegate
@@ -203,6 +378,10 @@ static NSInteger maxUploadCount = 3;
                 [weakSelf.imageArr removeObjectAtIndex:weakSelf.imageArr.count-1];
             }
             [weakSelf.collectionView reloadData];
+            
+            if (self.updateImgBlock) {
+                self.updateImgBlock(self.smallModel.yj_imgUrlArr);
+            }
         }
     }];
 }

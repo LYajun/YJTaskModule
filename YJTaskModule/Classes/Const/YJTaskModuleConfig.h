@@ -16,14 +16,15 @@ static NSString *YJTaskModule_SysID_TeachingMaterial = @"621";
 static NSString *YJTaskModule_SysID_Multimedia = @"930";
 static NSString *YJTaskModule_SysID_TeachingPlan = @"626";
 
-
+static NSString *YJTaskModule_ImgApiUrl_UserDefault_Key = @"YJTaskModule_ImgApiUrl_UserDefault_Key";
 static NSString *YJTaskModule_SysID_UserDefault_Key = @"YJTaskModule_SysID_UserDefault_Key";
 static NSString *YJTaskModule_ListenClassName_UserDefault_Key = @"YJTaskModule_ListenClassName_UserDefault_Key";
 static NSString *YJTaskModule_SpeechAlertClassName_UserDefault_Key = @"YJTaskModule_SpeechAlertClassName_UserDefault_Key";
 static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
 static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
 
-
+static NSString *YJTaskModule_AssignmentID_UserDefault_Key = @"YJTaskModule_AssignmentID_UserDefault_Key";
+static NSString *YJTaskModule_ResID_UserDefault_Key = @"YJTaskModule_ResID_UserDefault_Key";
 
 static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
 static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
@@ -31,6 +32,10 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 
 
 @interface YJTaskModuleConfig : NSObject
+/** 任务ID */
+@property (nonatomic,copy) NSString *assignmentID;
+/** 资料ID */
+@property (nonatomic,copy) NSString *resID;
 /** 系统ID */
 @property (nonatomic,copy) NSString *sysID;
 /** 听力播放器类名 */
@@ -39,6 +44,8 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 @property (nonatomic,copy) NSString *speechAlertClassName;
 /** 图片上传Url基础地址 */
 @property (nonatomic,copy) NSString *apiUrl;
+/** 图片基础地址 */
+@property (nonatomic,copy) NSString *imgApiUrl;
 /** 用户ID */
 @property (nonatomic,copy) NSString *userID;
 /** 用户类型 */
@@ -50,6 +57,9 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 
 /** 保存配置信息 */
 - (void)saveConfigInfo;
+
++ (NSString *)currentSysID;
+
 @end
 
 NS_ASSUME_NONNULL_END

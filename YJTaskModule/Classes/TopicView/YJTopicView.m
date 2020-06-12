@@ -47,6 +47,8 @@
         self.correntView.bigModel = (YJPaperBigModel *)self.bigModel;
     }else{
         self.textView.scrollEnabled = YES;
+        self.textView.topicPintro = self.bigModel.yj_topicDirectionTxt;
+        self.textView.topicContent = self.bigModel.yj_topicContent;
         if (self.bigModel.yj_bigTopicType == YJBigTopicTypeChioceBlank ||
             self.bigModel.yj_bigTopicType == YJBigTopicTypeBigTextAndBlank || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"S"] || [self.bigModel.yj_bigTopicTypeID isEqualToString:@"U"]) {// 添加听力填空
             self.textView.topicIndexs = self.bigModel.yj_bigChioceBlankTopicIndexList;
@@ -257,14 +259,22 @@
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
     NSString *urlStr = URL.absoluteString;
     if (!IsStrEmpty(urlStr)) {
-        [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+        urlStr = [urlStr stringByRemovingPercentEncoding];
+        NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+        if (YJTaskSupportImgType(ext)) {
+            [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+        }
     }
     return NO;
 }
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
      NSString *urlStr = URL.absoluteString;
      if (!IsStrEmpty(urlStr)) {
-         [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+         urlStr = [urlStr stringByRemovingPercentEncoding];
+         NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
+         if (YJTaskSupportImgType(ext)) {
+             [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
+         }
      }
     return NO;
 }
@@ -327,7 +337,7 @@
         _textView = [[YJTopicTextView alloc] initWithFrame:CGRectZero];
         _textView.font = [UIFont systemFontOfSize:16];
         _textView.delegate = self;
-
+        _textView.linkTextAttributes = @{NSForegroundColorAttributeName:LG_ColorWithHex(0x252525)};
     }
     return _textView;
 }

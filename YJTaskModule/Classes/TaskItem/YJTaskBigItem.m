@@ -157,7 +157,7 @@
         if (self.bigModel.yj_isCorrectTopic && (self.bigTopicView.taskStageType == YJTaskStageTypeAnswer || self.bigTopicView.taskStageType == YJTaskStageTypeViewer)) {
             self.splitView.dragEnable = NO;
         }else{
-            if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicDirectionTxt)) {
+            if (IsStrEmpty(self.bigModel.yj_topicContent) && IsStrEmpty(self.bigModel.yj_topicDirectionTxt) && IsStrEmpty(self.bigModel.yj_topicListenText)) {
                 self.splitView.dragEnable = NO;
             }else{
                 self.splitView.dragEnable = YES;

@@ -11,6 +11,15 @@
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
 
+
+@implementation YJTaskAnswerTextView
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    return NO;
+}
+
+@end
+
 @interface YJTaskAnswerEditView ()<LGBaseTextViewDelegate>
 {
     CGFloat keyboardY;
@@ -126,13 +135,13 @@
         self.keyboardHideBlock();
     }
 }
-- (LGBaseTextView *)textView{
+- (YJTaskAnswerTextView *)textView{
     if (!_textView) {
         CGFloat w = CGRectGetMinX(self.sureButton.frame) - 20;
         CGFloat h = self.textViewHeight;
         CGFloat x = 10;
         CGFloat y = (self.tabbarHeight-h)/2;
-        _textView = [[LGBaseTextView alloc] initWithFrame:CGRectMake(x, y, w, h)];
+        _textView = [[YJTaskAnswerTextView alloc] initWithFrame:CGRectMake(x, y, w, h)];
         _textView.font = [UIFont systemFontOfSize:17];
         _textView.placeholder = @"请输入...";
 //        _textView.maxLength = 200;

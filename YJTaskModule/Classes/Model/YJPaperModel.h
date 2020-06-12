@@ -15,7 +15,9 @@
 @interface YJPaperTextAttachment: NSTextAttachment
 
 @end
+@interface YJPaperBlankTextField : UITextField
 
+@end
 NS_ASSUME_NONNULL_BEGIN
 @interface YJPaperSmallModel : YJBasePaperSmallModel
 /** 电子教材库-评语 */
@@ -51,10 +53,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *QuesAnalysis;
 /** 参考答案 */
 @property (nonatomic,copy) NSString *QuesAnswer;
-@property (nonatomic,copy) NSMutableAttributedString *QuesAnswer_attr;
+@property (nonatomic,strong) NSMutableAttributedString *QuesAnswer_attr;
 /** 题目 */
 @property (nonatomic,copy) NSString *QuesAsk;
-@property (nonatomic,copy) NSMutableAttributedString *QuesAsk_attr;
+@property (nonatomic,strong) NSMutableAttributedString *QuesAsk_attr;
 /** 小题音频 */
 @property (nonatomic,copy) NSString *QuesAudio;
 /** 小题满分 */
@@ -67,7 +69,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *YuFaCentciScoreStr;
 /** 句型分数 - 学生 */
 @property (nonatomic,copy) NSString *SentenceScoreStr;
-
+@property (nonatomic,assign) BOOL QuesAnswerHidden;
+@property (nonatomic,assign) BOOL QuesAnalysisHidden;
 /** 词汇分数 - 教师 */
 @property (nonatomic,copy) NSString *WordRichMarkScoreStr;
 /** 主题分数 - 教师 */
@@ -107,6 +110,8 @@ NS_ASSUME_NONNULL_BEGIN
 @end
 
 @interface YJPaperBigModel : YJBasePaperBigModel
+/** 题干内容标题 */
+@property (nonatomic,copy) NSString *SmallDirectionTxt;
 /** 专业化训练：大题计时 */
 @property (nonatomic,assign) NSInteger QueTraceTime;
 /** 大题已作答时间 */
@@ -131,10 +136,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) NSInteger QuesCount;
 /** 文本资源地址:如听力原文 */
 @property (nonatomic,copy) NSString *TopicArticle;
-@property (nonatomic,copy) NSMutableAttributedString *TopicArticle_attr;
+@property (nonatomic,strong) NSMutableAttributedString *TopicArticle_attr;
 /** 大题题目内容 */
 @property (nonatomic,copy) NSString *TopicContent;
-@property (nonatomic,copy) NSMutableAttributedString *TopicContent_attr;
+@property (nonatomic,strong) NSMutableAttributedString *TopicContent_attr;
 /** 大题ID */
 @property (nonatomic,copy) NSString *TopicID;
 /** 教学中心大题索引 */
@@ -166,8 +171,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *MainKnText;
 /** 重要考点 */
 @property (nonatomic,copy) NSString *Import;
-/** 次重要到点 */
+/** 次重要考点 */
 @property (nonatomic,copy) NSString *Main;
+@property (nonatomic,assign) BOOL MainKnTextHidden;
+@property (nonatomic,assign) BOOL ImporKnTextHidden;
+
 @property (nonatomic,copy) NSString *ThemeKeywordCode;
 @property (nonatomic,copy) NSString *ThemeKeywordText;
 @property (nonatomic,copy) NSString *UpperKnlgCode;
@@ -203,6 +211,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *MainKlg;
 /** 试卷ID */
 @property (nonatomic,copy) NSString *PapaerID;
+@property (nonatomic,copy) NSString *PaperName;
 /** 批改题目数量 */
 @property (nonatomic,assign) NSInteger PgQuesNum;
 /** 小题总数 */

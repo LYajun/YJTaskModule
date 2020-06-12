@@ -84,7 +84,11 @@
 - (void)setIsManualMarkMode:(BOOL)isManualMarkMode{
     _isManualMarkMode = isManualMarkMode;
     if (isManualMarkMode) {
-        self.titleL.text = @"评阅卡";
+        if (self.isCheckState) {
+            self.titleL.text = @"审核卡";
+        }else{
+            self.titleL.text = @"评阅卡";
+        }
     }else{
         self.titleL.text = @"答题卡";
     }

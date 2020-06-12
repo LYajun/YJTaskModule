@@ -11,7 +11,7 @@
 #import <LGTalk/LGTPhotoBrowser.h>
 #import <Masonry/Masonry.h>
 #import "YJConst.h"
-
+#import <YJExtensions/YJEGumbo+Query.h>
 
 @interface YJMarkSubCell ()
 @property(nonatomic,strong) UILabel *titleLab;
@@ -99,8 +99,39 @@
 - (void)setTitleColor:(UIColor *)titleColor{
     self.titleLab.textColor = titleColor;
 }
+- (void)setTextAttr:(NSAttributedString *)textAttr{
+    NSMutableAttributedString *attr = textAttr.mutableCopy;
+    [attr yj_setFont:17];
+    [attr yj_setColor:LG_ColorWithHex(0x333333)];
+    
+    if (!IsStrEmpty(self.topicContent) && [self.topicContent.lowercaseString containsString:@"<strong"]) {
+        YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
+        NSArray *elements = document.Query(@"strong");
+        for (YJEGumboElement *element in elements) {
+            NSString *text = [element.text() yj_deleteWhitespaceAndNewlineCharacter];
+            if (!IsStrEmpty(text)) {
+                NSString *textAttrStr = attr.string;
+                NSRange range = [textAttrStr rangeOfString:text];
+                if (range.location != NSNotFound) {
+                    [attr yj_setBoldFont:17 atRange:range];
+                    NSString *class = kApiParams(element.attr(@"class"));
+                    if ([class isEqualToString:@"Ques-title"]) {
+                        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+                        paragraphStyle.alignment = NSTextAlignmentCenter;
+                        [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:range];
+                    }
+                }
+            }
+        }
+    }
+    
+    self.textView.attributedText = attr;
+}
 - (void)setText:(NSString *)text{
+    NSArray *pianzhangAnswerArr = nil;
+    
     if (!IsStrEmpty(text) && !IsStrEmpty(text.yj_deleteWhitespaceAndNewlineCharacter) && [text containsString:YJTaskModule_u2060]) {
+        pianzhangAnswerArr = [text componentsSeparatedByString:YJTaskModule_u2060];
         text = [text stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@"\n"];
         NSMutableString *textCopy = text.mutableCopy;
         while ([textCopy hasSuffix:@" "] || [textCopy hasSuffix:@"\n"]) {
@@ -125,33 +156,61 @@
     if (!IsStrEmpty(text) && [text isEqualToString:@"未作答"]) {
         self.textView.textColor = LG_ColorWithHex(0x999999);
     }else{
-        NSMutableArray *spanTextArray = [NSMutableArray array];
-        if ([text containsString:[NSString yj_Char1]]) {
-            NSArray *char1Arr = [text componentsSeparatedByString:[NSString yj_Char1]];
-            for (int i = 0; i < char1Arr.count-1; i++) {
-                if (i > 0) {
-                    NSString *spanText = char1Arr[i];
-                    if (!IsStrEmpty(spanText) && [spanText hasSuffix:[NSString stringWithFormat:@"%c",2]]) {
-                        [spanTextArray addObject:spanText];
+        
+        if (!IsArrEmpty(pianzhangAnswerArr)) {
+            NSMutableAttributedString *attr = [[NSMutableAttributedString alloc] init];
+            for (int i = 0;i < pianzhangAnswerArr.count;i++) {
+                NSString *pianzhang = pianzhangAnswerArr[i];
+                NSString *pianzhangAnswer = pianzhang.yj_deleteWhitespaceAndNewlineCharacter;
+                BOOL unAnswer = NO;
+                if (IsStrEmpty(pianzhangAnswer)) {
+                    unAnswer = YES;
+                    pianzhangAnswer = @"未作答";
+                }
+                NSMutableAttributedString *pianzhangAttr = [NSString stringWithFormat:@"%@%@",pianzhangAnswer,(i < pianzhangAnswerArr.count-1 ? @"\n" : @"")].yj_toMutableAttributedString;
+                if (unAnswer) {
+                    [pianzhangAttr yj_setColor:LG_ColorWithHex(0x989898)];
+                }else{
+                    [pianzhangAttr yj_setColor:LG_ColorWithHex(0x333333)];
+                }
+                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"%@ ",[NSString yj_stringToSmallTopicIndexStringWithIntCount:i]].yj_toMutableAttributedString;
+                [indexAttr yj_setColor:LG_ColorWithHex(0x333333)];
+                [indexAttr appendAttributedString:pianzhangAttr];
+                [attr appendAttributedString:indexAttr];
+            }
+            [attr yj_setFont:16];
+            self.textView.attributedText = attr;
+        }else{
+            NSMutableArray *spanTextArray = [NSMutableArray array];
+            if ([text containsString:[NSString yj_Char1]]) {
+                NSArray *char1Arr = [text componentsSeparatedByString:[NSString yj_Char1]];
+                for (int i = 0; i < char1Arr.count-1; i++) {
+                    if (i > 0) {
+                        NSString *spanText = char1Arr[i];
+                        if (!IsStrEmpty(spanText) && [spanText hasSuffix:[NSString stringWithFormat:@"%c",2]]) {
+                            [spanTextArray addObject:spanText];
+                        }
                     }
                 }
             }
-        }
-        if (spanTextArray.count > 0) {
-            NSMutableAttributedString *attr = text.yj_toMutableAttributedString;
-            [attr yj_setFont:16];
-            [attr yj_setColor:LG_ColorWithHex(0x333333)];
-            for (NSString *spanText in spanTextArray) {
-                NSRange range = [attr.string rangeOfString:spanText];
-                if (range.location != NSNotFound) {
-                    [attr yj_setBoldFont:17 atRange:range];
-                    [attr yj_setColor:LG_ColorWithHex(0x252525) atRange:range];
+            if (spanTextArray.count > 0) {
+                NSMutableAttributedString *attr = text.yj_toMutableAttributedString;
+                [attr yj_setFont:16];
+                [attr yj_setColor:LG_ColorWithHex(0x333333)];
+                for (NSString *spanText in spanTextArray) {
+                    NSRange range = [attr.string rangeOfString:spanText];
+                    if (range.location != NSNotFound) {
+                        [attr yj_setBoldFont:17 atRange:range];
+                        [attr yj_setColor:LG_ColorWithHex(0x252525) atRange:range];
+                    }
                 }
+                self.textView.attributedText = attr;
+            }else{
+                self.textView.textColor = LG_ColorWithHex(0x333333);
             }
-            self.textView.attributedText = attr;
-        }else{
-            self.textView.textColor = LG_ColorWithHex(0x333333);
         }
+        
+        
     }
 }
 - (void)setIsAddBgColor:(BOOL)isAddBgColor{

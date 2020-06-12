@@ -19,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 英译中隐藏语音评测按钮 */
 @property (nonatomic,assign) BOOL hideSpeechBtn;
 @property (nonatomic,copy) void (^SpeechMarkBlock) (void);
+@property (nonatomic,copy) void (^UpdateTableBlock) (void);
 @end
 
 NS_ASSUME_NONNULL_END

@@ -8,8 +8,12 @@
 
 #import <UIKit/UIKit.h>
 #import "LGBaseTextView.h"
+@interface YJTaskAnswerTextView : LGBaseTextView
+
+@end
+
 @interface YJTaskAnswerEditView : UIView
-@property (nonatomic,strong) LGBaseTextView *textView;
+@property (nonatomic,strong) YJTaskAnswerTextView *textView;
 @property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
 @property (nonatomic,copy) void (^keyboardHideBlock) (void);
 @end

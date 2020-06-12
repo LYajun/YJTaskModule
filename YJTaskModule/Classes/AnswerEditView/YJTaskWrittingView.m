@@ -15,8 +15,22 @@
 #import <LGAlertHUD/LGAlertHUD.h>
 
 #define kTopicHeight 80
+
+
+@interface YJTaskWrittingTextView : LGBaseTextView
+
+@end
+
+@implementation YJTaskWrittingTextView
+
+- (BOOL)canPerformAction:(SEL)action withSender:(id)sender{
+    return NO;
+}
+
+@end
+
 @interface YJTaskWrittingView ()<LGBaseTextViewDelegate,YJResizableSplitViewDelegate>
-@property (nonatomic,strong) LGBaseTextView *textView;
+@property (nonatomic,strong) YJTaskWrittingTextView *textView;
 @property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
 
 @property (nonatomic,strong) UITextView *topicTextView;
@@ -174,15 +188,17 @@
     NSMutableAttributedString *attr = topicInfoAttr.mutableCopy;
     [attr yj_setFont:17];
     [attr yj_setColor:LG_ColorWithHex(0x252525)];
-    NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
-    NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
-    YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
-    NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
-    if (IsArrEmpty(tableArray)) {
-        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-        paragraphStyle.lineSpacing = 8;
-        [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
-    }
+     if (!IsStrEmpty(self.topicContent) && ![self.topicContent containsString:@"style=\""]) {
+         NSDictionary *exportParams = @{NSDocumentTypeDocumentAttribute: NSHTMLTextDocumentType,NSCharacterEncodingDocumentAttribute:[NSNumber numberWithInt:NSUTF8StringEncoding]};
+         NSData *htmlData = [attr dataFromRange:NSMakeRange(0,attr.length) documentAttributes:exportParams error:nil];
+         YJEHpple *xpathParser = [[YJEHpple alloc] initWithHTMLData:htmlData];
+         NSArray *tableArray = [xpathParser searchWithXPathQuery:@"//table"];
+         if (IsArrEmpty(tableArray)) {
+             NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+             paragraphStyle.lineSpacing = 8;
+             [attr addAttribute:NSParagraphStyleAttributeName value:paragraphStyle range:NSMakeRange(0, attr.length)];
+         }
+     }
     self.topicTextView.attributedText = attr;
 }
 - (void)setTitleStr:(NSString *)titleStr{
@@ -246,10 +262,11 @@
     }
     return _splitView;
 }
-- (LGBaseTextView *)textView{
+- (YJTaskWrittingTextView *)textView{
     if (!_textView) {
-        _textView = [[LGBaseTextView alloc] initWithFrame:CGRectZero];
+        _textView = [[YJTaskWrittingTextView alloc] initWithFrame:CGRectZero];
         [_textView setAutoCursorPosition:YES];
+        _textView.yjDelegate = self;
 //        _textView.assistHeight = 40;
         _textView.placeholder = @"请输入...";
 //        _textView.maxLength = 1000;

@@ -51,7 +51,7 @@
         make.right.equalTo(bgView.mas_right).with.offset(IsIPad ? - 10 : -5);
         make.width.height.mas_equalTo(isSpeechMarkEnable ? (IsIPad ? 32 : 28) : 0);
     }];
-    
+    self.recordBtn.transform = CGAffineTransformMakeScale(0.8, 0.8);
     self.recordBtn.hidden = !isSpeechMarkEnable;
     
     [bgView addSubview:self.textView];
@@ -62,7 +62,7 @@
         make.bottom.equalTo(self.recordBtn.mas_top).with.offset(-4);
         make.height.greaterThanOrEqualTo(@(44));
     }];
-    [bgView yj_clipLayerWithRadius:4 width:1 color:LG_ColorWithHex(0x78beff)];
+    [bgView yj_clipLayerWithRadius:4 width:1 color:LG_ColorWithHex(0xcacaca)];
 }
 - (void)setAnswerStr:(NSString *)answerStr{
     _answerStr = answerStr;

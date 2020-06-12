@@ -8,6 +8,22 @@
 
 #import <UIKit/UIKit.h>
 
+typedef NS_ENUM(NSUInteger, YJTaskMarqueeLabelType) {
+    YJTaskMarqueeLabelTypeLeft = 0,//向左边滚动
+    YJTaskMarqueeLabelTypeLeftRight = 1,//先向左边，再向右边滚动
+};
+
+@interface YJTaskMarqueeLabel : UILabel
+
+@property(nonatomic,assign) YJTaskMarqueeLabelType marqueeLabelType;
+@property(nonatomic,assign) CGFloat speed;//速度
+@property(nonatomic,assign) CGFloat secondLabelInterval;
+@property(nonatomic,assign) NSTimeInterval stopTime;//滚到顶的停止时间
+- (void)invalidateTimer;
+@end
+
+
+
 @interface YJTaskTitleView : UIView
 @property(nonatomic,strong) UIButton *topicCarkBtn;
 @property(nonatomic,copy) NSString *taskName;

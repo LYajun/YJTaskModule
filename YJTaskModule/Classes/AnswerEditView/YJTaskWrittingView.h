@@ -11,6 +11,7 @@
 @interface YJTaskWrittingView : UIView
 /** 标题 */
 @property (nonatomic,copy) NSString *titleStr;
+@property (nonatomic,copy) NSString *topicContent;
 @property (nonatomic,strong) NSMutableAttributedString *topicInfoAttr;
 @property (nonatomic,assign) BOOL isTopicCard;
 + (instancetype)showWithText:(NSString *) text

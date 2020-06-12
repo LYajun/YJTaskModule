@@ -11,13 +11,14 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YJMarkSubCell : LGBaseTableViewCell
+@property (nonatomic,copy) NSString *topicContent;
 /** 标题 */
 @property (nonatomic,copy) NSString *titleStr;
 /** 标题颜色 */
 @property (nonatomic,strong) UIColor *titleColor;
 /** 文本内容 */
 @property (nonatomic,copy) NSString *text;
-
+@property (nonatomic,strong) NSAttributedString *textAttr;
 @property (nonatomic,assign) BOOL isAddBgColor;
 
 @property (nonatomic,strong) NSArray *imgUrlArr;

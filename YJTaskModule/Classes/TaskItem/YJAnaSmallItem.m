@@ -72,11 +72,12 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 0) {
         YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
+        cell.topicContent = self.smallModel.yj_smallTopicContent;
         cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
         if (self.smallModel.yj_smallItemCount > 1) {
             if (indexPath.section == 0) {
                 NSMutableAttributedString *attr = self.smallModel.yj_smallTopicAttrText.mutableCopy;
-                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:\n",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
                 [attr appendAttributedString:indexAttr];
                 cell.textAttr = attr;
             }else{
@@ -164,11 +165,16 @@
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
+                    cell.topicContent = smallModel.yj_smallOriStandardAnswer;
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
-                    if (!IsStrEmpty(standardAnswer)) {
-                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    if (smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsStrEmpty(standardAnswer)) {
+                        cell.textAttr = smallModel.yj_smallStandardAnswerAttrText;
+                    }else{
+                        if (!IsStrEmpty(standardAnswer)) {
+                            standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                        }
+                        cell.text = standardAnswer;
                     }
-                    cell.text = standardAnswer;
                 }else{
                     cell.imgUrlArr = nil;
                     NSInteger analysisIndex = indexP.row - 1;
@@ -288,11 +294,12 @@
     NSInteger UserType = [NSUserDefaults yj_integerForKey:YJTaskModule_UserType_UserDefault_Key];
     if (indexPath.row == 0) {
         YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
+        cell.topicContent = self.smallModel.yj_smallTopicContent;
         cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
         if (self.smallModel.yj_smallItemCount > 1) {
             if (indexPath.section == 0) {
                 NSMutableAttributedString *attr = self.smallModel.yj_smallTopicAttrText.mutableCopy;
-                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:\n",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
+                NSMutableAttributedString *indexAttr = [NSString stringWithFormat:@"\n\n%@:",[NSString yj_stringToSmallTopicIndexStringWithIntCount:indexPath.section]].yj_toMutableAttributedString;
                 [attr appendAttributedString:indexAttr];
                 cell.textAttr = attr;
             }else{
@@ -426,11 +433,16 @@
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"【参考答案】";
                     cell.titleColor = LG_ColorWithHex(0x009900);
+                    cell.topicContent = smallModel.yj_smallOriStandardAnswer;
                     NSString *standardAnswer = smallModel.yj_smallStandardAnswer;
-                    if (!IsStrEmpty(standardAnswer)) {
-                        standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                    if (smallModel.yj_smallTopicType == YJSmallTopicTypeWritting && !IsStrEmpty(standardAnswer)) {
+                        cell.textAttr = smallModel.yj_smallStandardAnswerAttrText;
+                    }else{
+                        if (!IsStrEmpty(standardAnswer)) {
+                            standardAnswer = [standardAnswer stringByReplacingOccurrencesOfString:@"$/" withString:@"/"];
+                        }
+                        cell.text = standardAnswer;
                     }
-                    cell.text = standardAnswer;
                 }else if (indexP.row == 2){
                     cell.imgUrlArr = nil;
                     cell.titleStr = @"【本题得分】";

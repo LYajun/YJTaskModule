@@ -20,6 +20,8 @@
 @property (nonatomic,assign) NSInteger currentSmallIndex;
 @property (nonatomic,strong) NSArray<YJTaskCarkModel *> *dataArr;
 @property (nonatomic,assign) BOOL isTopicCardMode;
+
+@property (nonatomic,assign) BOOL isCheckState;
 @property (nonatomic,assign) BOOL isManualMarkMode;
 @property (nonatomic,assign) BOOL bigTopicTypeNameHideBig;
 @property (nonatomic,assign) id<YJTaskCarkViewDelegate> delegate;

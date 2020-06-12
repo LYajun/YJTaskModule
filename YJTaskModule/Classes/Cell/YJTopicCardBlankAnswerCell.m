@@ -50,6 +50,7 @@
         make.right.equalTo(bgView.mas_right).with.offset(IsIPad ? - 10 : -5);
         make.width.height.mas_equalTo(isSpeechMarkEnable ? (IsIPad ? 32 : 28) : 0);
     }];
+    self.recordBtn.transform = CGAffineTransformMakeScale(0.8, 0.8);
     self.recordBtn.hidden = !isSpeechMarkEnable;
     [bgView addSubview:self.textView];
     [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {

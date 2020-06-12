@@ -65,6 +65,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath{
     if (indexPath.row == 0) {
         YJTaskTopicCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskTopicCell class]) forIndexPath:indexPath];
+        cell.topicContent = self.smallModel.yj_smallTopicContent;
         cell.voiceUrl = self.smallModel.yj_smallTopicArticle;
         cell.textAttr = self.smallModel.yj_smallTopicAttrText;
         self.currentTaskTopicCell = cell;

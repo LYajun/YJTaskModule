@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @class YJPaperSmallModel;
 @interface YJWrittingImageView : UIView
 @property (nonatomic,strong) YJPaperSmallModel *smallModel;
+@property (nonatomic, copy) void(^updateImgBlock)(NSArray *imgUrls);
 - (CGFloat)collectionViewItemWidth;
 @end
 

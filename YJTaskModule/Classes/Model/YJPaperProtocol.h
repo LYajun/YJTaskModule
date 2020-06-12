@@ -81,6 +81,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray<NSMutableAttributedString *> *)yj_smallOptions;
 /** 小题题干信息(富文本)-单个题干 */
 - (NSMutableAttributedString *)yj_smallTopicAttrText;
+- (NSString *)yj_smallTopicContent;
 /** 小题题干信息(富文本)-不含索引 */
 - (NSMutableAttributedString *)yj_smallTopicContentAttrText;
 /** 答题点数 */
@@ -95,6 +96,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_smallAnswerAnalysis;
 /** 小题参考答案 */
 - (NSString *)yj_smallStandardAnswer;
+- (NSString *)yj_smallOriStandardAnswer;
 - (NSMutableAttributedString *)yj_smallStandardAnswerAttrText;
 /** 学生：小题作文各维度分数串,以"*"分割 */
 - (NSString *)yj_smallWrittingScores;
@@ -102,6 +104,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_smallWrittingScores_mark;
 /** 小题得分 */
 - (NSString *)yj_smallStuScore;
+
+- (NSString *)yj_smallMarkAnswerScore;
 /** 智能评阅得分 */
 - (NSString *)yj_smallIntelligenceScore;
 /** 小题评语 */
