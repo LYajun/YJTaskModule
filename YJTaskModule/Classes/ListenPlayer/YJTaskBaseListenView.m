@@ -9,7 +9,7 @@
 
 @implementation YJTaskBaseListenView
 
-
+- (void)startPlayer{};
 - (void)pausePlayer{}
 - (void)stopPlayer{}
 @end

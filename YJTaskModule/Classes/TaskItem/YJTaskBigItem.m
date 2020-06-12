@@ -167,7 +167,9 @@
 }
 
 #pragma mark Public
-
+- (void)startListen{
+    [self.bigTopicView startListen];
+}
 - (void)stopListen{
     [self stopTaskBaseSmallItemVoicePlay];
     [self.bigTopicView stopListen];
@@ -321,6 +323,9 @@
     }
     CGFloat listenH = 44;
     CGFloat titleH = 36;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        titleH = 5;
+    }
     CGFloat heightRate = 0.35;
     switch (self.bigModel.yj_bigTopicType) {
         case YJBigTopicTypeDefault:

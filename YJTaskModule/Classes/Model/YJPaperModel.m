@@ -246,9 +246,13 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return @"";
 }
 - (NSInteger)yj_smallPaperIndex{
-    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
-    if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
-        return self.Index + 1;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        if (self.mutiBlankDisplayEnable) {
+            NSInteger startIndex = [[self.yj_smallIndex_Ori componentsSeparatedByString:@"|"].firstObject integerValue];
+            return startIndex + 1;
+        }else{
+            return self.Index + 1;
+        }
     }
     if (self.mutiBlankDisplayEnable && self.PaperIndexOri > 0) {
         return self.PaperIndexOri;
@@ -275,9 +279,15 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     }else{
         score = [NSString stringWithFormat:@"[%.1f分]",self.QuesScore];
     }
-    NSString *sysID = [NSUserDefaults yj_stringForKey:YJTaskModule_SysID_UserDefault_Key];
-    if (!IsStrEmpty(sysID) && [sysID isEqualToString:YJTaskModule_SysID_SpecialTraining] && IsStrEmpty(_QuesAsk)) {
-        score = @"____";
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        if (self.smallTopicCount <= 1) {
+            index = [NSString yj_Char1];
+        }
+        if (IsStrEmpty(_QuesAsk) && self.smallTopicCount > 1) {
+            score = @"____";
+        }else{
+            score = @"";
+        }
     }
     if (self.QuesAsk_attr) {
         if (![self.QuesAsk_attr.string hasPrefix:index]) {
@@ -579,6 +589,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     for (YJPaperSmallModel *smallModel in Queses) {
         smallModel.TopicTypeID = self.TopicTypeID;
         smallModel.TopicTypeName = self.yj_bigTopicTypeName;
+        smallModel.smallTopicCount = Queses.count;
         
         if (!IsStrEmpty(smallModel.QuesAnswer) && [self.TopicTypeID isEqualToString:@"f"] && ![smallModel.QuesAnswer hasSuffix:@"</div>"]) {
             NSString *QuesAnswer = smallModel.QuesAnswer;

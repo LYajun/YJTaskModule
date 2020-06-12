@@ -187,6 +187,11 @@
 - (void)updateBlankAnswers{
     self.textView.answerResults = self.bigModel.yj_bigChioceBlankAnswerList;
 }
+- (void)startListen{
+    if ([self isListen]) {
+        [self.listenView startPlayer];
+    }
+}
 - (void)pauseListen{
     if ([self isListen]) {
         [self.listenView pausePlayer];

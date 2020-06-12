@@ -18,7 +18,7 @@
 @interface YJTaskBlankCell ()
 @property (nonatomic,strong) UILabel *indexLab;
 @property (strong,nonatomic) LGBaseTextView *textView;
-@property (strong,nonatomic) UIButton *recordBtn;
+@property (strong,nonatomic) LGBaseHighlightBtn *recordBtn;
 @end
 @implementation YJTaskBlankCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
@@ -47,7 +47,11 @@
     
     [bgView addSubview:self.recordBtn];
     [self.recordBtn mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.bottom.equalTo(bgView.mas_bottom).with.offset(isSpeechMarkEnable ? (IsIPad ? -15 : -10) : 0);
+        if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+            make.bottom.equalTo(bgView.mas_bottom).with.offset(isSpeechMarkEnable ? (IsIPad ? -10 : -5) : 0);
+        }else{
+            make.bottom.equalTo(bgView.mas_bottom).with.offset(isSpeechMarkEnable ? (IsIPad ? -15 : -10) : 0);
+        }
         make.right.equalTo(bgView.mas_right).with.offset(IsIPad ? - 10 : -5);
         make.width.height.mas_equalTo(isSpeechMarkEnable ? (IsIPad ? 32 : 28) : 0);
     }];
@@ -102,7 +106,6 @@
 
 - (void)recordBtnLongTouchGes:(UILongPressGestureRecognizer *) longGes{
     if ([longGes state] == UIGestureRecognizerStateBegan) {
-        [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [[YJSpeechManager defaultManager] startEngineAtRefText:nil markType:YJSpeechMarkTypeASR];
         [YJSpeechMarkView showSpeechRecognizeView];
         if (self.SpeechMarkBlock) {
@@ -110,7 +113,6 @@
         }
     }else if ([longGes state] == UIGestureRecognizerStateEnded ||
               [longGes state] == UIGestureRecognizerStateCancelled){
-        [self.recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
         [YJSpeechMarkView dismiss];
         [[YJSpeechManager defaultManager] stopEngineWithTip:@"语音识别中..."];
     }
@@ -139,11 +141,16 @@
     }
     return _textView;
 }
-- (UIButton *)recordBtn{
+- (LGBaseHighlightBtn *)recordBtn{
     if (!_recordBtn) {
-        _recordBtn = [UIButton buttonWithType:UIButtonTypeCustom];
-        [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
-        [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_close" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateDisabled];
+        _recordBtn = [LGBaseHighlightBtn buttonWithType:UIButtonTypeCustom];
+        if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+            [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_s_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
+            [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_s_close" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateDisabled];
+        }else{
+            [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_open" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
+            [_recordBtn setImage:[UIImage yj_imageNamed:@"yj_record_close" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateDisabled];
+        }
         UILongPressGestureRecognizer *longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(recordBtnLongTouchGes:)];
         longPress.minimumPressDuration = 0.2;
         [_recordBtn addGestureRecognizer:longPress];

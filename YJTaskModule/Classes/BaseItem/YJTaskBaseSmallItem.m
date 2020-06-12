@@ -54,6 +54,13 @@
         self.titleView.taskName = [NSString stringWithFormat:@"(本题共%li道小题,当前第%li小题)",self.totalTopicCount,currentIndex+1];
     }else{
         self.titleView.taskName = @"(本题共1道小题)";
+        
+        if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+            [self.titleView mas_updateConstraints:^(MASConstraintMaker *make) {
+                   make.height.mas_equalTo(0);
+            }];
+            self.titleView.hidden = YES;
+        }
     }
 }
 - (void)updateData{

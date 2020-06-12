@@ -25,6 +25,7 @@
 @property (nonatomic,copy) void (^updateBlock) (NSError *error);
 - (instancetype)initWithFrame:(CGRect)frame bigPModel:(YJBasePaperBigModel *)bigPModel;
 - (void)updateBlankAnswers;
+- (void)startListen;
 - (void)stopListen;
 - (void)pauseListen;
 @end

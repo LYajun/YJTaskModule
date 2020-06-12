@@ -32,7 +32,7 @@
                     bigPModel:(YJBasePaperBigModel *) bigPModel
                 taskStageType:(YJTaskStageType) taskStageType
                    taskPModel:(YJBasePaperModel *) taskPModel;
-
+- (void)startListen;
 - (void)stopListen;
 - (void)pauseListen;
 

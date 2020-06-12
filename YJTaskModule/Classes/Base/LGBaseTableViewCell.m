@@ -9,6 +9,14 @@
 #import "LGBaseTableViewCell.h"
 #import "YJConst.h"
 
+
+@implementation LGBaseHighlightBtn
+
+- (void)setHighlighted:(BOOL)highlighted{};
+
+@end
+
+
 @implementation LGBaseTableViewCell
 
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{

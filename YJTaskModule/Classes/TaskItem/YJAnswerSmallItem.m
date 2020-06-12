@@ -35,6 +35,14 @@
     }
     return self;
 }
+- (void)setBigModel:(YJBasePaperBigModel *)bigModel{
+    [super setBigModel:bigModel];
+    if (IsStrEmpty(self.smallModel.yj_smallTopicContent) &&  [[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining] && bigModel.yj_smallTopicList.count == 1) {
+        self.tableView.contentInset = UIEdgeInsetsMake(-40, 0, 0, 0);
+    }else{
+        self.tableView.contentInset = UIEdgeInsetsZero;
+    }
+}
 - (void)updateData{
     [self.tableView reloadData];
 }

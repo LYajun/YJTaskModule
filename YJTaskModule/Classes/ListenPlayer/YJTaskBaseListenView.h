@@ -13,6 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 /** 音频地址数组 */
 @property (nonatomic,strong) NSArray<NSString *> *urlArr;
 @property (nonatomic,strong) NSArray<NSString *> *urlNameArr;
+- (void)startPlayer;
 
 - (void)pausePlayer;
 

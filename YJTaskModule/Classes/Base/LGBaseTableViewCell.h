@@ -8,6 +8,9 @@
 
 #import <UIKit/UIKit.h>
 
+@interface LGBaseHighlightBtn : UIButton
+
+@end
 
 @interface LGBaseTableViewCell : UITableViewCell
 @property (nonatomic, assign) BOOL isShowSeparator;
