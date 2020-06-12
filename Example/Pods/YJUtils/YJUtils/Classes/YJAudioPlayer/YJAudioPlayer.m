@@ -102,6 +102,10 @@ static NSString * const kPlaybackLikelyToKeepUp   = @"playbackLikelyToKeepUp";
 }
 #pragma mark - Private
 + (NSString *)deleteURLDoubleSlashWithUrlStr:(NSString *)urlStr{
+    if (urlStr && urlStr.length > 0){
+        urlStr = [urlStr stringByRemovingPercentEncoding];
+        urlStr = [urlStr stringByReplacingOccurrencesOfString:@"\\" withString:@"/"];
+    }
     if (urlStr && urlStr.length > 0 && [urlStr containsString:@"://"]) {
         NSArray *urlArr = [urlStr componentsSeparatedByString:@"://"];
        NSString *lastStr = [urlArr.lastObject stringByReplacingOccurrencesOfString:@"//" withString:@"/"];
