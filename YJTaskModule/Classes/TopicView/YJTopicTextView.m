@@ -252,7 +252,11 @@
     NSInteger count = answerResults.count > self.blankTextFieldArray.count ? self.blankTextFieldArray.count : answerResults.count;
     for (NSInteger i = 0; i < count; i++) {
         YJBlankTextField *textFiled = self.blankTextFieldArray[i];
-        textFiled.text = answerResults[i];
+        NSString *answer = answerResults[i];
+        if (!IsStrEmpty(answer) && !IsStrEmpty(textFiled.placeholder)) {
+            answer = [NSString stringWithFormat:@"%@.%@",textFiled.placeholder,answer];
+        }
+        textFiled.text = answer;
         YJTextAttachment *textAttachment = [[YJTextAttachment alloc] initWithData:nil ofType:nil] ;
         textAttachment.image = [self imageWithUIView:textFiled];
         textAttachment.textIndex = textFiled.tag;
