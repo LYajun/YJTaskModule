@@ -131,35 +131,35 @@ PODS:
     - YJNetManager
     - YJPresentAnimation
   - Masonry (1.1.0)
-  - MJExtension (3.2.1)
+  - MJExtension (3.2.2)
   - MJRefresh (3.4.3)
   - Reachability (3.2)
-  - SDWebImage (5.8.0):
-    - SDWebImage/Core (= 5.8.0)
-  - SDWebImage/Core (5.8.0)
+  - SDWebImage (5.8.4):
+    - SDWebImage/Core (= 5.8.4)
+  - SDWebImage/Core (5.8.4)
   - SwipeView (1.3.2)
   - XMLDictionary (1.4.1)
-  - YJExtensions (1.2.8):
-    - YJExtensions/Foundation (= 1.2.8)
-    - YJExtensions/UIKit (= 1.2.8)
-    - YJExtensions/YJEGumbo (= 1.2.8)
-    - YJExtensions/YJEHpple (= 1.2.8)
-  - YJExtensions/Foundation (1.2.8):
+  - YJExtensions (1.2.9):
+    - YJExtensions/Foundation (= 1.2.9)
+    - YJExtensions/UIKit (= 1.2.9)
+    - YJExtensions/YJEGumbo (= 1.2.9)
+    - YJExtensions/YJEHpple (= 1.2.9)
+  - YJExtensions/Foundation (1.2.9):
     - YJExtensions/YJEHpple
-  - YJExtensions/UIKit (1.2.8):
+  - YJExtensions/UIKit (1.2.9):
     - YJExtensions/Foundation
-  - YJExtensions/YJEGumbo (1.2.8):
-    - YJExtensions/YJEGumbo/src (= 1.2.8)
-  - YJExtensions/YJEGumbo/src (1.2.8)
-  - YJExtensions/YJEHpple (1.2.8)
-  - YJImageBrowser (1.0.1):
-    - YJImageBrowser/Const (= 1.0.1)
-    - YJImageBrowser/ProgressView (= 1.0.1)
-    - YJImageBrowser/YJImageBrowserView (= 1.0.1)
-  - YJImageBrowser/Const (1.0.1):
+  - YJExtensions/YJEGumbo (1.2.9):
+    - YJExtensions/YJEGumbo/src (= 1.2.9)
+  - YJExtensions/YJEGumbo/src (1.2.9)
+  - YJExtensions/YJEHpple (1.2.9)
+  - YJImageBrowser (1.0.2):
+    - YJImageBrowser/Const (= 1.0.2)
+    - YJImageBrowser/ProgressView (= 1.0.2)
+    - YJImageBrowser/YJImageBrowserView (= 1.0.2)
+  - YJImageBrowser/Const (1.0.2):
     - YJExtensions
-  - YJImageBrowser/ProgressView (1.0.1)
-  - YJImageBrowser/YJImageBrowserView (1.0.1):
+  - YJImageBrowser/ProgressView (1.0.2)
+  - YJImageBrowser/YJImageBrowserView (1.0.2):
     - SDWebImage
     - YJImageBrowser/Const
     - YJImageBrowser/ProgressView
@@ -189,44 +189,44 @@ PODS:
     - YJExtensions
     - YJNetManager
     - YJTaskMark/kuyou
-  - YJTaskModule (1.4.4):
-    - YJTaskModule/ActivityIndicatorView (= 1.4.4)
-    - YJTaskModule/AnswerEditView (= 1.4.4)
-    - YJTaskModule/Base (= 1.4.4)
-    - YJTaskModule/BaseItem (= 1.4.4)
-    - YJTaskModule/Cell (= 1.4.4)
-    - YJTaskModule/Const (= 1.4.4)
-    - YJTaskModule/ImageLabel (= 1.4.4)
-    - YJTaskModule/ListenPlayer (= 1.4.4)
-    - YJTaskModule/MatchView (= 1.4.4)
-    - YJTaskModule/Model (= 1.4.4)
-    - YJTaskModule/SpeechView (= 1.4.4)
-    - YJTaskModule/TaskItem (= 1.4.4)
-    - YJTaskModule/TitleView (= 1.4.4)
-    - YJTaskModule/TopicCardView (= 1.4.4)
-    - YJTaskModule/TopicView (= 1.4.4)
-    - YJTaskModule/YJCorrect (= 1.4.4)
-    - YJTaskModule/YJFileManager (= 1.4.4)
-    - YJTaskModule/YJProgressView (= 1.4.4)
-    - YJTaskModule/YJSpeechMarkView (= 1.4.4)
-  - YJTaskModule/ActivityIndicatorView (1.4.4)
-  - YJTaskModule/AnswerEditView (1.4.4):
+  - YJTaskModule (1.4.5):
+    - YJTaskModule/ActivityIndicatorView (= 1.4.5)
+    - YJTaskModule/AnswerEditView (= 1.4.5)
+    - YJTaskModule/Base (= 1.4.5)
+    - YJTaskModule/BaseItem (= 1.4.5)
+    - YJTaskModule/Cell (= 1.4.5)
+    - YJTaskModule/Const (= 1.4.5)
+    - YJTaskModule/ImageLabel (= 1.4.5)
+    - YJTaskModule/ListenPlayer (= 1.4.5)
+    - YJTaskModule/MatchView (= 1.4.5)
+    - YJTaskModule/Model (= 1.4.5)
+    - YJTaskModule/SpeechView (= 1.4.5)
+    - YJTaskModule/TaskItem (= 1.4.5)
+    - YJTaskModule/TitleView (= 1.4.5)
+    - YJTaskModule/TopicCardView (= 1.4.5)
+    - YJTaskModule/TopicView (= 1.4.5)
+    - YJTaskModule/YJCorrect (= 1.4.5)
+    - YJTaskModule/YJFileManager (= 1.4.5)
+    - YJTaskModule/YJProgressView (= 1.4.5)
+    - YJTaskModule/YJSpeechMarkView (= 1.4.5)
+  - YJTaskModule/ActivityIndicatorView (1.4.5)
+  - YJTaskModule/AnswerEditView (1.4.5):
     - LGAlertHUD
     - Masonry
     - YJResizableSplitView
     - YJTaskModule/Base
     - YJTaskModule/Const
-  - YJTaskModule/Base (1.4.4):
+  - YJTaskModule/Base (1.4.5):
     - BlocksKit
     - LGAlertHUD
     - MJExtension
     - YJTaskModule/Const
-  - YJTaskModule/BaseItem (1.4.4):
+  - YJTaskModule/BaseItem (1.4.5):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/Model
     - YJTaskModule/TitleView
-  - YJTaskModule/Cell (1.4.4):
+  - YJTaskModule/Cell (1.4.5):
     - LGAlertHUD
     - LGTalk
     - Masonry
@@ -241,24 +241,24 @@ PODS:
     - YJTaskModule/SpeechView
     - YJTaskModule/YJSpeechMarkView
     - YJUtils
-  - YJTaskModule/Const (1.4.4):
+  - YJTaskModule/Const (1.4.5):
     - YJExtensions
-  - YJTaskModule/ImageLabel (1.4.4):
+  - YJTaskModule/ImageLabel (1.4.5):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/ListenPlayer (1.4.4):
+  - YJTaskModule/ListenPlayer (1.4.5):
     - LGAlertHUD
     - Masonry
     - YJSearchController
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/YJProgressView
-  - YJTaskModule/MatchView (1.4.4):
+  - YJTaskModule/MatchView (1.4.5):
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/Model (1.4.4):
+  - YJTaskModule/Model (1.4.5):
     - MJExtension
     - YJNetManager
     - YJTaskMark
@@ -266,7 +266,7 @@ PODS:
     - YJTaskModule/Const
     - YJTaskModule/TopicCardView
     - YJTaskModule/YJFileManager
-  - YJTaskModule/SpeechView (1.4.4):
+  - YJTaskModule/SpeechView (1.4.5):
     - LGAlertHUD
     - Masonry
     - YJSearchController
@@ -274,7 +274,7 @@ PODS:
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/Model
-  - YJTaskModule/TaskItem (1.4.4):
+  - YJTaskModule/TaskItem (1.4.5):
     - Masonry
     - SwipeView
     - YJResizableSplitView
@@ -285,14 +285,14 @@ PODS:
     - YJTaskModule/Model
     - YJTaskModule/TitleView
     - YJTaskModule/TopicView
-  - YJTaskModule/TitleView (1.4.4):
+  - YJTaskModule/TitleView (1.4.5):
     - Masonry
     - YJTaskModule/Const
-  - YJTaskModule/TopicCardView (1.4.4):
+  - YJTaskModule/TopicCardView (1.4.5):
     - Masonry
     - YJTaskModule/Const
     - YJTaskModule/ImageLabel
-  - YJTaskModule/TopicView (1.4.4):
+  - YJTaskModule/TopicView (1.4.5):
     - Masonry
     - YJImageBrowser
     - YJSearchController
@@ -302,15 +302,15 @@ PODS:
     - YJTaskModule/MatchView
     - YJTaskModule/Model
     - YJTaskModule/YJCorrect
-  - YJTaskModule/YJCorrect (1.4.4):
+  - YJTaskModule/YJCorrect (1.4.5):
     - LGAlertHUD
     - Masonry
     - YJTaskModule/Base
     - YJTaskModule/Const
     - YJTaskModule/Model
-  - YJTaskModule/YJFileManager (1.4.4)
-  - YJTaskModule/YJProgressView (1.4.4)
-  - YJTaskModule/YJSpeechMarkView (1.4.4):
+  - YJTaskModule/YJFileManager (1.4.5)
+  - YJTaskModule/YJProgressView (1.4.5)
+  - YJTaskModule/YJSpeechMarkView (1.4.5):
     - Masonry
     - YJTaskModule/Const
   - YJUtils (1.1.4):
@@ -322,6 +322,7 @@ PODS:
   - YJUtils/YJMediaCutter (1.1.4)
 
 DEPENDENCIES:
+  - YJExtensions (~> 1.2.9)
   - YJTaskModule (from `../`)
 
 SPEC REPOS:
@@ -358,22 +359,22 @@ SPEC CHECKSUMS:
   LGLog: a58e542c6c99755d1b8eca492b2acf70a3115731
   LGTalk: fb1a148bf6755b7dd400be3d1068d81459a19a4c
   Masonry: 678fab65091a9290e40e2832a55e7ab731aad201
-  MJExtension: 635f2c663dcb1bf76fa4b715b2570a5710aec545
+  MJExtension: d9b9c74cbdeb724c1e9ecbb157b318276e62e876
   MJRefresh: 53e3e3219f204425ee6d3e62e8733d3295944cd6
   Reachability: 33e18b67625424e47b6cde6d202dce689ad7af96
-  SDWebImage: 84000f962cbfa70c07f19d2234cbfcf5d779b5dc
+  SDWebImage: cf6922231e95550934da2ada0f20f2becf2ceba9
   SwipeView: bd67cfaf7760c036438446b3ccb28a3b84fce009
   XMLDictionary: fa07b6ff422b3a91d47a5de9bc82e3fc04fbd167
-  YJExtensions: f38d0c8b05ea3cd52bde07bdd35bb913065abbc8
-  YJImageBrowser: d879399f8ee957f79333b957c64f5d8258b32277
+  YJExtensions: b02c849ffe62650cec815854c9362031d3034650
+  YJImageBrowser: 4e7832362366afd752f70be0372927ff9359ef02
   YJNetManager: 2de45698355adda77563015b1bf884d468a688db
   YJPresentAnimation: 58af2bfff17028cb286ecd442d418af8997f8740
   YJResizableSplitView: 5ce0f3e8a608552a6f9a8c4d987e589a9c21b17e
   YJSearchController: 77970cc713a6dbb22abb465fb6af2ceb11bb46d9
   YJTaskMark: af9e04cc65cc35344a9286e534aeaa810117f637
-  YJTaskModule: 94fb571e72e1a1476e406850925c7143b895660a
+  YJTaskModule: eae44a5b83b2c41147395edb0ec2d9d3f8086fe5
   YJUtils: ea9694342497fc495c97503f19355e4d576c83fc
 
-PODFILE CHECKSUM: f500a7ccba47323bb95db68447fe69ebb1bf31aa
+PODFILE CHECKSUM: 137682e8cd28f7a17f46ceee5f7533337a3a9c8c
 
 COCOAPODS: 1.9.2

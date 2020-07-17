@@ -6,7 +6,7 @@
 //  Copyright © 2020 lyj. All rights reserved.
 //
 
-#import <YJTaskModule/YJTaskModule.h>
+#import "LGBaseTableViewCell.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
