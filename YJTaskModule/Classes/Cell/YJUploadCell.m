@@ -180,7 +180,7 @@
 - (void)setImgUrl:(NSString *)imgUrl{
     _imgUrl = imgUrl;
     self.imageView.hidden = NO;
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl] placeholderImage:[UIImage yj_imageWithColor:LG_ColorWithHex(0x999999) size:CGSizeMake(LG_ScreenWidth, LG_ScreenHeight)]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:imgUrl.yj_URLQueryAllowedCharacterSet] placeholderImage:[UIImage yj_imageWithColor:LG_ColorWithHex(0x999999) size:CGSizeMake(LG_ScreenWidth, LG_ScreenHeight)]];
 }
 - (UIImageView *)imageView{
     if (!_imageView) {

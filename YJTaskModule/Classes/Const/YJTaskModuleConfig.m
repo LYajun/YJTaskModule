@@ -27,7 +27,7 @@
     [NSUserDefaults yj_setObject:@(self.userType) forKey:YJTaskModule_UserType_UserDefault_Key];
     [NSUserDefaults yj_setObject:@(self.imgAnswerEnable) forKey:YJTaskModule_ImgAnswerEnable_UserDefault_Key];
     [NSUserDefaults yj_setObject:@(self.speechMarkEnable) forKey:YJTaskModule_SpeechMarkEnable_UserDefault_Key];
-    
+    [NSUserDefaults yj_setObject:@(self.speechAnswerEnable) forKey:YJTaskModule_SpeechAnswerEnable_UserDefault_Key];
 }
 
 + (NSString *)currentSysID{

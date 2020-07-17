@@ -9,6 +9,8 @@
 #import "YJViewController.h"
 #import "IEPaperDisplayViewController.h"
 
+#import <Masonry/Masonry.h>
+
 
 @interface YJViewController ()
 
@@ -20,6 +22,7 @@
 {
     [super viewDidLoad];
     self.navigationController.navigationBar.translucent = NO;
+    
 }
 
 - (IBAction)gotoTaskMudule:(id)sender {

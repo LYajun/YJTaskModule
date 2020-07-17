@@ -238,13 +238,13 @@
         __weak typeof(self) weakSelf = self;
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(weakSelf.viewNoData);
-            make.centerY.equalTo(weakSelf.viewNoData).offset(-40);
+            make.centerY.equalTo(weakSelf.viewNoData).offset(IsIPad ? -70 : -50);
         }];
         [_viewNoData addSubview:self.labNoData];
         [self.labNoData mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(weakSelf.viewNoData);
             make.left.equalTo(weakSelf.viewNoData).offset(20);
-            make.top.equalTo(img.mas_bottom).offset(18);
+            make.centerY.equalTo(self.viewNoData).offset(20);
         }];
     }
     return _viewNoData;

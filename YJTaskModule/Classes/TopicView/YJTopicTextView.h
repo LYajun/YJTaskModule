@@ -19,6 +19,9 @@
 @property (nonatomic,strong) NSArray<NSString *> *answerResults;
 @property (nonatomic,strong) NSArray<NSString *> *topicIndexs;
 @property (nonatomic,copy) NSString *topicPintro;
+
+@property (nonatomic,copy) NSString *ImporKnText;
+@property (nonatomic,assign) BOOL ImporKnTextTopic;
 @property (nonatomic,copy) NSString *topicContent;
 - (void)setBlankAttributedString:(NSAttributedString *)blankAttributedString;
 - (void)setTopicContentAttr:(NSAttributedString *) topicContentAttr;

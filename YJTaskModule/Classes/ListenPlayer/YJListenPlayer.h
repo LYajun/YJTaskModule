@@ -31,8 +31,8 @@
 @end
 @interface YJListenPlayer : NSObject
 // 播放音量
-@property (nonatomic) float volume;
-@property (nonatomic) id<YJListenPlayerDelegate> delegate;
+@property (nonatomic,assign) float volume;
+@property (nonatomic,assign) id<YJListenPlayerDelegate> delegate;
 
 // 播放
 - (void)play;

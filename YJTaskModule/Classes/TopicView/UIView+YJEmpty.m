@@ -114,7 +114,7 @@
         [self.noDataView addSubview:img];
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.noDataView);
-            make.centerY.equalTo(self.noDataView).offset(-10);
+            make.centerY.equalTo(self.noDataView).offset(IsIPad ? -70 : -50);
         }];
         self.noDataViewLab = [[UILabel alloc] init];
         self.noDataViewLab.font = [UIFont systemFontOfSize:14];
@@ -124,7 +124,7 @@
         [self.noDataView addSubview:self.noDataViewLab];
         [self.noDataViewLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.width.equalTo(self.noDataView);
-            make.top.equalTo(img.mas_bottom).offset(18);
+            make.centerY.equalTo(self.noDataView).offset(20);
         }];
     }
 }
@@ -136,7 +136,7 @@
         [self.loadErrorView addSubview:img];
         [img mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.equalTo(self.loadErrorView);
-            make.centerY.equalTo(self.loadErrorView).offset(-10);
+            make.centerY.equalTo(self.loadErrorView).offset(-15);
         }];
         self.loadErrorViewLab = [[UILabel alloc]init];
         self.loadErrorViewLab.font = [UIFont systemFontOfSize:14];

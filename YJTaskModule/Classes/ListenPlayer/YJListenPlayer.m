@@ -197,7 +197,7 @@
 }
 - (void)addTimeObserVer{
     __weak typeof(self) playerM = self;
-    _timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 1.0) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
+    _timeObserver = [self.player addPeriodicTimeObserverForInterval:CMTimeMake(1.0, 30.0) queue:dispatch_get_main_queue() usingBlock:^(CMTime time) {
         CGFloat currentTime = CMTimeGetSeconds(time);
         if (playerM.delegate && [playerM.delegate respondsToSelector:@selector(yj_listenPlayer:currentPlayProgress:)]) {
             [playerM.delegate yj_listenPlayer:playerM currentPlayProgress:currentTime];

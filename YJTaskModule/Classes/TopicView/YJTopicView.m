@@ -263,6 +263,24 @@
 #pragma mark UITextView delegate
 - (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange{
     NSString *urlStr = URL.absoluteString;
+    return [self yj_textView:textView didSelectUrl:urlStr];
+}
+- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
+     NSString *urlStr = URL.absoluteString;
+     return [self yj_textView:textView didSelectUrl:urlStr];
+}
+- (BOOL)yj_textView:(UITextView *)textView didSelectUrl:(NSString *)urlStr{
+    if ([urlStr hasPrefix:@"klg:"]) {
+        NSInteger klgIndex = [[urlStr stringByReplacingOccurrencesOfString:@"klg:" withString:@""] integerValue];
+        NSArray *klgIDArr = [self.bigModel.yj_topicImpKlgCode componentsSeparatedByString:@"、"];
+        if (!IsArrEmpty(klgIDArr)) {
+            NSString *klgID = [klgIDArr yj_objectAtIndex:klgIndex];
+            if (!IsStrEmpty(klgID)) {
+                [[NSNotificationCenter defaultCenter] postNotificationName:YJTaskModule_KlgAlert_Notification object:nil userInfo:@{@"code":klgID}];
+            }
+        }
+        return NO;
+    }
     if (!IsStrEmpty(urlStr)) {
         urlStr = [urlStr stringByRemovingPercentEncoding];
         NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
@@ -270,17 +288,6 @@
             [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
         }
     }
-    return NO;
-}
-- (BOOL)textView:(UITextView *)textView shouldInteractWithURL:(NSURL *)URL inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
-     NSString *urlStr = URL.absoluteString;
-     if (!IsStrEmpty(urlStr)) {
-         urlStr = [urlStr stringByRemovingPercentEncoding];
-         NSString *ext = [urlStr componentsSeparatedByString:@"."].lastObject;
-         if (YJTaskSupportImgType(ext)) {
-             [YJImageBrowserView showWithImageUrls:@[urlStr] atIndex:0];
-         }
-     }
     return NO;
 }
 - (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange{
@@ -292,6 +299,9 @@
 }
 - (BOOL)textView:(UITextView *)textView shouldInteractWithTextAttachment:(NSTextAttachment *)textAttachment inRange:(NSRange)characterRange interaction:(UITextItemInteraction)interaction API_AVAILABLE(ios(10.0)){
     if (![textAttachment isKindOfClass:[YJTextAttachment class]]) {
+        return NO;
+    }
+    if (interaction == UITextItemInteractionInvokeDefaultAction && characterRange.length > 0) {
         return NO;
     }
      NSInteger index = [(YJTextAttachment *)textAttachment textIndex];

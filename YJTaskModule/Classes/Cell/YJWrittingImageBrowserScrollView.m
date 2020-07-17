@@ -42,7 +42,7 @@
 }
 - (void)setImageUrl:(NSString *)imageUrl{
     _imageUrl = imageUrl;
-    [self.imageView sd_setImageWithURL:[NSURL URLWithString:self.imageUrl] placeholderImage:[UIImage yj_imageNamed:@"yj_img_placeholder" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()]];
+    [self.imageView sd_setImageWithURL:[NSURL URLWithString:[self.imageUrl stringByAddingPercentEncodingWithAllowedCharacters:[NSCharacterSet URLQueryAllowedCharacterSet]]] placeholderImage:[UIImage yj_imageNamed:@"yj_img_placeholder" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()]];
 }
 #pragma mark - 指定缩放视图（必须得是scrollView的子视图）
 - (UIView *)viewForZoomingInScrollView:(UIScrollView *)scrollView{

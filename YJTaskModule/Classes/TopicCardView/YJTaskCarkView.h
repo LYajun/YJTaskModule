@@ -12,7 +12,7 @@
 
 @optional
 - (void)yj_taskCarkView:(YJTaskCarkView *) cardView didSelectedItemAtIndexPath:(NSIndexPath *) indexPath;
-
+- (void)yj_taskCarkViewDidHide;
 @end
 
 @interface YJTaskCarkView : UIView

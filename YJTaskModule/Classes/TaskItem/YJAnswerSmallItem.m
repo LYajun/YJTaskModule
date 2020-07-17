@@ -167,7 +167,11 @@
                         if (IsStrEmpty(self.smallModel.yj_smallAnswer)) {
                             cell.answerStr = @"";
                         }else{
-                            NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+                            NSString *u2060 = YJTaskModule_u2060;
+                            if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+                                u2060 = YJTaskModule_x2063;
+                            }
+                            NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:u2060];
                             if (indexP.row <= answerStrList.count - 1) {
                                 cell.answerStr = answerStrList[indexP.row];
                             }else{
@@ -286,7 +290,11 @@
                     NSString *answerStr = @"";
                     NSInteger index = indexPath.row - 1;
                     if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
-                        NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+                        NSString *u2060 = YJTaskModule_u2060;
+                        if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+                            u2060 = YJTaskModule_x2063;
+                        }
+                        NSArray *answerStrList = [self.smallModel.yj_smallAnswer componentsSeparatedByString:u2060];
                         if (index <= answerStrList.count - 1) {
                             answerStr = answerStrList[index];
                         }

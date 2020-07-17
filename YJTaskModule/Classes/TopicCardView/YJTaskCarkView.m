@@ -67,7 +67,7 @@
     YJTaskCarkView *cardView = [[YJTaskCarkView alloc] initWithFrame:CGRectMake(0, 0, kTaskCarkViewWidth, kTaskCarkViewHeight)];
      cardView.maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     cardView.maskView.backgroundColor = LG_ColorWithHexA(0x000000, 0.6);
-    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:cardView action:@selector(hide)];
+    UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:cardView action:@selector(manualHide)];
     [cardView.maskView addGestureRecognizer:tap];
 //    [cardView.maskView addSubview:cardView.closeBtn];
 //    [cardView.closeBtn mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -178,6 +178,12 @@
     [self.tableView layoutIfNeeded];
     [self.tableView scrollToRowAtIndexPath:self.indexPath atScrollPosition:UITableViewScrollPositionMiddle animated:NO];
 }
+- (void)manualHide{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(yj_taskCarkViewDidHide)]) {
+        [self.delegate yj_taskCarkViewDidHide];
+    }
+    [self hide];
+}
 - (void)hide{
     __weak typeof(self) weakSelf = self;
     [UIView animateWithDuration:0.2 animations:^(void) {
@@ -208,7 +214,7 @@
     if (!_closeBtn) {
         _closeBtn = [UIButton buttonWithType:UIButtonTypeCustom];
         [_closeBtn setImage:[UIImage yj_imageNamed:@"bk_delete" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
-        [_closeBtn addTarget:self action:@selector(hide) forControlEvents:UIControlEventTouchUpInside];
+        [_closeBtn addTarget:self action:@selector(manualHide) forControlEvents:UIControlEventTouchUpInside];
         _closeBtn.userInteractionEnabled = NO;
     }
     return _closeBtn;

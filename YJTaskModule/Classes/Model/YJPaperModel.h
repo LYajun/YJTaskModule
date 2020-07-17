@@ -161,11 +161,15 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,copy) NSString *TopicTypeName;
 @property (nonatomic,copy) NSString *TopicTypeOtherName;
 @property (nonatomic,copy) NSString *TopicGenreName;
+/** 过关训练大题题型名 */
+@property (nonatomic,copy) NSString *SpecialTopicTypeName;
 /** 改错题信息 */
 @property (nonatomic,strong) YJCorrectModel *GCQues;
 /** 小题List */
 @property (nonatomic,strong) NSArray<YJPaperSmallModel *> *Queses;
 @property (nonatomic,strong) NSArray *QuesOri;
+/** 是否知识点标记题型 */
+@property (nonatomic,assign) BOOL ImporKnTextTopic;
 /** 重要知识点 */
 @property (nonatomic,copy) NSString *ImporKnText;
 /** 次要知识点 */

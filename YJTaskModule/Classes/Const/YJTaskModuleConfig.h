@@ -29,7 +29,7 @@ static NSString *YJTaskModule_ResID_UserDefault_Key = @"YJTaskModule_ResID_UserD
 static NSString *YJTaskModule_UserType_UserDefault_Key = @"YJTaskModule_UserType_UserDefault_Key";
 static NSString *YJTaskModule_ImgAnswerEnable_UserDefault_Key = @"YJTaskModule_ImgAnswerEnable_UserDefault_Key";
 static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_SpeechMarkEnable_UserDefault_Key";
-
+static NSString *YJTaskModule_SpeechAnswerEnable_UserDefault_Key = @"YJTaskModule_SpeechAnswerEnable_UserDefault_Key";
 
 @interface YJTaskModuleConfig : NSObject
 /** 任务ID */
@@ -52,9 +52,10 @@ static NSString *YJTaskModule_SpeechMarkEnable_UserDefault_Key = @"YJTaskModule_
 @property (nonatomic,assign) NSInteger userType;
 /** 是否支持图片作答,默认为NO */
 @property (nonatomic,assign) BOOL imgAnswerEnable;
-/** 是否支持语音作答,默认为NO*/
+/** 是否支持文本作答中的语音识别,默认为NO*/
 @property (nonatomic,assign) BOOL speechMarkEnable;
-
+/** 是否支持语音作答,默认为NO*/
+@property (nonatomic,assign) BOOL speechAnswerEnable;
 /** 保存配置信息 */
 - (void)saveConfigInfo;
 

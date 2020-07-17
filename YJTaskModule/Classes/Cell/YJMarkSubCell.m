@@ -129,10 +129,13 @@
 }
 - (void)setText:(NSString *)text{
     NSArray *pianzhangAnswerArr = nil;
-    
-    if (!IsStrEmpty(text) && !IsStrEmpty(text.yj_deleteWhitespaceAndNewlineCharacter) && [text containsString:YJTaskModule_u2060]) {
-        pianzhangAnswerArr = [text componentsSeparatedByString:YJTaskModule_u2060];
-        text = [text stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@"\n"];
+    NSString *u2060 = YJTaskModule_u2060;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        u2060 = YJTaskModule_x2063;
+    }
+    if (!IsStrEmpty(text) && !IsStrEmpty(text.yj_deleteWhitespaceAndNewlineCharacter) && [text containsString:u2060]) {
+        pianzhangAnswerArr = [text componentsSeparatedByString:u2060];
+        text = [text stringByReplacingOccurrencesOfString:u2060 withString:@"\n"];
         NSMutableString *textCopy = text.mutableCopy;
         while ([textCopy hasSuffix:@" "] || [textCopy hasSuffix:@"\n"]) {
             if ([textCopy hasSuffix:@" "]) {

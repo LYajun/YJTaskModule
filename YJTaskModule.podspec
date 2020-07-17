@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.4.3'
+  s.version          = '1.4.4'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -106,12 +106,24 @@ TODO: Add long description of the pod here.
     s.subspec 'YJSpeechMarkView' do |speechMarkView|
         speechMarkView.source_files = 'YJTaskModule/Classes/YJSpeechMarkView/**/*'
         speechMarkView.dependency 'YJTaskModule/Const'
-
         speechMarkView.dependency 'Masonry'
+    end
+
+     s.subspec 'SpeechView' do |speechView|
+        speechView.source_files = 'YJTaskModule/Classes/SpeechView/**/*'
+        speechView.dependency 'YJTaskModule/Const'
+        speechView.dependency 'YJTaskModule/Base'
+        speechView.dependency 'YJTaskModule/Model'
+        
+        speechView.dependency 'Masonry'
+        speechView.dependency 'YJTaskMark'
+        speechView.dependency 'LGAlertHUD'
+        speechView.dependency 'YJSearchController'
     end
 
     s.subspec 'Cell' do |cell|
         cell.source_files = 'YJTaskModule/Classes/Cell/**/*'
+        cell.dependency 'YJTaskModule/SpeechView'
         cell.dependency 'YJTaskModule/Base'
         cell.dependency 'YJTaskModule/Model'
         cell.dependency 'YJTaskModule/Const'

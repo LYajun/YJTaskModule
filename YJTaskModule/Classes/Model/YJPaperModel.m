@@ -63,7 +63,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 @implementation YJPaperSmallModel
 + (NSArray *)mj_ignoredPropertyNames{
-    return @[@"hash",@"superclass",@"description",@"debugDescription",@"QuesAsk_attr",@"OptionContentList_attr",@"QuesAnswer_attr",@"yj_smallAnswerScore",@"yj_smallAnswerArr",@"yj_smallAnswer",@"yj_smallItemCount",@"ClauseList",@"speechResultModel"];
+    return @[@"hash",@"superclass",@"description",@"debugDescription",@"QuesAsk_attr",@"OptionContentList_attr",@"QuesAnswer_attr",@"yj_smallAnswerScore",@"yj_smallAnswerArr",@"yj_smallAnswer",@"yj_smallItemCount",@"speechResultModel",@"yj_imgUrlArr",@"yj_smallSimpleTextAnswer",@"mutiBlankIndex",@"mutiBlankQuesScore",@"mutiBlankDisplayEnable",@"smallTopicCount",@"TopicTypeName",@"TopicTypeID",@"itemCount"];
 }
 + (NSDictionary *)mj_objectClassInArray{
     return @{
@@ -188,7 +188,11 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     _AnswerImgUrlList = yj_imgUrlArr;
 }
 - (void)setAnswerStr:(NSString *)AnswerStr{
-    if (!IsStrEmpty(AnswerStr) && IsStrEmpty([AnswerStr stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
+    NSString *u2060 = YJTaskModule_u2060;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        u2060 = YJTaskModule_x2063;
+    }
+    if (!IsStrEmpty(AnswerStr) && IsStrEmpty([AnswerStr stringByReplacingOccurrencesOfString:u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         AnswerStr = @"";
     }
     _AnswerStr = AnswerStr;
@@ -211,7 +215,15 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
        self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:@"&nbsp;" withString:@" "];
     }
     if (!IsStrEmpty(self.QuesAnswer) && [self.QuesAnswer containsString:YJTaskModule_u2063]) {
-        self.QuesAnswer = [self.QuesAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2063 withString:@"\n"];
+         NSArray *pianzhangAnswerArr = [self.QuesAnswer componentsSeparatedByString:YJTaskModule_u2063];
+        NSString *pianzhangAnswer = @"";
+        for (int i = 0;i < pianzhangAnswerArr.count;i++) {
+            NSString *pianzhang = pianzhangAnswerArr[i];
+            pianzhang = pianzhang.yj_deleteWhitespaceAndNewlineCharacter;
+            pianzhang = [NSString stringWithFormat:@"%@ %@%@",[NSString yj_stringToSmallTopicIndexStringWithIntCount:i],pianzhang,(i < pianzhangAnswerArr.count-1 ? @"\n" : @"")];
+            pianzhangAnswer = [pianzhangAnswer stringByAppendingString:pianzhang];
+        }
+        self.QuesAnswer = pianzhangAnswer;
     }
     return [NSString yj_filterHTML:self.QuesAnswer];
 }
@@ -280,8 +292,8 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
         score = [NSString stringWithFormat:@"[%.1f分]",self.QuesScore];
     }
     if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
-        if (self.smallTopicCount <= 1) {
-            index = [NSString yj_Char1];
+        if (self.smallTopicCount <= 1 || self.yj_smallItemCount > 1) {
+            index = [NSString stringWithFormat:@"%c",4];
         }
         if (IsStrEmpty(_QuesAsk) && self.smallTopicCount > 1) {
             score = @"____";
@@ -375,10 +387,15 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return nil;
 }
 - (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index{
+    NSString *u2060 = YJTaskModule_u2060;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        u2060 = YJTaskModule_x2063;
+    }
+    
     NSMutableArray *answerArr = [NSMutableArray array];
     NSArray *answerStrList = nil;
     if (!IsStrEmpty(self.yj_smallAnswer)) {
-        answerStrList = [self.yj_smallAnswer componentsSeparatedByString:YJTaskModule_u2060];
+        answerStrList = [self.yj_smallAnswer componentsSeparatedByString:u2060];
     }
     for (int i = 0; i < self.yj_smallQuesAskList.count; i++) {
         if (i == index) {
@@ -391,7 +408,7 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
             }
         }
     }
-    self.yj_smallAnswer = [answerArr componentsJoinedByString:YJTaskModule_u2060];
+    self.yj_smallAnswer = [answerArr componentsJoinedByString:u2060];
 }
 - (YJSmallTopicType)yj_smallTopicType{
     YJSmallTopicType smallType = 0;
@@ -443,7 +460,11 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     if (IsObjEmpty(yj_smallAnswer)) {
         yj_smallAnswer = @"";
     }
-    if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByReplacingOccurrencesOfString:YJTaskModule_u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
+    NSString *u2060 = YJTaskModule_u2060;
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining]) {
+        u2060 = YJTaskModule_x2063;
+    }
+    if (!IsStrEmpty(yj_smallAnswer) && IsStrEmpty([yj_smallAnswer stringByReplacingOccurrencesOfString:u2060 withString:@""].yj_deleteWhitespaceAndNewlineCharacter)) {
         yj_smallAnswer = @"";
     }
     [super setYj_smallAnswer:yj_smallAnswer];
@@ -546,12 +567,12 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 @end
 @implementation YJPaperBigModel
++ (NSArray *)mj_ignoredPropertyNames{
+    return @[@"hash",@"superclass",@"description",@"debugDescription",@"TopicContent_attr",@"TopicArticle_attr",@"yj_bigAnswerTimeCount",@"yj_topicCarkMode",@"yj_bigAnswerTimeSum",@"klgInfoDisplayEnable",@"taskStageTypeTeachAnalysis",@"TopicPintro_copy"];
+}
 
 + (NSDictionary *)mj_objectClassInArray{
     return @{@"Queses":[YJPaperSmallModel class]};
-}
-+ (NSArray *)mj_ignoredPropertyNames{
-    return @[@"hash",@"superclass",@"description",@"debugDescription",@"TopicContent_attr",@"TopicArticle_attr"];
 }
 - (void)setTopicPintroMidea:(NSString *)TopicPintroMidea{
     if (!IsStrEmpty(TopicPintroMidea) && [TopicPintroMidea containsString:@"\\"]) {
@@ -588,7 +609,11 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     _Queses = Queses;
     for (YJPaperSmallModel *smallModel in Queses) {
         smallModel.TopicTypeID = self.TopicTypeID;
-        smallModel.TopicTypeName = self.yj_bigTopicTypeName;
+        if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining] && !IsStrEmpty(self.SpecialTopicTypeName)) {
+            smallModel.TopicTypeName = self.SpecialTopicTypeName;
+        }else{
+            smallModel.TopicTypeName = self.yj_bigTopicTypeName;
+        }
         smallModel.smallTopicCount = Queses.count;
         
         if (!IsStrEmpty(smallModel.QuesAnswer) && [self.TopicTypeID isEqualToString:@"f"] && ![smallModel.QuesAnswer hasSuffix:@"</div>"]) {
@@ -625,7 +650,11 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
             NSString *htmlStr = element.html();
             if ([styleAttr.lowercaseString containsString:@"border:"]) {
                 TopicContent = [TopicContent stringByReplacingOccurrencesOfString:styleAttr withString:@""];
-                TopicContent = [TopicContent stringByReplacingOccurrencesOfString:htmlStr withString:[NSString stringWithFormat:@"<TABLE style=\"border: 1px solid black;\"><TBODY><TR><TD>%@</TD></TR></TBODY></TABLE>",htmlStr]];
+                TopicContent = [TopicContent stringByReplacingOccurrencesOfString:htmlStr withString:[NSString stringWithFormat:@"<TABLE style=\"border: 1px solid black;\"><TD>%@</TD></TABLE>",htmlStr]];
+                if ([TopicContent.lowercaseString containsString:@"</table></div></div>"]) {
+                    TopicContent = [TopicContent stringByReplacingOccurrencesOfString:@"</table></div></div>" withString:@"</table></div></div><p>" options:NSCaseInsensitiveSearch range:NSMakeRange(0, TopicContent.length)];
+                    TopicContent = [TopicContent stringByAppendingString:@"</p>"];
+                }
             }
         }
         
@@ -751,6 +780,17 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     }
     _Main = Main;
 }
+- (BOOL)yj_imporKnTextTopic{
+    return self.ImporKnTextTopic;
+}
+- (NSString *)yj_topicImpKlgCode{
+    NSString *ImporKnCode = @"";
+   if (!IsStrEmpty(self.ImportantKlg)) {
+        ImporKnCode = [self.ImportantKlg stringByReplacingOccurrencesOfString:@"|" withString:@"、"];
+    }
+    return ImporKnCode;
+}
+
 - (NSString *)yj_topicImpKlgInfo{
     if (self.ImporKnTextHidden) {
         return @"无";
@@ -1066,6 +1106,9 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 }
 @end
 @implementation YJPaperModel
++ (NSArray *)mj_ignoredPropertyNames{
+    return @[@"hash",@"superclass",@"description",@"debugDescription",@"yj_taskStageType",@"yj_taskStageTypeTeachAnalysis",@"yj_taskKlgInfoDisplayEnable",@"yj_answerTimeAdd",@"yj_currentBigIndex"];
+}
 + (NSDictionary *)mj_objectClassInArray{
     return @{@"Topics":[YJPaperBigModel class]};
 }

@@ -155,7 +155,9 @@ NS_ASSUME_NONNULL_BEGIN
 /** 是否显示知识点信息 */
 - (BOOL)yj_showTopicKlgInfo;
 /** 重要知识点 */
+- (BOOL)yj_imporKnTextTopic;
 - (NSString *)yj_topicImpKlgInfo;
+- (NSString *)yj_topicImpKlgCode;
 /** 次重要知识点 */
 - (NSString *)yj_topicMainKlgInfo;
 /** 大题题干导语信息 */

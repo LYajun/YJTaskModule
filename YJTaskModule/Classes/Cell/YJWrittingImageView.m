@@ -84,7 +84,8 @@ static NSInteger maxUploadCount = 3;
     NSMutableArray *fileNames = [NSMutableArray array];
     for (UIImage *image in imgArr) {
         [fileNames addObject:[NSString stringWithFormat:@"%.f-%li.png",[[NSDate date] timeIntervalSince1970],imageDatas.count]];
-        [imageDatas addObject:UIImageJPEGRepresentation([UIImage yj_fixOrientation:image], 0.5)];
+        NSData *imgData = [image yj_compressImageOnlength:200];
+        [imageDatas addObject:imgData];
     }
     uploadModel.uploadDatas = imageDatas;;
     uploadModel.name = @"file";
@@ -175,7 +176,9 @@ static NSInteger maxUploadCount = 3;
    [LGAlert showIndeterminateWithStatus:@"上传图片..."];
     [[YJNetManager defaultManager].setRequest(urlStr).setParameters(params) uploadFileWithBlock:^(id<AFMultipartFormData>  _Nonnull formData) {
         for (int i = 0; i <imgArr.count; i++) {
-            [formData appendPartWithFileData:UIImageJPEGRepresentation([imgArr objectAtIndex:i], 0.5) name:@"userHeader" fileName:[NSString stringWithFormat:@"iOS%d%@.png",i+1,timeStr] mimeType:@"image/png"];
+            UIImage *image = imgArr[i];
+             NSData *imgData = [image yj_compressImageOnlength:200];
+            [formData appendPartWithFileData:imgData name:@"userHeader" fileName:[NSString stringWithFormat:@"iOS%d%@.png",i+1,timeStr] mimeType:@"image/png"];
         }
     } progress:^(NSProgress * _Nonnull progress) {
         
@@ -251,7 +254,8 @@ static NSInteger maxUploadCount = 3;
     NSMutableArray *fileNames = [NSMutableArray array];
     for (UIImage *image in imgArr) {
         [fileNames addObject:[NSString stringWithFormat:@"%@%li.png",[[NSUUID UUID] UUIDString],imageDatas.count]];
-        [imageDatas addObject:UIImageJPEGRepresentation([UIImage yj_fixOrientation:image], 0.5)];
+        NSData *imgData = [image yj_compressImageOnlength:200];
+        [imageDatas addObject:imgData];
     }
     uploadModel.uploadDatas = imageDatas;;
     uploadModel.name = @"file";

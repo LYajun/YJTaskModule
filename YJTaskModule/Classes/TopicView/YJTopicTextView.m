@@ -64,6 +64,42 @@
     self.textContainerInset = UIEdgeInsetsZero;//上下间距为零
     _blankTextFieldArray = nil;
     _blankRangeArray = nil;
+    
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(addGestureRecognizer:)];
+    [self addGestureRecognizer:tapRecognizer];
+}
+- (void)addGestureRecognizer:(UIGestureRecognizer *)gestureRecognizer{
+    if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]){
+        UITextView *textView = (UITextView*)gestureRecognizer.view;
+        CGPoint tapLocation = [gestureRecognizer locationInView:textView];
+        UITextPosition *textPosition = [textView closestPositionToPoint:tapLocation];
+        NSDictionary *attributes = [textView textStylingAtPosition:textPosition inDirection:UITextStorageDirectionBackward];
+        YJTextAttachment *textAttachment = attributes[NSAttachmentAttributeName];
+        NSString *linkStr = attributes[NSLinkAttributeName];
+        if(textAttachment) {
+            if (@available(iOS 10.0, *)) {
+                if([self.delegate conformsToProtocol:@protocol(UITextViewDelegate)] && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithTextAttachment:inRange:interaction:)]) {
+                    [self.delegate textView:self shouldInteractWithTextAttachment:textAttachment inRange:NSMakeRange(0, 0) interaction:UITextItemInteractionInvokeDefaultAction];
+                }
+            } else {
+                if([self.delegate conformsToProtocol:@protocol(UITextViewDelegate)] && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithTextAttachment:inRange:)]) {
+                    [self.delegate textView:self shouldInteractWithTextAttachment:textAttachment inRange:NSMakeRange(0, 0)];
+                }
+            }
+        }else if (!IsStrEmpty(linkStr) && [linkStr hasPrefix:@"klg:"]){
+            if (@available(iOS 10.0, *)) {
+                if([self.delegate conformsToProtocol:@protocol(UITextViewDelegate)] && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:interaction:)]) {
+                    [self.delegate textView:self shouldInteractWithURL:[NSURL URLWithString:linkStr] inRange:NSMakeRange(0, 0) interaction:UITextItemInteractionInvokeDefaultAction];
+                }
+            } else {
+                if([self.delegate conformsToProtocol:@protocol(UITextViewDelegate)] && [self.delegate respondsToSelector:@selector(textView:shouldInteractWithURL:inRange:)]) {
+                    [self.delegate textView:self shouldInteractWithURL:[NSURL URLWithString:linkStr] inRange:NSMakeRange(0, 0)];
+                }
+            }
+        }
+
+    }
+    [super addGestureRecognizer:gestureRecognizer];
 }
 #pragma mark setter
 - (void)setBlankAttributedString:(NSAttributedString *)blankAttributedString {
@@ -117,7 +153,9 @@
     }
     
     [self strongWithAttr:blankAttrString];
-    
+    if (self.ImporKnTextTopic) {
+        [self klgWithAttr:blankAttrString];
+    }
     [self tableWithAttr:blankAttrString];
     self.attributedText = blankAttrString;
 }
@@ -134,7 +172,9 @@
    
     
     [self strongWithAttr:attr];
-    
+    if (self.ImporKnTextTopic) {
+        [self klgWithAttr:attr];
+    }
     [self tableWithAttr:attr];
     
     self.attributedText = attr;
@@ -163,6 +203,44 @@
         }
     }
 }
+- (void)klgWithAttr:(NSMutableAttributedString *)attr{
+    NSArray *klgArr = [self.ImporKnText componentsSeparatedByString:@"、"];
+    if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_SpecialTraining] && !IsStrEmpty(self.topicContent) && !IsArrEmpty(klgArr)) {
+       NSString *textAttrStr = attr.string;
+       NSMutableArray *allKeys = [NSMutableArray array];
+       for (NSInteger i = 0;i < klgArr.count;i++) {
+            NSString *substr = klgArr[i];
+           if ([substr containsString:@" "]) {
+               NSRange range = [textAttrStr rangeOfString:substr options:NSCaseInsensitiveSearch];
+               if (range.location != NSNotFound) {
+                   [attr addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleThick | NSUnderlinePatternDot] range:range];
+                   [attr addAttribute:NSLinkAttributeName value:[NSString stringWithFormat:@"klg:%@",@(i)] range:range];
+               }
+           }else{
+               [allKeys addObject:substr];
+           }
+       }
+        NSMutableArray *addArr = [NSMutableArray array];
+       [textAttrStr enumerateSubstringsInRange:NSMakeRange(0, attr.string.length-1) options:NSStringEnumerationByWords usingBlock:^(NSString *substring, NSRange substringRange, NSRange enclosingRange, BOOL *stop) {
+           if (([allKeys containsObject:substring] || [allKeys containsObject:substring.lowercaseString] || [allKeys containsObject:substring.uppercaseString]) && ![addArr containsObject:substring]){
+               NSInteger index = -1;
+               if ([allKeys containsObject:substring]) {
+                   index = [klgArr indexOfObject:substring];
+               }else if ([allKeys containsObject:substring.lowercaseString]){
+                   index = [klgArr indexOfObject:substring.lowercaseString];
+               }else if ([allKeys containsObject:substring.uppercaseString]){
+                   index = [klgArr indexOfObject:substring.uppercaseString];
+               }
+               if (index >= 0) {
+                   [addArr addObject:substring];
+                   [attr addAttribute:NSUnderlineStyleAttributeName value:[NSNumber numberWithInteger:NSUnderlineStyleThick | NSUnderlinePatternDot] range:substringRange];
+                   [attr addAttribute:NSLinkAttributeName value:[NSString stringWithFormat:@"klg:%@",@(index)] range:substringRange];
+               }
+           }
+       }];
+    }
+}
+
 - (void)strongWithAttr:(NSMutableAttributedString *)attr{
     if (!IsStrEmpty(self.topicContent) && [self.topicContent.lowercaseString containsString:@"<strong"]) {
         YJEGumboDocument *document = [[YJEGumboDocument alloc] initWithHTMLString:self.topicContent];
@@ -273,7 +351,14 @@
 - (NSArray<NSString *> *)answerResults{
     NSMutableArray *blankAnswers = [NSMutableArray array];
     for (YJBlankTextField *textField in self.blankTextFieldArray) {
-        [blankAnswers  addObject:textField.text];
+        NSString *answer = textField.text;
+         if (!IsStrEmpty(answer) && !IsStrEmpty(textField.placeholder)) {
+             NSString *prefix = [NSString stringWithFormat:@"%@.",textField.placeholder];
+             if ([answer hasPrefix:prefix]) {
+                 answer = [answer substringFromIndex:prefix.length];
+             }
+         }
+        [blankAnswers addObject:answer];
     }
     return blankAnswers.copy;
 }

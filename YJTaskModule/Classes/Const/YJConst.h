@@ -38,17 +38,20 @@
 
 
 static NSString *YJTaskModule_StopYJTaskTopicVoicePlay_Notification = @"YJTaskModule_StopYJTaskTopicVoicePlay_Notification";
+static NSString *YJTaskModule_KlgAlert_Notification = @"YJTaskModule_KlgAlert_Notification";
 
 
 static NSString *YJTaskBundle_Cell = @"Cell";
 static NSString *YJTaskBundle_Empty = @"EmptyPage";
 static NSString *YJTaskBundle_ListenView = @"ListenView";
+static NSString *YJTaskBundle_SpeechAnswer = @"SpeechAnswer";
 
 NSBundle *YJTaskBundle(void);
 
 
 static NSString *YJTaskModule_u2060 = @"\u2060";
 static NSString *YJTaskModule_u2063 = @"\u2063";
+static NSString *YJTaskModule_x2063 = @"&#x2063;";
 
 NSArray *YJTaskSupportTextTypes(void);
 NSArray *YJTaskSupportAudioTypes(void);
