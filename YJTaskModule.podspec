@@ -121,6 +121,7 @@ TODO: Add long description of the pod here.
         speechView.dependency 'YJTaskMark'
         speechView.dependency 'LGAlertHUD'
         speechView.dependency 'YJSearchController'
+        speechView.dependency 'YJUtils'
     end
 
     s.subspec 'Cell' do |cell|
