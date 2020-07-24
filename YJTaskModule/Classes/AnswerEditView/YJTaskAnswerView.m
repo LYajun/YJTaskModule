@@ -13,6 +13,7 @@
 
 @interface YJTaskAnswerView ()
 @property (nonatomic,copy) NSString *text;
+@property (nonatomic,copy) NSString *sureTitle;
 @property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
 @end
 @implementation YJTaskAnswerView
@@ -30,11 +31,16 @@
     editView.keyboardHideBlock = ^{
         [weakSelf hide];
     };
+    editView.sureTitle = self.sureTitle;
     editView.textView.text = self.text;
 }
 + (instancetype)showWithText:(NSString *)text answerResultBlock:(void (^)(NSString *))answerResultBlock{
+    return [self showWithText:text sureTitle:@"确定" answerResultBlock:answerResultBlock];
+}
++ (instancetype)showWithText:(NSString *)text sureTitle:(NSString *)sureTitle answerResultBlock:(void (^)(NSString *))answerResultBlock{
     YJTaskAnswerView *subView = [[YJTaskAnswerView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     subView.text = text;
+    subView.sureTitle = sureTitle;
     subView.answerResultBlock = answerResultBlock;
     [subView layoutUI];
     [subView show];

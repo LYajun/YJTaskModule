@@ -6,10 +6,13 @@
 //  Copyright © 2019 刘亚军. All rights reserved.
 //
 
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
 #import "YJBasePaperModel.h"
 #import "YJSpeechClauseModel.h"
 #import "YJSpeechSaveModel.h"
 #import "YJCorrectModel.h"
+#import "YJSpeechTalkModel.h"
 #import <YJTaskMark/YJSpeechResultModel.h>
 
 @interface YJPaperTextAttachment: NSTextAttachment
@@ -20,6 +23,8 @@
 @end
 NS_ASSUME_NONNULL_BEGIN
 @interface YJPaperSmallModel : YJBasePaperSmallModel
+/** 点赞数 */
+@property (nonatomic,assign) NSInteger goodCount;
 /** 电子教材库-评语 */
 @property (nonatomic,copy) NSString *PyResult;
 @property (nonatomic,strong) NSArray *AnswerImgUrlList;
@@ -88,6 +93,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,strong) NSArray<YJSpeechSaveScoreModel *> *ScoreInfoList;
 /** 翻译题的断句List */
 @property (nonatomic,strong) NSArray *QuesAskList;
+/** 评论列表 */
+@property (nonatomic,strong) NSArray<YJSpeechTalkModel *> *evaList;
 /** 新增 - 大题题型ID */
 @property (nonatomic,copy) NSString *TopicTypeID;
 /** 新增 - 小题作答点数 */

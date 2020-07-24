@@ -71,6 +71,8 @@ typedef NS_ENUM(NSInteger, YJSmallTopicType) {
 NS_ASSUME_NONNULL_BEGIN
 @protocol YJPaperSmallProtocol <NSObject>
 @optional
+/** 大题ID */
+- (NSString *)yj_smallTopicID;
 /** 翻译题断句List */
 - (NSArray *)yj_smallQuesAskList;
 /** 小题作答类型 */
@@ -139,6 +141,11 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSString *)yj_assignmentID;
 /** 离线文件夹路径 */
 - (NSString *)yj_offlineFileDir;
+
+/** 评论列表 */
+- (NSArray *)yj_smallSpeechTalkList;
+/** 点赞数 */
+- (NSInteger)yj_smallSpeechGoodCount;
 @end
 
 @protocol YJPaperBigProtocol <NSObject>

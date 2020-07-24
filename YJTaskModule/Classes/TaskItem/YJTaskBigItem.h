@@ -31,12 +31,19 @@
 - (instancetype)initWithFrame:(CGRect)frame
                     bigPModel:(YJBasePaperBigModel *) bigPModel
                 taskStageType:(YJTaskStageType) taskStageType
+                ownController:(UIViewController *)ownController;
+
+- (instancetype)initWithFrame:(CGRect)frame
+                    bigPModel:(YJBasePaperBigModel *) bigPModel
+                taskStageType:(YJTaskStageType) taskStageType
                    taskPModel:(YJBasePaperModel *) taskPModel;
+
 - (void)startListen;
 - (void)stopListen;
 - (void)pauseListen;
 
 - (void)updateCurrentSmallItemWithAnswer:(NSString *)answer;
+- (void)updateCurrentSmallItemWithAnswer:(NSString *)answer speechPath:(NSString *)speechPath;
 - (void)updateTopicCardCurrentSmallItemWithAnswer:(NSString *)answer;
 
 @end

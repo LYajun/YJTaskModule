@@ -20,6 +20,7 @@
 @end
 
 @interface YJTaskBaseSmallItem : UIView
+@property (nonatomic,weak) UIViewController *ownController;
 @property (nonatomic,assign) id<YJTaskBaseSmallItemDelegate> delegate;
 @property (nonatomic,assign) NSInteger totalTopicCount;
 @property (nonatomic,assign) BOOL lastSmallItem;

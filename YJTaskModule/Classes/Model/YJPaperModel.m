@@ -63,12 +63,13 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
 
 @implementation YJPaperSmallModel
 + (NSArray *)mj_ignoredPropertyNames{
-    return @[@"hash",@"superclass",@"description",@"debugDescription",@"QuesAsk_attr",@"OptionContentList_attr",@"QuesAnswer_attr",@"yj_smallAnswerScore",@"yj_smallAnswerArr",@"yj_smallAnswer",@"yj_smallItemCount",@"speechResultModel",@"yj_imgUrlArr",@"yj_smallSimpleTextAnswer",@"mutiBlankIndex",@"mutiBlankQuesScore",@"mutiBlankDisplayEnable",@"smallTopicCount",@"TopicTypeName",@"TopicTypeID",@"itemCount"];
+    return @[@"hash",@"superclass",@"description",@"debugDescription",@"QuesAsk_attr",@"OptionContentList_attr",@"QuesAnswer_attr",@"yj_smallAnswerScore",@"yj_smallAnswerArr",@"yj_smallAnswer",@"yj_smallItemCount",@"speechResultModel",@"yj_imgUrlArr",@"yj_smallSimpleTextAnswer",@"mutiBlankIndex",@"mutiBlankQuesScore",@"mutiBlankDisplayEnable",@"smallTopicCount",@"TopicTypeName",@"TopicTypeID",@"itemCount",@"yj_recordAnswerUrl",@"yj_recordAnswerText",@"yj_uploadAnswerUrl",@"yj_uploadAnswerText",@"yj_subjectAnswerType"];
 }
 + (NSDictionary *)mj_objectClassInArray{
     return @{
              @"ClauseList":[YJSpeechClauseModel class],
-             @"ScoreInfoList":[YJSpeechSaveScoreModel class]
+             @"ScoreInfoList":[YJSpeechSaveScoreModel class],
+             @"evaList":[YJSpeechTalkModel class]
              };
 }
 - (NSString *)yj_filterPBrHtml:(NSString *)html{
@@ -564,7 +565,15 @@ NSString *YJTaskModuleHandleImgLabInfo(NSString *htmlStr){
     return assignmentID;
 }
 
-
+- (NSArray *)yj_smallSpeechTalkList{
+    return self.evaList;
+}
+- (NSInteger)yj_smallSpeechGoodCount{
+    return self.goodCount;
+}
+- (NSString *)yj_smallTopicID{
+    return self.TopicID;
+}
 @end
 @implementation YJPaperBigModel
 + (NSArray *)mj_ignoredPropertyNames{

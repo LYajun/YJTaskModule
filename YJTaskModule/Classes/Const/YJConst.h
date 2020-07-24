@@ -62,3 +62,4 @@ BOOL YJTaskSupportTextType(NSString *ext);
 BOOL YJTaskSupportAudioType(NSString *ext);
 BOOL YJTaskSupportVideoType(NSString *ext);
 BOOL YJTaskSupportImgType(NSString *ext);
+NSTimeInterval YJTaskAudioDurationFromURL(NSString *url);

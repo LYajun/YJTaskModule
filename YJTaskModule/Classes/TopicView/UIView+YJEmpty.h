@@ -8,6 +8,8 @@
 #import <UIKit/UIKit.h>
 
 @interface UIView (YJEmpty)
+@property (assign, nonatomic) CGFloat emptyTopSpace;
+@property (assign, nonatomic) CGFloat emptyBottomSpace;
 @property (strong, nonatomic) UIView *loadingView;
 @property (strong, nonatomic) UIView *viewTitleLoading;
 @property (strong, nonatomic) UILabel *titleLoadingLab;

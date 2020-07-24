@@ -16,6 +16,7 @@
 #import "YJSpeechResModel.h"
 #import "YJSpeechResultModel.h"
 #import "YJSpeechTimer.h"
+#import "KYNativeAudio.h"
 #import "KYPlayer.h"
 #import "KYRecorder.h"
 #import "KYWavHeader.h"

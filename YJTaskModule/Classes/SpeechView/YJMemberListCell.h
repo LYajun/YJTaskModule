@@ -12,7 +12,13 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YJMemberListCell : LGBaseTableViewCell
-
+@property (nonatomic,copy) NSString *name;
+@property (nonatomic,assign) BOOL choice;
 @end
 
+
+
+@interface YJTaskSearchBar : UITextField
+@property (nonatomic, copy) void(^removeBlock)(void);
+@end
 NS_ASSUME_NONNULL_END

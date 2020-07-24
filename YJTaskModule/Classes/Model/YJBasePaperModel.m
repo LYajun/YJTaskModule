@@ -83,7 +83,13 @@
             break;
         case YJTaskStageTypeHp:
         case YJTaskStageTypeHpViewer:
-            SmallItem = NSClassFromString(@"YJHpSmallItem");
+        {
+            if ([[YJTaskModuleConfig currentSysID] isEqualToString:YJTaskModule_SysID_Multimedia]) {
+                SmallItem = NSClassFromString(@"MFHpSmallItem");
+            }else{
+                SmallItem = NSClassFromString(@"YJHpSmallItem");
+            }
+        }
             break;
         case YJTaskStageTypeAnaLysisTopicViewer:
             SmallItem = NSClassFromString(@"YJStatisticTopicClassLookTopicDetailSmallItem");

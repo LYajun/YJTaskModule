@@ -42,7 +42,7 @@ static CGFloat kSoundOffset = 10;
 @property (nonatomic,copy) void (^initBlock) (BOOL success);
 @property (nonatomic,copy) void (^speechResultBlock) (YJSpeechResultModel *resultModel);
 @property (nonatomic,copy) void (^soundIntensityBlock) (CGFloat sound,CGFloat silentTime);
-
+@property (nonatomic,copy) void (^speechStartBlock) (void);
 /**
  当连续评测前，先强制关闭上次的，再开始下一次，但不输出上次评测结果
  */
@@ -130,7 +130,12 @@ static CGFloat kSoundOffset = 10;
     return _markTimeout;
 }
 - (void)startEngineAtRefText:(NSString *)refText markType:(YJSpeechMarkType)markType{
-   
+    [self startEngineAtRefText:refText markType:markType fileASR:NO];
+}
+- (void)startEngineAtRefText:(NSString *)refText markType:(YJSpeechMarkType)markType fileASR:(BOOL)fileASR{
+   if (self.speechStartBlock) {
+       self.speechStartBlock();
+   }
     self.markType = markType;
     self.refText = refText;
     self.isMarking = YES;
@@ -170,10 +175,17 @@ static CGFloat kSoundOffset = 10;
     }else{
         config.coreType = KYTestType_ASR;
     }
-    config.refText = refText;
+    if (fileASR) {
+        config.audioPath = refText;
+        NSString *ext = refText.pathExtension.lowercaseString;
+        self.isEndMark = YES;
+        config.audioType = ext;
+    }else{
+        config.refText = refText;
+        config.audioType = @"wav";
+    }
     config.phonemeOption = KYPhonemeOption_KK;
     config.soundIntensityEnable = YES;
-    config.audioType = @"wav";
     config.sampleRate = 16000;
     config.sampleBytes = 2;
     __weak typeof(self) weakSelf = self;
@@ -202,7 +214,7 @@ static CGFloat kSoundOffset = 10;
         if (!self.isEndMark) {
             NSLog(@"评测异常结束");
         }
-        if (!self.isMarking && ![result isEqualToString:@"评测超时"]) {
+        if (!self.isMarking && ![result isEqualToString:@"评测超时"] && ![result isEqualToString:@"语音识别超时"]) {
             return;
         }
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -310,6 +322,9 @@ static CGFloat kSoundOffset = 10;
 - (void)initResult:(void (^)(BOOL))resultBlock{
     _initBlock = resultBlock;
 }
+- (void)speechEngineStartBLock:(void (^)(void))startBlock{
+    _speechStartBlock = startBlock;
+}
 - (void)speechEngineResult:(void (^)(YJSpeechResultModel *))resultBlock{
     _speechResultBlock = resultBlock;
 }
@@ -358,7 +373,11 @@ static CGFloat kSoundOffset = 10;
         weakSelf.timeoutCount += 1;
         if (weakSelf.timeoutCount >= weakSelf.markTimeout) {
             [weakSelf cancelEngine];
-            [weakSelf showResult:@"评测超时"];
+            if (weakSelf.markType == YJSpeechMarkTypeASR) {
+                 [weakSelf showResult:@"语音识别超时"];
+            }else{
+                [weakSelf showResult:@"评测超时"];
+            }
         }
     });
 }

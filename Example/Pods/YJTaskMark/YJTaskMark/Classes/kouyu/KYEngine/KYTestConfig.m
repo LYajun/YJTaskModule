@@ -18,6 +18,7 @@
         self.channel = 1;
 
         self.phoneme_output = YES;
+        self.audioType = @"wav";
     }
     return self;
 }

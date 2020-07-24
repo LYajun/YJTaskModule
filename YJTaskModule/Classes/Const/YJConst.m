@@ -7,7 +7,7 @@
 //
 
 #import "YJConst.h"
-
+#import <AVFoundation/AVFoundation.h>
 
 @interface YJBundleModel : NSObject
 
@@ -92,4 +92,17 @@ BOOL YJTaskSupportVideoType(NSString *ext){
         }
     }
     return NO;
+}
+
+NSTimeInterval YJTaskAudioDurationFromURL(NSString *url){
+    AVURLAsset *audioAsset = nil;
+    NSDictionary *dic = @{AVURLAssetPreferPreciseDurationAndTimingKey:@(YES)};
+    if ([url hasPrefix:@"http"]) {
+        audioAsset = [AVURLAsset URLAssetWithURL:[NSURL URLWithString:url] options:dic];
+    }else {
+        audioAsset = [AVURLAsset URLAssetWithURL:[NSURL fileURLWithPath:url] options:dic];
+    }
+    CMTime audioDuration = audioAsset.duration;
+    float audioDurationSeconds = CMTimeGetSeconds(audioDuration);
+    return audioDurationSeconds;
 }

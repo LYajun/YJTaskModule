@@ -25,6 +25,17 @@ NS_ASSUME_NONNULL_BEGIN
 /** 图片数组*/
 @property (nonatomic,strong) NSArray *yj_imgUrlArr;
 
+/** 主观题作答模式：0-文本，1-图片，2-录音，3-上传 */
+@property (nonatomic,assign) NSInteger yj_subjectAnswerType;
+/** 录音作答音频路径 */
+@property (nonatomic,copy) NSString *yj_recordAnswerUrl;
+/** 录音作答识别文本 */
+@property (nonatomic,copy) NSString *yj_recordAnswerText;
+/** 上传录音作答音频路径 */
+@property (nonatomic,copy) NSString *yj_uploadAnswerUrl;
+/** 上传录音作答识别文本 */
+@property (nonatomic,copy) NSString *yj_uploadAnswerText;
+
 - (void)updateSmallAnswerStr:(NSString *)answer atIndex:(NSInteger)index;
 @end
 

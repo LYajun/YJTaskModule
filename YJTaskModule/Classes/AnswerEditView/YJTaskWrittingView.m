@@ -286,3 +286,182 @@
     return _topicTextView;
 }
 @end
+
+#pragma mark -
+
+@interface YJTaskTextEditView ()<LGBaseTextViewDelegate>
+@property (nonatomic,strong) YJTaskWrittingTextView *textView;
+@property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
+@property (nonatomic,strong) UILabel *titleLab;
+/** 是否发生更改 */
+@property (nonatomic,assign) BOOL isUpdate;
+@end
+
+@implementation YJTaskTextEditView
+- (instancetype)initWithFrame:(CGRect)frame{
+    if (self = [super initWithFrame:frame]) {
+        self.backgroundColor = [UIColor whiteColor];
+        [self layouyUI];
+    }
+    return self;
+}
+- (void)layouyUI{
+    UIView *navBar = [UIView new];
+    [self addSubview:navBar];
+    [navBar mas_makeConstraints:^(MASConstraintMaker *make) {
+       make.left.top.right.equalTo(self);
+       make.height.mas_equalTo([self yj_customNavBarHeight]);
+    }];
+    [navBar yj_setGradientBackgroundWithColors:@[LG_ColorWithHex(0x04caf4),LG_ColorWithHex(0x23a1fa)] locations:nil startPoint:CGPointMake(0, 0) endPoint:CGPointMake(1, 0)];
+    UIButton *backBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    backBtn.tag = 1;
+    [backBtn setTitle:@"取消" forState:UIControlStateNormal];
+    [backBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    backBtn.titleLabel.font = LG_SysFont(15);
+    [backBtn addTarget:self action:@selector(hide:) forControlEvents:UIControlEventTouchUpInside];
+    [navBar addSubview:backBtn];
+    [backBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+       make.top.equalTo(navBar.mas_top).offset(28 + [self yj_stateBarSpace]);
+       make.left.equalTo(navBar.mas_left).offset(10);
+       make.height.mas_equalTo(25);
+       make.width.mas_equalTo(40);
+    }];
+    UIButton *sureBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+    sureBtn.tag = 2;
+    [sureBtn setTitle:@"完成" forState:UIControlStateNormal];
+    [sureBtn setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+    sureBtn.titleLabel.font = LG_SysFont(15);
+    [sureBtn addTarget:self action:@selector(hide:) forControlEvents:UIControlEventTouchUpInside];
+    [navBar addSubview:sureBtn];
+    [sureBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+       make.top.equalTo(navBar.mas_top).offset(28+[self yj_stateBarSpace]);
+       make.right.equalTo(navBar.mas_right).offset(-10);
+       make.height.mas_equalTo(25);
+       make.width.mas_equalTo(40);
+    }];
+
+    UILabel *titleL = [UILabel new];
+    titleL.textAlignment = NSTextAlignmentCenter;
+    titleL.font = [UIFont systemFontOfSize:17];
+    titleL.textColor = [UIColor whiteColor];
+    titleL.text = @"作文题";
+    self.titleLab = titleL;
+    [navBar addSubview:titleL];
+    [titleL mas_makeConstraints:^(MASConstraintMaker *make) {
+       make.centerX.equalTo(navBar);
+       make.bottom.equalTo(navBar.mas_bottom).offset(-13);
+       make.left.equalTo(backBtn.mas_right).offset(10);
+    }];
+    
+    [self addSubview:self.textView];
+    [self.textView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerX.left.bottom.equalTo(self);
+        make.top.equalTo(navBar.mas_bottom);
+    }];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewWillDidBeginEditingNoti:) name:LGUITextViewWillDidBeginEditingCursorNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(textViewWillDidEndEditingNoti:) name:LGUITextViewWillDidEndEditingNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(enterBackgroundNoti) name:UIApplicationWillResignActiveNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hide) name:@"YJAnswerTimerDidFinishCountdown" object:nil];
+}
++ (instancetype)showWithText:(NSString *)text answerResultBlock:(void (^)(NSString *))answerResultBlock{
+    YJTaskTextEditView *editView = [[YJTaskTextEditView alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    editView.answerResultBlock = answerResultBlock;
+    editView.textView.text = text;
+    [editView show];
+    return editView;
+}
+#pragma mark NSNotification action
+- (void)dealloc{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
+}
+
+- (void)enterBackgroundNoti{
+    [self endEditing:YES];
+}
+
+- (void)textViewWillDidBeginEditingNoti:(NSNotification *) noti{
+    NSDictionary *info = noti.userInfo;
+    CGFloat overstep = [[info objectForKey:@"offset"] floatValue];
+
+    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self).offset(-overstep);
+    }];
+}
+- (void)textViewWillDidEndEditingNoti:(NSNotification *) noti{
+    [self.textView mas_updateConstraints:^(MASConstraintMaker *make) {
+        make.bottom.equalTo(self).offset(0);
+    }];
+}
+#pragma mark - LGBaseTextViewDelegate
+- (void)yj_textViewDidChange:(LGBaseTextView *)textView{
+    self.isUpdate = YES;
+}
+- (void)setTitleStr:(NSString *)titleStr{
+    _titleStr = titleStr;
+    self.titleLab.text = titleStr;
+}
+- (void)show{
+    UIWindow *rootWindow = [UIApplication sharedApplication].keyWindow;
+    [rootWindow addSubview:self];
+    [self creatShowAnimation];
+    
+    [self.textView becomeFirstResponder];
+}
+- (void)creatShowAnimation{
+    self.transform = CGAffineTransformMakeScale(0.90, 0.90);
+    [UIView animateWithDuration:0.25 delay:0 usingSpringWithDamping:0.8 initialSpringVelocity:1 options:UIViewAnimationOptionCurveLinear animations:^{
+        self.transform = CGAffineTransformMakeScale(1.0, 1.0);
+    } completion:^(BOOL finished) {
+    }];
+}
+- (void)hide:(UIButton *)btn{
+    [self.textView resignFirstResponder];
+    
+    __weak typeof(self) weakSelf = self;
+    if (btn.tag == 2 && self.answerResultBlock) {
+        NSString *text = self.textView.text;
+        if (!IsStrEmpty(text) && IsStrEmpty([text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]])) {
+            text = @"";
+        }
+        self.answerResultBlock(text);
+        [UIView animateWithDuration:0.2 animations:^{
+            weakSelf.alpha = 0;
+        } completion:^(BOOL finished) {
+            [weakSelf removeFromSuperview];
+        }];
+    }else{
+        if (btn.tag == 1 && self.isUpdate) {
+            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:@"点击取消会丢失已更改的作答内容" cancelTitle:@"我再想想" destructiveTitle:@"取消" cancelBlock:^{
+            } destructiveBlock:^{
+                [UIView animateWithDuration:0.2 animations:^{
+                    weakSelf.alpha = 0;
+                } completion:^(BOOL finished) {
+                    [weakSelf removeFromSuperview];
+                }];
+            }] show];
+        }else{
+            [UIView animateWithDuration:0.2 animations:^{
+                weakSelf.alpha = 0;
+            } completion:^(BOOL finished) {
+                [weakSelf removeFromSuperview];
+            }];
+        }
+    }
+}
+- (YJTaskWrittingTextView *)textView{
+    if (!_textView) {
+        _textView = [[YJTaskWrittingTextView alloc] initWithFrame:CGRectZero];
+        [_textView setAutoCursorPosition:YES];
+        _textView.yjDelegate = self;
+//        _textView.assistHeight = 40;
+        _textView.placeholder = @"请输入...";
+//        _textView.maxLength = 1000;
+        _textView.font = LG_SysFont(17);
+        _textView.limitType = YJTextViewLimitTypeEmojiLimit;
+    }
+    return _textView;
+}
+@end

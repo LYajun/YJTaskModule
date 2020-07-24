@@ -13,6 +13,7 @@
 @end
 
 @interface YJTaskAnswerEditView : UIView
+@property (nonatomic,copy) NSString *sureTitle;
 @property (nonatomic,strong) YJTaskAnswerTextView *textView;
 @property (nonatomic,copy) void (^answerResultBlock) (NSString *result);
 @property (nonatomic,copy) void (^keyboardHideBlock) (void);

@@ -22,6 +22,7 @@ static NSString *YJTaskModule_ListenClassName_UserDefault_Key = @"YJTaskModule_L
 static NSString *YJTaskModule_SpeechAlertClassName_UserDefault_Key = @"YJTaskModule_SpeechAlertClassName_UserDefault_Key";
 static NSString *YJTaskModule_ApiUrl_UserDefault_Key = @"YJTaskModule_ApiUrl_UserDefault_Key";
 static NSString *YJTaskModule_UserID_UserDefault_Key = @"YJTaskModule_UserID_UserDefault_Key";
+static NSString *YJTaskModule_UserName_UserDefault_Key = @"YJTaskModule_UserName_UserDefault_Key";
 
 static NSString *YJTaskModule_AssignmentID_UserDefault_Key = @"YJTaskModule_AssignmentID_UserDefault_Key";
 static NSString *YJTaskModule_ResID_UserDefault_Key = @"YJTaskModule_ResID_UserDefault_Key";
@@ -48,6 +49,8 @@ static NSString *YJTaskModule_SpeechAnswerEnable_UserDefault_Key = @"YJTaskModul
 @property (nonatomic,copy) NSString *imgApiUrl;
 /** 用户ID */
 @property (nonatomic,copy) NSString *userID;
+/** 用户名 */
+@property (nonatomic,copy) NSString *userName;
 /** 用户类型 */
 @property (nonatomic,assign) NSInteger userType;
 /** 是否支持图片作答,默认为NO */

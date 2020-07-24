@@ -11,7 +11,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YJExcellentAnswerListView : UIView
-
+@property (nonatomic,strong) NSArray *dataArr;
++ (YJExcellentAnswerListView *)excellentAnswerListView;
+- (void)show;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -17,6 +17,9 @@
 #import "YJConst.h"
 #import <Masonry/Masonry.h>
 #import <LGAlertHUD/YJLancooAlert.h>
+#import "YJSpeechRecordAnswerView.h"
+#import "YJSpeechUploadAnswerView.h"
+#import "YJMemberTitleView.h"
 
 @interface YJTaskWrittingCell ()
 @property (nonatomic,strong) UILabel *indexLab;
@@ -24,16 +27,26 @@
 @property (strong,nonatomic) LGBaseHighlightBtn *recordBtn;
 @property (strong,nonatomic) UIButton *textAnswerBtn;
 @property (strong,nonatomic) UIButton *imgAnswerBtn;
+@property (strong,nonatomic) UIButton *recordAnswerBtn;
+@property (strong,nonatomic) UIButton *uploadAnswerBtn;
+@property (strong,nonatomic) YJMemberTitleView *memberTitleView;
+
 @property (strong, nonatomic) UIView *answerBtnBgV;
 @property (strong, nonatomic) UIView *contentBgV;
 @property (strong, nonatomic) UIView *imageBgV;
+@property (strong, nonatomic) YJSpeechRecordAnswerView *recordView;
+@property (strong, nonatomic) YJSpeechUploadAnswerView *uploadView;
 
 @property (strong,nonatomic) LGTPhotoBrowser *photoBrowser;
 @property (strong,nonatomic) YJWrittingImageView *addImageView;
+
+/** 主观题作答模式：0-文本，1-图片，2-录音，3-上传 */
+@property (nonatomic,assign) NSInteger subjectAnswerType;
 @end
 @implementation YJTaskWrittingCell
 - (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier{
     if (self = [super initWithStyle:style reuseIdentifier:reuseIdentifier]) {
+         BOOL isSpeechAnswerEnable = [NSUserDefaults yj_boolForKey:YJTaskModule_SpeechAnswerEnable_UserDefault_Key];
         
         UIButton *tapBtn = [UIButton buttonWithType:UIButtonTypeSystem];
         [tapBtn addTarget:self action:@selector(tapBtnClickAction) forControlEvents:UIControlEventTouchUpInside];
@@ -41,26 +54,55 @@
         [tapBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.edges.equalTo(self.answerBtnBgV);
         }];
+        
+        [self.contentView addSubview:self.memberTitleView];
+        [self.memberTitleView mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.left.right.top.equalTo(self.contentView);
+            make.height.mas_equalTo(isSpeechAnswerEnable ? 40 : 0);
+        }];
+        self.memberTitleView.hidden = !isSpeechAnswerEnable;
+        
         [self.contentView addSubview:self.answerBtnBgV];
         [self.answerBtnBgV mas_makeConstraints:^(MASConstraintMaker *make) {
-            make.top.equalTo(self.contentView).offset(5);
+            make.top.equalTo(self.memberTitleView.mas_bottom).offset(5);
             make.left.centerX.equalTo(self.contentView);
             make.height.mas_equalTo(44);
         }];
         
-        [self.answerBtnBgV addSubview:self.imgAnswerBtn];
-        [self.imgAnswerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+        [self.answerBtnBgV addSubview:self.uploadAnswerBtn];
+        [self.uploadAnswerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.top.equalTo(self.answerBtnBgV).offset(2);
             make.centerY.equalTo(self.answerBtnBgV);
             make.right.equalTo(self.answerBtnBgV).offset(-6);
-            make.width.equalTo(self.imgAnswerBtn.mas_height);
+            make.width.equalTo(self.uploadAnswerBtn.mas_height);
+        }];
+        
+        [self.answerBtnBgV addSubview:self.recordAnswerBtn];
+        [self.recordAnswerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.answerBtnBgV);
+            make.right.equalTo(self.uploadAnswerBtn.mas_left).offset(-10);
+            make.width.height.equalTo(self.uploadAnswerBtn);
+        }];
+        
+        self.uploadAnswerBtn.hidden = !isSpeechAnswerEnable;
+        self.recordAnswerBtn.hidden = !isSpeechAnswerEnable;
+        
+        [self.answerBtnBgV addSubview:self.imgAnswerBtn];
+        [self.imgAnswerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.centerY.equalTo(self.answerBtnBgV);
+            if (isSpeechAnswerEnable) {
+                make.right.equalTo(self.recordAnswerBtn.mas_left).offset(-10);
+            }else{
+                make.right.equalTo(self.answerBtnBgV).offset(-6);
+            }
+            make.width.height.equalTo(self.uploadAnswerBtn);
         }];
         
         [self.answerBtnBgV addSubview:self.textAnswerBtn];
         [self.textAnswerBtn mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerY.equalTo(self.answerBtnBgV);
             make.right.equalTo(self.imgAnswerBtn.mas_left).offset(-10);
-            make.width.height.equalTo(self.imgAnswerBtn);
+            make.width.height.equalTo(self.uploadAnswerBtn);
         }];
         
         
@@ -119,6 +161,69 @@
         }];
         
         self.imageBgV.hidden = YES;
+        
+        if (isSpeechAnswerEnable) {
+            [self.contentView addSubview:self.recordView];
+            [self.recordView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.contentBgV);
+                make.bottom.equalTo(self.contentView).offset(-5);
+                make.top.equalTo(self.answerBtnBgV.mas_bottom).offset(0);
+                make.height.mas_greaterThanOrEqualTo([self.addImageView collectionViewItemWidth]);
+            }];
+            
+            [self.contentView addSubview:self.uploadView];
+            [self.uploadView mas_makeConstraints:^(MASConstraintMaker *make) {
+                make.left.right.equalTo(self.contentBgV);
+                make.bottom.equalTo(self.contentView).offset(-5);
+                make.top.equalTo(self.answerBtnBgV.mas_bottom).offset(0);
+                make.height.mas_greaterThanOrEqualTo([self.addImageView collectionViewItemWidth]);
+            }];
+            
+            self.recordView.hidden = YES;
+            self.uploadView.hidden = YES;
+            __weak typeof(self) weakSelf = self;
+            
+            self.recordView.playBlock = ^{
+                if (weakSelf.playBlock) {
+                    weakSelf.playBlock();
+                }
+            };
+            self.recordView.removeRecordBlock = ^{
+                weakSelf.smallModel.yj_recordAnswerUrl = @"";
+                weakSelf.smallModel.yj_recordAnswerText = @"";
+                if (weakSelf.UpdateTableBlock) {
+                    weakSelf.UpdateTableBlock();
+                }
+            };
+            self.recordView.UpdateTableBlock = ^(NSString * _Nonnull recordText) {
+                weakSelf.smallModel.yj_recordAnswerText = recordText;
+                if (weakSelf.UpdateTableBlock) {
+                    weakSelf.UpdateTableBlock();
+                }
+            };
+            self.uploadView.playBlock = ^{
+                if (weakSelf.playBlock) {
+                    weakSelf.playBlock();
+                }
+            };
+            self.uploadView.removeRecordBlock = ^{
+                weakSelf.smallModel.yj_uploadAnswerUrl = @"";
+                weakSelf.smallModel.yj_uploadAnswerText = @"";
+                if (weakSelf.UpdateTableBlock) {
+                    weakSelf.UpdateTableBlock();
+                }
+            };
+            self.uploadView.UpdateTableBlock = ^(NSString * _Nonnull recordText) {
+                weakSelf.smallModel.yj_uploadAnswerText = recordText;
+                if (weakSelf.UpdateTableBlock) {
+                    weakSelf.UpdateTableBlock();
+                }
+            };
+            self.uploadView.uploadVoiceBlock = ^(NSString * _Nonnull voiceUrl) {
+                weakSelf.smallModel.yj_uploadAnswerUrl = voiceUrl;
+            };
+        }
+        
     }
     return self;
 }
@@ -136,32 +241,53 @@
         [[YJSpeechManager defaultManager] stopEngineWithTip:@"语音识别中..."];
     }
 }
-- (void)textAnswerClickAction{
-    if (!self.textAnswerBtn.selected) {
-        if (!IsArrEmpty(self.smallModel.yj_imgUrlArr)) {
-            __weak typeof(self) weakSelf = self;
-            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:@"切换为文本作答会删除图片内容，是否要切换？" cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
-                [UIView animateWithDuration:2.5 animations:^{
-                    weakSelf.smallModel.yj_imgUrlArr = @[];
-                    [weakSelf setContentBgVHidden:NO];
-                    weakSelf.addImageView.smallModel = (YJPaperSmallModel *)weakSelf.smallModel;
-                }];
-            }] show];
-        }else{
-            [UIView animateWithDuration:2.5 animations:^{
-                [self setContentBgVHidden:NO];
-            }];
-        }
+- (NSString *)changeAnswerTypeWithCurrentType:(NSInteger)currentType toType:(NSInteger)toType{
+    return [NSString stringWithFormat:@"切换为%@会删除%@，是否要切换？",[self toAnswerTypeTitle:toType],[self answerTypeTitle:currentType]];
+}
+- (NSString *)answerTypeTitle:(NSInteger)type{
+    switch (type) {
+        case 1:
+            return @"图片内容";
+        case 2:
+            return @"录音内容";
+        case 3:
+            return @"上传内容";
+        default:
+            return @"文本内容";
     }
 }
-- (void)imgAnswerClickAction{
-    if (!self.imgAnswerBtn.selected) {
-        if (!IsStrEmpty(self.smallModel.yj_smallAnswer)) {
+- (NSString *)toAnswerTypeTitle:(NSInteger)type{
+    switch (type) {
+        case 1:
+            return @"图片作答";
+        case 2:
+            return @"录音作答";
+        case 3:
+            return @"上传作答";
+        default:
+            return @"文本作答";
+    }
+}
+- (void)textAnswerClickAction{
+    if (!self.textAnswerBtn.selected) {
+        if (!IsArrEmpty(self.smallModel.yj_imgUrlArr) || !IsStrEmpty(self.smallModel.yj_recordAnswerText) || !IsStrEmpty(self.smallModel.yj_uploadAnswerText)) {
             __weak typeof(self) weakSelf = self;
-            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:@"切换为图片作答会删除文本内容，是否要切换？" cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
+            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:[self changeAnswerTypeWithCurrentType:self.subjectAnswerType toType:0] cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
                 [UIView animateWithDuration:2.5 animations:^{
-                    weakSelf.smallModel.yj_smallAnswer = @"";
-                    [weakSelf setContentBgVHidden:YES];
+                    weakSelf.smallModel.yj_imgUrlArr = @[];
+                    weakSelf.smallModel.yj_recordAnswerUrl = @"";
+                    weakSelf.smallModel.yj_recordAnswerText = @"";
+                    weakSelf.smallModel.yj_uploadAnswerUrl = @"";
+                    weakSelf.smallModel.yj_uploadAnswerText = @"";
+                    
+                    weakSelf.subjectAnswerType = 0;
+                    [weakSelf setContentBgVAnswerStyle];
+                    weakSelf.addImageView.smallModel = (YJPaperSmallModel *)weakSelf.smallModel;
+                    weakSelf.recordView.recordText = @"";
+                    weakSelf.recordView.voiceUrl = @"";
+                    weakSelf.uploadView.recordText = @"";
+                    weakSelf.uploadView.voiceUrl = @"";
+                    
                     if (weakSelf.UpdateTableBlock) {
                         weakSelf.UpdateTableBlock();
                     }
@@ -169,7 +295,104 @@
             }] show];
         }else{
             [UIView animateWithDuration:2.5 animations:^{
-                [self setContentBgVHidden:YES];
+                self.subjectAnswerType = 0;
+                [self setContentBgVAnswerStyle];
+            }];
+        }
+    }
+}
+- (void)imgAnswerClickAction{
+    if (!self.imgAnswerBtn.selected) {
+        if (!IsStrEmpty(self.smallModel.yj_smallAnswer) || !IsStrEmpty(self.smallModel.yj_recordAnswerText) || !IsStrEmpty(self.smallModel.yj_uploadAnswerText)) {
+            __weak typeof(self) weakSelf = self;
+            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:[self changeAnswerTypeWithCurrentType:self.subjectAnswerType toType:1] cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
+                [UIView animateWithDuration:2.5 animations:^{
+                    weakSelf.smallModel.yj_smallAnswer = @"";
+                    weakSelf.smallModel.yj_recordAnswerUrl = @"";
+                   weakSelf.smallModel.yj_recordAnswerText = @"";
+                   weakSelf.smallModel.yj_uploadAnswerUrl = @"";
+                   weakSelf.smallModel.yj_uploadAnswerText = @"";
+                    
+                     weakSelf.subjectAnswerType = 1;
+                    [weakSelf setContentBgVAnswerStyle];
+                    
+                    weakSelf.recordView.recordText = @"";
+                    weakSelf.recordView.voiceUrl = @"";
+                    weakSelf.uploadView.recordText = @"";
+                    weakSelf.uploadView.voiceUrl = @"";
+                    
+                    if (weakSelf.UpdateTableBlock) {
+                        weakSelf.UpdateTableBlock();
+                    }
+                }];
+            }] show];
+        }else{
+            [UIView animateWithDuration:2.5 animations:^{
+                 self.subjectAnswerType = 1;
+                [self setContentBgVAnswerStyle];
+            }];
+        }
+    }
+}
+- (void)recordAnswerClickAction{
+    if (!self.recordAnswerBtn.selected) {
+        if (!IsStrEmpty(self.smallModel.yj_smallAnswer) || !IsArrEmpty(self.smallModel.yj_imgUrlArr) || !IsStrEmpty(self.smallModel.yj_uploadAnswerText)) {
+            __weak typeof(self) weakSelf = self;
+            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:[self changeAnswerTypeWithCurrentType:self.subjectAnswerType toType:2] cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
+                [UIView animateWithDuration:2.5 animations:^{
+                    weakSelf.smallModel.yj_imgUrlArr = @[];
+                    weakSelf.smallModel.yj_smallAnswer = @"";
+                   weakSelf.smallModel.yj_uploadAnswerUrl = @"";
+                   weakSelf.smallModel.yj_uploadAnswerText = @"";
+                    
+                     weakSelf.subjectAnswerType = 2;
+                    [weakSelf setContentBgVAnswerStyle];
+                    
+                     weakSelf.addImageView.smallModel = (YJPaperSmallModel *)weakSelf.smallModel;
+                
+                    weakSelf.uploadView.recordText = @"";
+                    weakSelf.uploadView.voiceUrl = @"";
+                    
+                    if (weakSelf.UpdateTableBlock) {
+                        weakSelf.UpdateTableBlock();
+                    }
+                }];
+            }] show];
+        }else{
+            [UIView animateWithDuration:2.5 animations:^{
+                 self.subjectAnswerType = 2;
+                [self setContentBgVAnswerStyle];
+            }];
+        }
+    }
+}
+- (void)uploadAnswerClickAction{
+    if (!self.uploadAnswerBtn.selected) {
+        if (!IsStrEmpty(self.smallModel.yj_smallAnswer) || !IsArrEmpty(self.smallModel.yj_imgUrlArr) || !IsStrEmpty(self.smallModel.yj_recordAnswerText)) {
+            __weak typeof(self) weakSelf = self;
+            [[YJLancooAlert lancooAlertWithTitle:@"温馨提示" msg:[self changeAnswerTypeWithCurrentType:self.subjectAnswerType toType:3] cancelTitle:@"否" destructiveTitle:@"是" cancelBlock:nil destructiveBlock:^{
+                [UIView animateWithDuration:2.5 animations:^{
+                    weakSelf.smallModel.yj_imgUrlArr = @[];
+                    weakSelf.smallModel.yj_smallAnswer = @"";
+                   weakSelf.smallModel.yj_recordAnswerUrl = @"";
+                   weakSelf.smallModel.yj_recordAnswerText = @"";
+                    
+                     weakSelf.subjectAnswerType = 3;
+                    [weakSelf setContentBgVAnswerStyle];
+                    
+                     weakSelf.addImageView.smallModel = (YJPaperSmallModel *)weakSelf.smallModel;
+                    weakSelf.recordView.recordText = @"";
+                    weakSelf.recordView.voiceUrl = @"";
+                   
+                    if (weakSelf.UpdateTableBlock) {
+                        weakSelf.UpdateTableBlock();
+                    }
+                }];
+            }] show];
+        }else{
+            [UIView animateWithDuration:2.5 animations:^{
+                 self.subjectAnswerType = 3;
+                [self setContentBgVAnswerStyle];
             }];
         }
     }
@@ -198,6 +421,8 @@
         self.recordBtn.enabled = NO;
         self.textView.placeholder = @"未作答";
     }
+    
+    self.memberTitleView.addable = editable;
 }
 - (void)setHideSpeechBtn:(BOOL)hideSpeechBtn{
     _hideSpeechBtn = hideSpeechBtn;
@@ -220,9 +445,13 @@
     _smallModel = smallModel;
     self.addImageView.hidden = !self.editable;
     
-    BOOL isTextAnswer = YES;
+    self.subjectAnswerType = 0;
     if (!IsArrEmpty(smallModel.yj_imgUrlArr) || self.imgAnswerBtn.selected) {
-        isTextAnswer = NO;
+        self.subjectAnswerType = 1;
+    }else if (!IsStrEmpty(smallModel.yj_recordAnswerText) || self.recordAnswerBtn.selected){
+        self.subjectAnswerType = 2;
+    }else if (!IsStrEmpty(smallModel.yj_uploadAnswerText) || self.uploadAnswerBtn.selected){
+        self.subjectAnswerType = 3;
     }
 
     
@@ -241,33 +470,40 @@
         [self.answerBtnBgV mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(isOffline ? 0 : 44);
         }];
-//        [self.imageBgV mas_updateConstraints:^(MASConstraintMaker *make) {
-//            make.height.mas_equalTo(isOffline ? 0 : [self.addImageView collectionViewItemWidth]);
-//        }];
     }else{
          [self.answerBtnBgV mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(0);
         }];
-//        if (IsArrEmpty(smallModel.yj_imgUrlArr)) {
-//            [self.imageBgV mas_updateConstraints:^(MASConstraintMaker *make) {
-//                make.height.mas_equalTo(0);
-//            }];
-//        }else{
-//            CGFloat imageBgW = self.photoBrowserWidth;
-//            [self.imageBgV mas_updateConstraints:^(MASConstraintMaker *make) {
-//                make.height.mas_equalTo(imageBgW/3);
-//            }];
-            self.photoBrowser.imageUrls = smallModel.yj_imgUrlArr;
-//        }
+        self.photoBrowser.imageUrls = smallModel.yj_imgUrlArr;
     }
+
+    self.recordView.recordText = smallModel.yj_recordAnswerText;
+    self.recordView.voiceUrl = smallModel.yj_recordAnswerUrl;
+    self.uploadView.recordText = smallModel.yj_uploadAnswerText;
+    self.uploadView.voiceUrl = smallModel.yj_uploadAnswerUrl;
+    self.uploadView.ownController = self.ownController;
     
-    [self setContentBgVHidden:!isTextAnswer];
+    [self setContentBgVAnswerStyle];
 }
-- (void)setContentBgVHidden:(BOOL)isHide{
-    self.contentBgV.hidden = isHide;
-    self.imageBgV.hidden = !self.contentBgV.hidden;
-    self.textAnswerBtn.selected = !isHide;
-    self.imgAnswerBtn.selected = !self.textAnswerBtn.selected;
+- (void)invalidatePlayer{
+    [self.recordView invalidatePlayer];
+    [self.uploadView invalidatePlayer];
+}
+- (void)setContentBgVAnswerStyle{
+    [self invalidatePlayer];
+    
+    self.smallModel.yj_subjectAnswerType = self.subjectAnswerType;
+    
+    self.contentBgV.hidden = self.subjectAnswerType != 0;
+    self.imageBgV.hidden = self.subjectAnswerType != 1;
+    self.recordView.hidden = self.subjectAnswerType != 2;
+    self.uploadView.hidden = self.subjectAnswerType != 3;
+    
+    self.textAnswerBtn.selected = self.subjectAnswerType == 0;
+    self.imgAnswerBtn.selected = self.subjectAnswerType == 1;
+    self.recordAnswerBtn.selected = self.subjectAnswerType == 2;
+    self.uploadAnswerBtn.selected = self.subjectAnswerType == 3;
+    
     self.smallModel.yj_smallSimpleTextAnswer = self.textAnswerBtn.selected;
 }
 #pragma mark - Getter
@@ -365,5 +601,41 @@
         [_imgAnswerBtn addTarget:self action:@selector(imgAnswerClickAction) forControlEvents:UIControlEventTouchUpInside];
     }
     return _imgAnswerBtn;
+}
+- (UIButton *)recordAnswerBtn{
+    if (!_recordAnswerBtn) {
+        _recordAnswerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_recordAnswerBtn setImage:[UIImage yj_imageNamed:@"yj_answer_record_n" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
+        [_recordAnswerBtn setImage:[UIImage yj_imageNamed:@"yj_answer_record_s" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateSelected];
+        [_recordAnswerBtn addTarget:self action:@selector(recordAnswerClickAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _recordAnswerBtn;
+}
+- (UIButton *)uploadAnswerBtn{
+    if (!_uploadAnswerBtn) {
+        _uploadAnswerBtn = [UIButton buttonWithType:UIButtonTypeCustom];
+        [_uploadAnswerBtn setImage:[UIImage yj_imageNamed:@"yj_answer_upload_n" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateNormal];
+        [_uploadAnswerBtn setImage:[UIImage yj_imageNamed:@"yj_answer_upload_s" atDir:YJTaskBundle_Cell atBundle:YJTaskBundle()] forState:UIControlStateSelected];
+        [_uploadAnswerBtn addTarget:self action:@selector(uploadAnswerClickAction) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _uploadAnswerBtn;
+}
+- (YJMemberTitleView *)memberTitleView{
+    if (!_memberTitleView) {
+        _memberTitleView = [[YJMemberTitleView alloc] initWithFrame:CGRectZero];
+    }
+    return _memberTitleView;
+}
+- (YJSpeechRecordAnswerView *)recordView{
+    if (!_recordView) {
+        _recordView = [[YJSpeechRecordAnswerView alloc] initWithFrame:CGRectZero];
+    }
+    return _recordView;
+}
+- (YJSpeechUploadAnswerView *)uploadView{
+    if (!_uploadView) {
+        _uploadView = [[YJSpeechUploadAnswerView alloc] initWithFrame:CGRectZero];
+    }
+    return _uploadView;
 }
 @end

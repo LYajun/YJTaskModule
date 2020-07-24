@@ -17,3 +17,11 @@
 + (instancetype)showWithText:(NSString *) text
            answerResultBlock:(void (^) (NSString *result)) answerResultBlock;
 @end
+
+
+@interface YJTaskTextEditView : UIView
+/** 标题 */
+@property (nonatomic,copy) NSString *titleStr;
++ (instancetype)showWithText:(NSString *) text
+           answerResultBlock:(void (^) (NSString *result)) answerResultBlock;
+@end

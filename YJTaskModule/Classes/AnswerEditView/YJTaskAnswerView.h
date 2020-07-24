@@ -12,4 +12,5 @@
 
 + (instancetype)showWithText:(NSString *) text
            answerResultBlock:(void (^) (NSString *result)) answerResultBlock;
++ (instancetype)showWithText:(NSString *) text sureTitle:(NSString *)sureTitle answerResultBlock:(void (^) (NSString *result)) answerResultBlock;
 @end

@@ -1,7 +1,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'YJTaskModule'
-  s.version          = '1.4.5'
+  s.version          = '1.4.6'
   s.summary          = '作业库'
 
   s.description      = <<-DESC
@@ -114,6 +114,8 @@ TODO: Add long description of the pod here.
         speechView.dependency 'YJTaskModule/Const'
         speechView.dependency 'YJTaskModule/Base'
         speechView.dependency 'YJTaskModule/Model'
+        speechView.dependency 'YJTaskModule/AnswerEditView'
+        speechView.dependency 'YJTaskModule/TopicView'
         
         speechView.dependency 'Masonry'
         speechView.dependency 'YJTaskMark'

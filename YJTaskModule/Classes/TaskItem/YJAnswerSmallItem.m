@@ -23,6 +23,7 @@
 @interface YJAnswerSmallItem ()<UITableViewDelegate,UITableViewDataSource>
 @property (strong,nonatomic) UITableView *tableView;
 @property (nonatomic,strong) YJTaskTopicCell *currentTaskTopicCell;
+@property (nonatomic,strong) YJTaskWrittingCell *currentTaskWrittingCell;
 @end
 @implementation YJAnswerSmallItem
 - (instancetype)initWithFrame:(CGRect)frame smallPModel:(YJBasePaperSmallModel *)smallPModel taskStageType:(YJTaskStageType)taskStageType{
@@ -49,6 +50,9 @@
 - (void)stopVoicePlay{
     if (self.currentTaskTopicCell) {
         [self.currentTaskTopicCell invalidatePlayer];
+    }
+    if (self.currentTaskWrittingCell) {
+        [self.currentTaskWrittingCell invalidatePlayer];
     }
 }
 #pragma mark - UITableViewDelegate&&UITableViewDataSource
@@ -136,6 +140,8 @@
             {
                 if (self.smallModel.yj_smallTopicType == YJSmallTopicTypeSimpleAnswer && IsArrEmpty(self.smallModel.yj_smallQuesAskList)) {
                     YJTaskWrittingCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskWrittingCell class]) forIndexPath:indexPath];
+                    self.currentTaskWrittingCell = cell;
+                    cell.ownController = self.ownController;
                     cell.topicIndex = -1;
                     if (self.taskStageType == YJTaskStageTypeViewer) {
                         cell.editable = NO;
@@ -148,6 +154,11 @@
                     __weak typeof(self) weakSelf = self;
                     cell.UpdateTableBlock = ^{
                         [weakSelf.tableView reloadData];
+                    };
+                    cell.playBlock = ^{
+                        if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_taskTopicCellDidPlayVoice)]) {
+                            [weakSelf.delegate YJ_taskTopicCellDidPlayVoice];
+                        }
                     };
                     return cell;
                 }else{
@@ -198,6 +209,8 @@
             case YJSmallTopicTypeWritting:
             {
                 YJTaskWrittingCell *cell = [tableView dequeueReusableCellWithIdentifier:NSStringFromClass([YJTaskWrittingCell class]) forIndexPath:indexPath];
+                self.currentTaskWrittingCell = cell;
+                cell.ownController = self.ownController;
                 cell.topicIndex = -1;
                 if (self.taskStageType == YJTaskStageTypeViewer) {
                     cell.editable = NO;
@@ -210,6 +223,11 @@
                 __weak typeof(self) weakSelf = self;
                 cell.UpdateTableBlock = ^{
                     [weakSelf.tableView reloadData];
+                };
+                cell.playBlock = ^{
+                    if (weakSelf.delegate && [weakSelf.delegate respondsToSelector:@selector(YJ_taskTopicCellDidPlayVoice)]) {
+                        [weakSelf.delegate YJ_taskTopicCellDidPlayVoice];
+                    }
                 };
                 return cell;
             }

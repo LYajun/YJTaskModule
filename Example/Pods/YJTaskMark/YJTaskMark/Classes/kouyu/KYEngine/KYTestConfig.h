@@ -20,7 +20,7 @@ typedef enum : NSUInteger {
 //请求的内核类型
 typedef enum : NSUInteger {
     KYTestType_Word,              //单词评测(1 个单词)
-    KYTestType_Sentence,          //句子评测(40 单词内)
+    KYTestType_Sentence,          //句子评测(200 单词内)
     KYTestType_Paragraph,         //段落评测(1000 单词内)
     KYTestType_Open,              //开放题型
     KYTestType_Choice,             //(无限制)
@@ -95,6 +95,9 @@ typedef enum : NSUInteger {
 
 // 可选, vbr 配置，默认值 NO,若设置为 YES，则 quality 值作为 vbr quality 配置
 @property (nonatomic, assign) BOOL vbr;
+
+// 本地音频路径。需要支持本地音频评测时，传音频路径。支持pcm、mp3、ogg、flv、opus、amr、silk格式
+@property (nonatomic, copy) NSString *audioPath;
 
 /******************************************/
 

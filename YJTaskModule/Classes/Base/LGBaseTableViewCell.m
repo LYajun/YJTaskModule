@@ -39,12 +39,11 @@
     self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 - (void)drawRect:(CGRect)rect{
-//    if (!_isShowSeparator) return;
     CGFloat width = self.separatorWidth;
     if (!self.isShowSeparator) {
         width = 0;
     }
-    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(self.separatorOffset, rect.size.height - width, rect.size.width-self.separatorOffset*2, width)];
+    UIBezierPath *bezierPath = [UIBezierPath bezierPathWithRect:CGRectMake(self.separatorOffsetPoint.x, rect.size.height - width, rect.size.width-self.separatorOffsetPoint.x-self.separatorOffsetPoint.y, width)];
     [self.sepColor setFill];
     [bezierPath fillWithBlendMode:kCGBlendModeNormal alpha:1];
     [bezierPath closePath];
@@ -55,6 +54,10 @@
 }
 - (void)setSeparatorOffset:(CGFloat)separatorOffset{
     _separatorOffset = separatorOffset;
+    self.separatorOffsetPoint = CGPointMake(separatorOffset, separatorOffset);
+}
+- (void)setSeparatorOffsetPoint:(CGPoint)separatorOffsetPoint{
+    _separatorOffsetPoint = separatorOffsetPoint;
     [self setNeedsDisplay];
 }
 - (void)setSeparatorWidth:(CGFloat)separatorWidth{

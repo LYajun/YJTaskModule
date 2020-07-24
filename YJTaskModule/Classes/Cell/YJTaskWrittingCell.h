@@ -20,6 +20,10 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic,assign) BOOL hideSpeechBtn;
 @property (nonatomic,copy) void (^SpeechMarkBlock) (void);
 @property (nonatomic,copy) void (^UpdateTableBlock) (void);
+@property (nonatomic,weak) UIViewController *ownController;
+
+@property (nonatomic,copy) void (^playBlock) (void);
+- (void)invalidatePlayer;
 @end
 
 NS_ASSUME_NONNULL_END

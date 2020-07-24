@@ -17,6 +17,7 @@
     [NSUserDefaults yj_setObject:kApiParams(self.apiUrl) forKey:YJTaskModule_ApiUrl_UserDefault_Key];
     [NSUserDefaults yj_setObject:kApiParams(self.imgApiUrl) forKey:YJTaskModule_ImgApiUrl_UserDefault_Key];
     [NSUserDefaults yj_setObject:kApiParams(self.userID) forKey:YJTaskModule_UserID_UserDefault_Key];
+    [NSUserDefaults yj_setObject:kApiParams(self.userName) forKey:YJTaskModule_UserName_UserDefault_Key];
     [NSUserDefaults yj_setObject:kApiParams(self.sysID) forKey:YJTaskModule_SysID_UserDefault_Key];
     
     [NSUserDefaults yj_setObject:kApiParams(self.assignmentID) forKey:YJTaskModule_AssignmentID_UserDefault_Key];

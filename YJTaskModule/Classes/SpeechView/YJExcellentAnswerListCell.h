@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface YJExcellentAnswerListCell : LGBaseTableViewCell
-
+- (void)invalidatePlayer;
 @end
 
 NS_ASSUME_NONNULL_END

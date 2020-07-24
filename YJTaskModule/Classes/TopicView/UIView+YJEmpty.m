@@ -14,34 +14,34 @@
 
 @implementation UIView (YJEmpty)
 - (void)yj_setViewLoadingShow:(BOOL)show{
-    [self initLoadingView];
+    [self yjtask_initLoadingView];
     [self.noDataView removeFromSuperview];
     [self.loadErrorView removeFromSuperview];
     [self.viewTitleLoading removeFromSuperview];
-    [self setShowOnBackgroundView:self.loadingView show:show];
+    [self yjtask_setShowOnBackgroundView:self.loadingView show:show];
 }
 - (void)yj_setViewTitleLoadingShow:(BOOL)show{
-    [self initTitleLoadingView];
+    [self yjtask_initTitleLoadingView];
     [self.loadingView removeFromSuperview];
     [self.loadErrorView removeFromSuperview];
     [self.noDataView removeFromSuperview];
-    [self setShowOnBackgroundView:self.viewTitleLoading show:show];
+    [self yjtask_setShowOnBackgroundView:self.viewTitleLoading show:show];
 }
 - (void)yj_setViewNoDataShow:(BOOL)show{
-    [self initNoDataView];
+    [self yjtask_initNoDataView];
     [self.loadingView removeFromSuperview];
     [self.loadErrorView removeFromSuperview];
     [self.viewTitleLoading removeFromSuperview];
-    [self setShowOnBackgroundView:self.noDataView show:show];
+    [self yjtask_setShowOnBackgroundView:self.noDataView show:show];
 }
 - (void)yj_setViewLoadErrorShow:(BOOL)show{
-    [self initLoadErrorView];
+    [self yjtask_initLoadErrorView];
     [self.loadingView removeFromSuperview];
     [self.noDataView removeFromSuperview];
     [self.viewTitleLoading removeFromSuperview];
-    [self setShowOnBackgroundView:self.loadErrorView show:show];
+    [self yjtask_setShowOnBackgroundView:self.loadErrorView show:show];
 }
-- (void)setShowOnBackgroundView:(UIView *)aView show:(BOOL)show {
+- (void)yjtask_setShowOnBackgroundView:(UIView *)aView show:(BOOL)show {
     if (!aView) {
         return;
     }
@@ -51,25 +51,27 @@
         }
         [self addSubview:aView];
         [aView mas_remakeConstraints:^(MASConstraintMaker *make) {
-            make.edges.equalTo(self);
+            make.top.equalTo(self).offset(self.emptyTopSpace);
+            make.bottom.equalTo(self).offset(-self.emptyBottomSpace);
+            make.left.right.equalTo(self);
         }];
     }else {
         [aView removeFromSuperview];
     }
 }
 - (void)yj_setViewNoDataString:(NSString *)string{
-    [self initNoDataView];
+    [self yjtask_initNoDataView];
     self.noDataViewLab.text = string;
 }
 - (void)yj_setViewLoadErrorString:(NSString *)string{
-    [self initLoadErrorView];
+    [self yjtask_initLoadErrorView];
     self.loadErrorViewLab.text = string;
 }
 - (void)yj_setViewTitleLoadingString:(NSString *)string{
-    [self initTitleLoadingView];
+    [self yjtask_initTitleLoadingView];
     self.titleLoadingLab.text = string;
 }
-- (void)initLoadingView{
+- (void)yjtask_initLoadingView{
     if (!self.loadingView) {
         self.loadingView = [[UIView alloc]init];
         self.loadingView.backgroundColor = [UIColor whiteColor];
@@ -82,7 +84,7 @@
         [activityIndicatorView startAnimating];
     }
 }
-- (void)initTitleLoadingView{
+- (void)yjtask_initTitleLoadingView{
     if (!self.viewTitleLoading) {
         self.viewTitleLoading = [[UIView alloc]init];
         self.viewTitleLoading.backgroundColor = [UIColor whiteColor];
@@ -106,7 +108,7 @@
         [indicatorView startAnimating];
     }
 }
-- (void)initNoDataView{
+- (void)yjtask_initNoDataView{
     if (!self.noDataView) {
         self.noDataView = [[UIView alloc]init];
         self.noDataView.backgroundColor = [UIColor whiteColor];
@@ -120,7 +122,7 @@
         self.noDataViewLab.font = [UIFont systemFontOfSize:14];
         self.noDataViewLab.textAlignment = NSTextAlignmentCenter;
         self.noDataViewLab.textColor = LG_ColorWithHex(0x989898);
-        self.noDataViewLab.text = @"数据为空";
+        self.noDataViewLab.text = @"暂无内容";
         [self.noDataView addSubview:self.noDataViewLab];
         [self.noDataViewLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.width.equalTo(self.noDataView);
@@ -128,7 +130,7 @@
         }];
     }
 }
-- (void)initLoadErrorView{
+- (void)yjtask_initLoadErrorView{
     if (!self.loadErrorView) {
         self.loadErrorView = [[UIView alloc]init];
         self.loadErrorView.backgroundColor = [UIColor whiteColor];
@@ -142,7 +144,7 @@
         self.loadErrorViewLab.font = [UIFont systemFontOfSize:14];
         self.loadErrorViewLab.textAlignment = NSTextAlignmentCenter;
         self.loadErrorViewLab.textColor = LG_ColorWithHex(0x989898);
-        self.loadErrorViewLab.text = @"操作失败，轻触刷新";
+        self.loadErrorViewLab.text = @"加载失败，轻触刷新";
         [self.loadErrorView addSubview:self.loadErrorViewLab];
         [self.loadErrorViewLab mas_makeConstraints:^(MASConstraintMaker *make) {
             make.centerX.width.equalTo(self.loadErrorView);
@@ -159,6 +161,18 @@
     }
 }
 #pragma mark - runtime
+- (CGFloat)emptyTopSpace{
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+- (void)setEmptyTopSpace:(CGFloat)emptyTopSpace{
+    objc_setAssociatedObject(self, @selector(emptyTopSpace), @(emptyTopSpace), OBJC_ASSOCIATION_ASSIGN);
+}
+- (CGFloat)emptyBottomSpace{
+    return [objc_getAssociatedObject(self, _cmd) floatValue];
+}
+- (void)setEmptyBottomSpace:(CGFloat)emptyBottomSpace{
+    objc_setAssociatedObject(self, @selector(emptyBottomSpace), @(emptyBottomSpace), OBJC_ASSOCIATION_ASSIGN);
+}
 - (UIView *)loadingView{
     return objc_getAssociatedObject(self, _cmd);
 }

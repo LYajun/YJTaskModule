@@ -16,5 +16,6 @@
 @property (nonatomic, assign) BOOL isShowSeparator;
 @property (nonatomic, assign) CGFloat separatorWidth;
 @property (nonatomic, assign) CGFloat separatorOffset;
+@property (nonatomic, assign) CGPoint separatorOffsetPoint;
 @property (nonatomic,strong) UIColor *sepColor;
 @end

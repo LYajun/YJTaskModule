@@ -10,8 +10,9 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class YJSpeechTalkModel;
 @interface YJSpeechTalkListCell : LGBaseTableViewCell
-
+@property (nonatomic,strong) YJSpeechTalkModel *talkModel;
 @end
 
 NS_ASSUME_NONNULL_END

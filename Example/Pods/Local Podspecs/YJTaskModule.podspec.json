@@ -1,6 +1,6 @@
 {
   "name": "YJTaskModule",
-  "version": "1.4.5",
+  "version": "1.4.6",
   "summary": "作业库",
   "description": "TODO: Add long description of the pod here.",
   "homepage": "https://github.com/LYajun/YJTaskModule",
@@ -13,7 +13,7 @@
   },
   "source": {
     "git": "https://github.com/LYajun/YJTaskModule.git",
-    "tag": "1.4.5"
+    "tag": "1.4.6"
   },
   "platforms": {
     "ios": "8.0"
@@ -219,6 +219,12 @@
 
         ],
         "YJTaskModule/Model": [
+
+        ],
+        "YJTaskModule/AnswerEditView": [
+
+        ],
+        "YJTaskModule/TopicView": [
 
         ],
         "Masonry": [

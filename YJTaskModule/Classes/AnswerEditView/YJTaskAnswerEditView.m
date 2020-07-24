@@ -98,6 +98,12 @@
         self.keyboardHideBlock();
     }
 }
+- (void)setSureTitle:(NSString *)sureTitle{
+    _sureTitle = sureTitle;
+    if (!IsStrEmpty(sureTitle)) {
+        [self.sureButton setTitle:sureTitle forState:UIControlStateNormal];
+    }
+}
 #pragma mark UITextViewDelegate
 - (void)yj_textViewDidBeginEditing:(LGBaseTextView *)textView{
     [self changeFrame:ceilf([textView sizeThatFits:textView.frame.size].height)];

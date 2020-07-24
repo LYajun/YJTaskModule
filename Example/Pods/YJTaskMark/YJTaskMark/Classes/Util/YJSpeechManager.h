@@ -51,6 +51,9 @@ typedef NS_ENUM(NSInteger,YJSpeechMarkType) {
  */
 - (void)startEngineAtRefText:(NSString *)refText
                     markType:(YJSpeechMarkType)markType;
+- (void)startEngineAtRefText:(NSString *)refText
+                    markType:(YJSpeechMarkType)markType
+                     fileASR:(BOOL)fileASR;
 /** 是否评测中 */
 - (BOOL)isSpeechMarking;
 
@@ -66,7 +69,8 @@ typedef NS_ENUM(NSInteger,YJSpeechMarkType) {
 /** 删除引擎 */
 - (void)deleteEngine;
 
-
+/** 开始评测回调 */
+- (void)speechEngineStartBLock:(void (^) (void))startBlock;
 /** 评测结果 */
 - (void)speechEngineResult:(void (^) (YJSpeechResultModel *resultModel))resultBlock;
 /** 音强 */

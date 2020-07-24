@@ -9,6 +9,7 @@
 #import "KYTestEngine.h"
 #import "KYRecorder.h"
 #import "zlib.h"
+#import "KYNativeAudio.h"
 
 //证书是否为新的
 #define KY_isNew @"ky_isNew"
@@ -48,11 +49,20 @@
 
 @end
 
-@interface KYTestEngine ()
+typedef enum : NSUInteger {
+    KYEngineStatus_Idle = 1,     //init，尚未评测
+    KYEngineStatus_Recording,       //正在评测
+    KYEngineStatus_Stop             //停止评测
+} KYEngineStatus;
+
+
+@interface KYTestEngine ()<KYNativeAudioDelegate>
 
 @property (nonatomic, assign) struct skegn *engine;
 
 @property (nonatomic, strong) KYRecorder *recorder;
+
+@property (nonatomic, strong) KYNativeAudio *nativeAudio;
 
 @property (nonatomic, copy) NSString *serialNumber;
 
@@ -61,6 +71,12 @@
 @property (nonatomic, strong) KYStartEngineConfig *startEngineConfig;
 
 @property (nonatomic, copy) KYTestResultBlock testResultBlock;
+
+@property (nonatomic, assign) KYEngineStatus engineStatus;
+
+@property (nonatomic, assign) BOOL isErrorStop; //是否未调stop，返回err结果
+
+@property (nonatomic, assign) BOOL isRecordCancel;
 
 @end
 
@@ -80,6 +96,7 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
     if (self) {
         [[NSFileManager defaultManager] createDirectoryAtPath:[NSHomeDirectory() stringByAppendingFormat:@"/Documents/record"] withIntermediateDirectories:YES attributes:nil error:nil];
     }
+    self.engineStatus = KYEngineStatus_Idle;
     return self;
 }
 
@@ -140,29 +157,57 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
     if (self.recorder == NULL || self.engine == NULL) {
         return;
     }
+
+    if(self.engineStatus == KYEngineStatus_Recording){
+        NSLog(@"%@", @"startEngineTest fail, wait last record end");
+        return;
+    }
+
+    self.isErrorStop = NO;
+    self.isRecordCancel = NO;
     
     char record_id[64] = {0};
     char param[4096];
  
+    self.engineStatus = KYEngineStatus_Recording;
     strcpy(param, [self configParamRequestWith:testConfig].UTF8String);
     
     rv = skegn_start(self.engine, param, record_id, (skegn_callback)_skegn_callback, (__bridge const void *)(self));
     if (rv) {
+        [self cancelEngine];
+        self.engineStatus = KYEngineStatus_Stop;
         printf("skegn_start() failed: %d\n", rv);
         return;
+    } 
+    if ([testConfig.audioPath length] != 0) {
+        if (![[NSFileManager defaultManager] fileExistsAtPath:testConfig.audioPath]) {
+            [self cancelEngine];
+            self.engineStatus = KYEngineStatus_Stop;
+            NSLog(@"%@", @"本地音频不存在");
+        } else {
+            NSLog(@"eval with audio file");
+            self.nativeAudio = [[KYNativeAudio alloc] init];
+            self.nativeAudio.delegate = self;
+            [self.nativeAudio feedAudioDataWith:testConfig.audioPath];
+        }
+    } else {
+        NSString *wavPath = [NSString stringWithFormat:@"%@/Documents/record/%s.wav", NSHomeDirectory(), record_id];
+        __weak typeof(self) weakSelf = self;
+        rv = [self.recorder startReocrdWith:wavPath engine:self.engine callbackInterval:100 recorderBlock:^(struct skegn *engine, const void *audioData, int size) {
+            printf("feed: %d\n", size);
+            if(!weakSelf.isRecordCancel && weakSelf.engineStatus == KYEngineStatus_Recording && !weakSelf.isErrorStop){
+                skegn_feed(engine, audioData, size);
+            }
+        }];
+        
+        if(rv != 0) {
+            self.engineStatus = KYEngineStatus_Stop;
+            printf("airecorder_start() failed: %d\n", rv);
+            return;
+        }
     }
     
-    NSString *wavPath = [NSString stringWithFormat:@"%@/Documents/record/%s.wav", NSHomeDirectory(), record_id];
     
-    rv = [self.recorder startReocrdWith:wavPath engine:self.engine callbackInterval:100 recorderBlock:^(struct skegn *engine, const void *audioData, int size) {
-        printf("feed: %d\n", size);
-        skegn_feed(engine, audioData, size);
-    }];
-    
-    if(rv != 0) {
-        printf("airecorder_start() failed: %d\n", rv);
-        return;
-    }
     
     self.testResultBlock = testResultBlock;
 }
@@ -171,18 +216,29 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
     if (self.recorder) {
         [self.recorder stopRecorder];
     }
-    if (self.engine) {
+    if(self.nativeAudio) {
+        [self.nativeAudio stopRecorder];
+    }
+    //if (self.engine) {
+    if (!self.isErrorStop && self.engine && self.engineStatus != KYEngineStatus_Stop && !self.isRecordCancel) {
         skegn_stop(self.engine);
     }
+
+    self.engineStatus = KYEngineStatus_Stop;
 }
 
 - (void)cancelEngine {
+    self.isRecordCancel = YES;
     if (self.recorder) {
         [self.recorder stopRecorder];
+    }
+    if(self.nativeAudio) {
+        [self.nativeAudio stopRecorder];
     }
     if (self.engine) {
         skegn_cancel(self.engine);
     }
+    self.engineStatus = KYEngineStatus_Stop;
 }
 
 - (void)deleteEngine {
@@ -194,6 +250,11 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
     if (self.recorder) {
         self.recorder = nil;
     }
+    if(self.nativeAudio) {
+        [self.nativeAudio stopRecorder];
+        self.nativeAudio = nil;
+    }
+    self.engineStatus = KYEngineStatus_Stop;
 }
 
 - (void)playback {
@@ -320,6 +381,7 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
 //回调评测结果
 - (void)showResult:(NSString *)result {
     if ([result containsString:@"errId"]) {
+        self.isErrorStop = YES;
         [self stopEngine];
     }
     if (_testResultBlock) {
@@ -443,6 +505,18 @@ static int _skegn_callback(const void *usrdata, const char *id, int type, const 
             break;
     }
     return compress;
+}
+
+#pragma mark - Delegate
+- (void)nativeAudioInputStream:(uint8_t [])audioBuffer bufferLength:(int)length {
+    if(!self.isRecordCancel && self.engineStatus == KYEngineStatus_Recording){
+        skegn_feed(self.engine, audioBuffer, length);
+    }
+}
+
+- (void)nativeAudioFinishInputStream {
+    [self stopEngine];
+    NSLog(@"native audiofile skegn_stop:%f", CFAbsoluteTimeGetCurrent());
 }
 
 @end
